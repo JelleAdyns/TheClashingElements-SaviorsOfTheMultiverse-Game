@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseGame.h"
+#include "FontPath.h"
 class Game : public BaseGame
 {
 public:
@@ -23,6 +24,21 @@ public:
 
 private:
 
+	enum class GameState
+	{
+		Start,
+		SkinSelection,
+		Playing,
+		GameOver,
+		Won
+	};
+
+	// VARIABLES
+
+	GameState m_GameState{ GameState::SkinSelection };
+
+
+	
 	// FUNCTIONS
 	void Initialize();
 	void Cleanup( );

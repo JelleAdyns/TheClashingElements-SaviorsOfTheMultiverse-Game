@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Engine Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
@@ -15,6 +11,10 @@
     </Filter>
     <Filter Include="Game Files\Sub Classes">
       <UniqueIdentifier>{6126d52f-5ba8-4981-a94f-9beca15ab59a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Files\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -33,6 +33,12 @@
     <ClCompile Include="Player.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
+    <ClCompile Include="SkinManager.cpp">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="StartScreen.cpp">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -45,6 +51,15 @@
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinManager.h">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="StartScreen.h">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="FontPath.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,4 +10,3 @@ public:
 	Level& operator=(const Level& other) = delete;
 	Level& operator=(Level&& other) noexcept = delete;
 };
-

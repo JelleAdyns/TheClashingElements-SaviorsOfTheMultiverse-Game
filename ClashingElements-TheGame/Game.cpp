@@ -1,15 +1,20 @@
 #include "pch.h"
 #include "Game.h"
+#include <iostream>
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window }
 {
+	float test{ 3433 };
+	std::cout << test;
 	Initialize();
+
 }
 
 Game::~Game( )
 {
 	Cleanup( );
+
 }
 
 void Game::Initialize( )
@@ -47,6 +52,7 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 {
+	
 	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
 	//switch ( e.keysym.sym )
 	//{
@@ -105,6 +111,6 @@ void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 
 void Game::ClearBackground( ) const
 {
-	glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
+	glClearColor( 0.0f, 0.0f, 0.f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT );
 }

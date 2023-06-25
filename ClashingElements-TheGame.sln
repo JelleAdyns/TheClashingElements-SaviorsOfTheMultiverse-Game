@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{5ADAB721-CB6C-4EF5-89EB-20EC51A13CFC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClashingElements-TheGame", "ClashingElements-TheGame\ClashingElements-TheGame.vcxproj", "{B50B2947-D452-436E-A3B2-AEA5E07DD01A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5ADAB721-CB6C-4EF5-89EB-20EC51A13CFC} = {5ADAB721-CB6C-4EF5-89EB-20EC51A13CFC}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
