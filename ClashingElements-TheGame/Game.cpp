@@ -7,6 +7,8 @@ Game::Game( const Window& window )
 {
 	float test{ 3433 };
 	std::cout << test;
+	std::cout << test;
+
 	Initialize();
 
 }
