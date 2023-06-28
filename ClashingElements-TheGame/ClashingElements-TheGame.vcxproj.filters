@@ -36,7 +36,16 @@
     <ClCompile Include="SkinManager.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClCompile>
     <ClCompile Include="StartScreen.cpp">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatedSprite.cpp">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,10 +65,19 @@
     <ClInclude Include="SkinManager.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
-    <ClInclude Include="StartScreen.h">
+    <ClInclude Include="Screen.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
     <ClInclude Include="FontPath.h">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="StartScreen.h">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimatedSprite.h">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
   </ItemGroup>

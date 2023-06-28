@@ -1,6 +1,9 @@
 #pragma once
 #include "BaseGame.h"
 #include "FontPath.h"
+
+class AnimatedSprite;
+
 class Game : public BaseGame
 {
 public:
@@ -27,16 +30,16 @@ private:
 	enum class GameState
 	{
 		Start,
-		SkinSelection,
+		ShowingHighScores,
+		SelectingSkin,
 		Playing,
-		GameOver,
-		Won
+		GameOver
 	};
 
 	// VARIABLES
 
-	GameState m_GameState{ GameState::SkinSelection };
-
+	GameState m_GameState{ GameState::Start };
+	AnimatedSprite* m_TestSprite;
 
 	
 	// FUNCTIONS

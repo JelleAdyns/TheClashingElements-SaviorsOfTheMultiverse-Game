@@ -1,0 +1,39 @@
+#pragma once
+class Texture;
+class AnimatedSprite
+{
+public:
+	explicit AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime);
+	~AnimatedSprite();
+
+	AnimatedSprite(const AnimatedSprite& other) = delete;
+	AnimatedSprite(AnimatedSprite&& other) noexcept = delete;
+	AnimatedSprite& operator=(const AnimatedSprite& other) = delete;
+	AnimatedSprite& operator=(AnimatedSprite&& other) noexcept = delete;
+
+	void Draw() const;
+	virtual void Update(float elapsedSec);
+
+protected:
+	void SetTexture(const Texture* pTexture);
+
+	Point2f m_BottomCenter;
+
+	int	m_CurrentCol;
+	int	m_CurrentRow;
+
+	const int m_NrOfCols;
+	const int m_NrOfFrames;
+	const int m_NrOfRows;
+	const float	m_FrameTime;
+
+	float m_PassedTime;
+
+	Rectf SrcRect() const;
+
+private:
+	const Texture* m_pTexture;
+
+	Rectf DestRect() const;
+};
+

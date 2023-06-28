@@ -1,8 +1,6 @@
 #pragma once
-#include <vector>
-
-class Texture;
-class StartScreen
+#include "Screen.h"
+class StartScreen final: public Screen
 {
 public:
 	explicit StartScreen();
@@ -12,8 +10,8 @@ public:
 	StartScreen(StartScreen&& other) noexcept = delete;
 	StartScreen& operator=(const StartScreen& other) = delete;
 	StartScreen& operator=(StartScreen&& other) noexcept = delete;
+
 private:
-	//Sprite
-	std::vector<Texture*> m_pVecText;
 
 };
+

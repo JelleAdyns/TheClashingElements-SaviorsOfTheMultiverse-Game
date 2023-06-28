@@ -1,13 +1,11 @@
 #include "pch.h"
 #include "Game.h"
+#include "Character.h"
 #include <iostream>
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window }
 {
-	float test{ 3433 };
-	std::cout << test;
-	std::cout << test;
 
 	Initialize();
 
@@ -21,30 +19,25 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	
+	m_TestSprite = new Character{ Point2f{} };
 }
 
 void Game::Cleanup( )
 {
+	delete m_TestSprite;
+	m_TestSprite = nullptr;
 }
 
 void Game::Update( float elapsedSec )
 {
-	// Check keyboard state
-	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
-	//if ( pStates[SDL_SCANCODE_RIGHT] )
-	//{
-	//	std::cout << "Right arrow key is down\n";
-	//}
-	//if ( pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_UP])
-	//{
-	//	std::cout << "Left and up arrow keys are down\n";
-	//}
+
+	m_TestSprite->Update(elapsedSec);
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
+	m_TestSprite->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
