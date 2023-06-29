@@ -1,8 +1,13 @@
 #include "base.h"
+#include <SDL_opengl.h>
+#include <SDL_video.h>
 #include <iostream>
 #include <algorithm>
 #include <chrono>
 #include "BaseGame.h"
+
+
+float BaseGame::m_Scale{1 };
 
 BaseGame::BaseGame(const Window& window)
 	: m_Window{ window }
@@ -53,6 +58,8 @@ void BaseGame::InitializeGameEngine()
 		std::cerr << "BaseGame::Initialize( ), error when calling SDL_CreateWindow: " << SDL_GetError() << std::endl;
 		return;
 	}
+
+	SDL_SetWindowResizable(m_pWindow, SDL_TRUE);
 
 	// Create OpenGL context 
 	m_pContext = SDL_GL_CreateContext(m_pWindow);
@@ -170,6 +177,35 @@ void BaseGame::Run()
 			case SDL_MOUSEBUTTONUP:
 				e.button.y = int(m_Window.height) - e.button.y;
 				this->ProcessMouseUpEvent(e.button);
+				break;
+			case SDL_WINDOWEVENT:
+				if (e.window.event != SDL_WINDOWEVENT_RESIZED)
+					break;
+
+				int newWindowWidth{ e.window.data1 };
+				int newWindowHeight{ e.window.data2 };
+
+				float scaleX = float(newWindowWidth) / m_Window.width;
+				float scaleY = float(newWindowHeight) / m_Window.height;
+
+				// letterbox!
+				float minScale = std::min(scaleX, scaleY);
+				float viewportWidth{ m_Window.width * minScale };
+				float viewportHeight{ m_Window.height * minScale };
+
+				float viewportX{ 0 };
+				if (std::fabs(viewportWidth - newWindowWidth) > 1)
+					viewportX = (newWindowWidth - viewportWidth) / 2;
+
+				float viewportY{ 0 };
+				if (std::fabs(viewportHeight - newWindowHeight) > 1)
+					viewportY = (newWindowHeight - viewportHeight) / 2;
+
+
+				glViewport(
+					viewportX, viewportY,
+					viewportWidth, viewportHeight
+				);
 				break;
 			}
 		}

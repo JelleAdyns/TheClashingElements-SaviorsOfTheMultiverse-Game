@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "Character.h"
+#include <utils.h>
 #include <iostream>
 
 Game::Game( const Window& window ) 
@@ -19,7 +20,7 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_TestSprite = new Character{ Point2f{} };
+	m_TestSprite = new Character{ Point2f{50, 0} };
 }
 
 void Game::Cleanup( )
@@ -36,8 +37,16 @@ void Game::Update( float elapsedSec )
 
 void Game::Draw( ) const
 {
-	ClearBackground( );
+	glPushMatrix();
+	
+	glScalef(m_Scale, m_Scale, 1.f);
+	ClearBackground();
+	utils::DrawRect(1, 1, 1280 * m_Scale - 1, 720 * m_Scale - 1);
+
 	m_TestSprite->Draw();
+	glPopMatrix();
+
+	
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
