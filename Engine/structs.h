@@ -2,16 +2,6 @@
 #include <string>
 
 
-struct Tile
-{
-	explicit Tile(const int id, const Point2f& center);
-
-	const int id;
-	const Point2f center;
-	const Rectf area;
-
-	const static int size;
-};
 
 struct Window
 {
@@ -81,5 +71,16 @@ struct Ellipsef
 	float radiusY;
 };
 
+struct Tile
+{
+	explicit Tile(const int id, const Point2f& center, const bool isIntersection = false);
+	const static int Size;
+
+	const int Id;
+	const Point2f Center;
+	const Rectf Area;
+	const bool IsIntersection;
+
+};
 
 

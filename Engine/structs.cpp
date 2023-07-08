@@ -3,17 +3,6 @@
 
 
 
-//-----------------------------------------------------------------
-// Tile Constructors
-//-----------------------------------------------------------------
-const int Tile::size{16};
-
-Tile::Tile(const int id, const Point2f& center)
-	:id{ id }
-	,center{ center }
-	,area{ Rectf{center.x - size / 2, center.y - size / 2, size, size} }
-{
-}
 
 //-----------------------------------------------------------------
 // Window Constructors
@@ -107,5 +96,18 @@ Ellipsef::Ellipsef( const Point2f& center, float radiusX, float radiusY )
 
 Ellipsef::Ellipsef( float centerX, float centerY, float radiusX, float radiusY )
 	: Ellipsef{ Point2f{ centerX, centerY }, radiusX, radiusY }
+{
+}
+
+//-----------------------------------------------------------------
+// Tile Constructors
+//-----------------------------------------------------------------
+const int Tile::Size{16};
+
+Tile::Tile(const int id, const Point2f& center, const bool isIntersection)
+	:Id{ id }
+	,Center{ center }
+	,IsIntersection{ isIntersection }
+	,Area{ Rectf{center.x - Size / 2, center.y - Size / 2, Size, Size} }
 {
 }
