@@ -1,6 +1,18 @@
 #pragma once
 #include <string>
 
+
+struct Tile
+{
+	explicit Tile(const int id, const Point2f& center);
+
+	const int id;
+	const Point2f center;
+	const Rectf area;
+
+	const static int size;
+};
+
 struct Window
 {
 	explicit Window( const std::string& title = "Title", float width = 320.0f, 

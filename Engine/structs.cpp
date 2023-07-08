@@ -1,6 +1,20 @@
 #include "base.h"
 #include "structs.h"
 
+
+
+//-----------------------------------------------------------------
+// Tile Constructors
+//-----------------------------------------------------------------
+const int Tile::size{16};
+
+Tile::Tile(const int id, const Point2f& center)
+	:id{ id }
+	,center{ center }
+	,area{ Rectf{center.x - size / 2, center.y - size / 2, size, size} }
+{
+}
+
 //-----------------------------------------------------------------
 // Window Constructors
 //-----------------------------------------------------------------
