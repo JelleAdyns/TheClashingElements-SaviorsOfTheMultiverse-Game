@@ -52,7 +52,7 @@ public:
 		return m_Viewport;
 	}
 
-	static float m_Scale;
+	static int m_Scale;
 
 private:
 	// DATA MEMBERS

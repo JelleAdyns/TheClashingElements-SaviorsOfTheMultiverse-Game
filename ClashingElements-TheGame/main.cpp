@@ -12,7 +12,7 @@ int SDL_main(int argv, char** args)
 
 	StartHeapControl();
 
-	Game* pGame{ new Game{ Window{ "The Clashing Elements - The Game", 1280 * Game::m_Scale , 720 * Game::m_Scale } } };
+	Game* pGame{ new Game{ Window{ "The Clashing Elements - The Game", 256  , 224} } };
 	pGame->Run();
 	delete pGame;
 

@@ -1,13 +1,13 @@
 #include "base.h"
-#include <SDL_opengl.h>
-#include <SDL_video.h>
+//#include <SDL_opengl.h>
+//#include <SDL_video.h>
 #include <iostream>
 #include <algorithm>
 #include <chrono>
 #include "BaseGame.h"
 
 
-float BaseGame::m_Scale{1 };
+int BaseGame::m_Scale{1 };
 
 BaseGame::BaseGame(const Window& window)
 	: m_Window{ window }
@@ -52,14 +52,14 @@ void BaseGame::InitializeGameEngine()
 		SDL_WINDOWPOS_CENTERED,
 		int(m_Window.width),
 		int(m_Window.height),
-		SDL_WINDOW_OPENGL);
+		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	if (m_pWindow == nullptr)
 	{
 		std::cerr << "BaseGame::Initialize( ), error when calling SDL_CreateWindow: " << SDL_GetError() << std::endl;
 		return;
 	}
 
-	SDL_SetWindowResizable(m_pWindow, SDL_TRUE);
+	//SDL_SetWindowResizable(m_pWindow, SDL_TRUE);
 
 	// Create OpenGL context 
 	m_pContext = SDL_GL_CreateContext(m_pWindow);
@@ -161,9 +161,32 @@ void BaseGame::Run()
 				quit = true;
 				break;
 			case SDL_KEYDOWN:
-				this->ProcessKeyDownEvent(e.key);
+				ProcessKeyDownEvent(e.key);
 				break;
 			case SDL_KEYUP:
+			
+				//SDL_SetWindowPosition(m_pWindow, 0, 0);
+				
+				switch (e.key.keysym.sym)
+				{
+				case SDLK_1:
+					--m_Scale;
+					m_Scale = std::max(1, m_Scale);
+					glViewport(0, 0, m_Viewport.width * m_Scale, m_Viewport.height * m_Scale);
+					SDL_SetWindowSize(m_pWindow, m_Viewport.width * m_Scale, m_Viewport.height * m_Scale);
+					break;
+					
+				case SDLK_2:
+					++m_Scale;
+					m_Scale = std::min(4, m_Scale);
+					glViewport(0, 0, m_Viewport.width * m_Scale, m_Viewport.height * m_Scale);
+					SDL_SetWindowSize(m_pWindow, m_Viewport.width * m_Scale, m_Viewport.height * m_Scale);
+					break;
+
+				/*case SDLK_F11:
+					SDL_SetWindowFullscreen(m_pWindow, SDL_WINDOW_FULLSCREEN);
+					break;*/
+				}
 				this->ProcessKeyUpEvent(e.key);
 				break;
 			case SDL_MOUSEMOTION:
@@ -178,34 +201,51 @@ void BaseGame::Run()
 				e.button.y = int(m_Window.height) - e.button.y;
 				this->ProcessMouseUpEvent(e.button);
 				break;
-			case SDL_WINDOWEVENT:
+		/*	case SDL_WINDOWEVENT:
 				if (e.window.event != SDL_WINDOWEVENT_RESIZED)
 					break;
 
+				int newWidth = e.window.data1;
+				int newHeight = e.window.data2;
+				glViewport(0, 0, (GLsizei)newWidth, (GLsizei)newHeight);*/
+			case SDL_WINDOWEVENT:
+				if (e.window.event != SDL_WINDOWEVENT_RESIZED)
+					break;
+				
+				//m_Scale = 4;
+			
+				/*int newWindowWidth{ e.window.data1 };
+				int newWindowHeight{ e.window.data2 };
+				if(newWindowWidth < newWindowHeight) glViewport(newWindowWidth / 2 - newWindowWidth / 2, newWindowHeight / 2 - newWindowWidth / 2, newWindowWidth, newWindowWidth);
+				else glViewport(newWindowWidth / 2 - newWindowHeight / 2, newWindowHeight / 2 - newWindowHeight / 2, newWindowHeight, newWindowHeight);
+			*/
 				int newWindowWidth{ e.window.data1 };
 				int newWindowHeight{ e.window.data2 };
 
 				float scaleX = float(newWindowWidth) / m_Window.width;
 				float scaleY = float(newWindowHeight) / m_Window.height;
 
-				// letterbox!
+				 //letterbox!
 				float minScale = std::min(scaleX, scaleY);
 				float viewportWidth{ m_Window.width * minScale };
 				float viewportHeight{ m_Window.height * minScale };
 
 				float viewportX{ 0 };
-				if (std::fabs(viewportWidth - newWindowWidth) > 1)
-					viewportX = (newWindowWidth - viewportWidth) / 2;
+				if (std::fabs(viewportWidth - float(newWindowWidth)) > 1)
+					viewportX = (float(newWindowWidth) - viewportWidth) / 2;
 
 				float viewportY{ 0 };
-				if (std::fabs(viewportHeight - newWindowHeight) > 1)
-					viewportY = (newWindowHeight - viewportHeight) / 2;
-
+				if (std::fabs(viewportHeight - float(newWindowHeight)) > 1)
+					viewportY = (float(newWindowHeight) - viewportHeight) / 2;
 
 				glViewport(
 					viewportX, viewportY,
 					viewportWidth, viewportHeight
 				);
+				//float viewportWidth{ m_Viewport.width * m_Scale };
+				//float viewportHeight{ m_Viewport.height * m_Scale };
+				//glViewport(newWindowWidth /2 - viewportWidth /2, newWindowHeight/2 - viewportHeight /2, viewportWidth, viewportHeight);
+				//SDL_SetWindowSize(m_pWindow, viewportWidth, viewportHeight);
 				break;
 			}
 		}
