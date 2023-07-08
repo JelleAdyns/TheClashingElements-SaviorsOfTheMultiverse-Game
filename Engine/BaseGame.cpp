@@ -161,7 +161,7 @@ void BaseGame::Run()
 				quit = true;
 				break;
 			case SDL_KEYDOWN:
-				ProcessKeyDownEvent(e.key);
+				this->ProcessKeyDownEvent(e.key);
 				break;
 			case SDL_KEYUP:
 			
