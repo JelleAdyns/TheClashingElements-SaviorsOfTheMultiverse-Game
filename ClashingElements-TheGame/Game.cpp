@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "Character.h"
+#include "BackGround.h"
 #include <utils.h>
 #include <iostream>
 
@@ -20,32 +21,29 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_TestSprite = new Character{ Point2f{50, 0} };
+	m_Camera.SetLevelBoundaries(m_Level.GetLevelBoundaries());
 }
 
 void Game::Cleanup( )
 {
-	delete m_TestSprite;
-	m_TestSprite = nullptr;
+	
+
 }
 
 void Game::Update( float elapsedSec )
 {
-
-	m_TestSprite->Update(elapsedSec);
+	m_Level.Update(elapsedSec);
 }
 
 void Game::Draw( ) const
 {
-	glPushMatrix();
-	
-	glScalef(m_Scale, m_Scale, 1.f);
+
 	ClearBackground();
-	utils::DrawRect(1, 1, 1280 * m_Scale - 1, 720 * m_Scale - 1);
-
-	m_TestSprite->Draw();
+	glPushMatrix();
+	m_Camera.Transform(m_Level.GetPlayerPos());
+	//utils::DrawRect(1, 1, 1280 - 1, 720 - 1);
+	m_Level.Draw();
 	glPopMatrix();
-
 	
 }
 

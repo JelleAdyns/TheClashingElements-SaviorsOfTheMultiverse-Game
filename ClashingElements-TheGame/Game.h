@@ -1,8 +1,9 @@
 #pragma once
 #include "BaseGame.h"
-#include "FontPath.h"
+#include "Level.h"
+#include "Camera.h"
+#include <vector>
 
-class AnimatedSprite;
 
 class Game : public BaseGame
 {
@@ -25,6 +26,8 @@ public:
 	void ProcessMouseDownEvent( const SDL_MouseButtonEvent& e ) override;
 	void ProcessMouseUpEvent( const SDL_MouseButtonEvent& e ) override;
 
+
+	
 private:
 
 	enum class GameState
@@ -39,7 +42,8 @@ private:
 	// VARIABLES
 
 	GameState m_GameState{ GameState::Start };
-	AnimatedSprite* m_TestSprite;
+	Level m_Level{};
+	Camera m_Camera{ 256, 224 };
 
 	
 	// FUNCTIONS
