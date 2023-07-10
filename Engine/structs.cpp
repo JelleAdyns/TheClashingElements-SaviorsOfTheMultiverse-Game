@@ -102,12 +102,13 @@ Ellipsef::Ellipsef( float centerX, float centerY, float radiusX, float radiusY )
 //-----------------------------------------------------------------
 // Tile Constructors
 //-----------------------------------------------------------------
-const int Tile::Size{16};
+int Tile::Size{16};
 
-Tile::Tile(const int id, const Point2f& center, const bool isIntersection)
+Tile::Tile(const int id, const int centerX, const int centerY, const bool isIntersection)
 	:Id{ id }
-	,Center{ center }
+	,CenterX{ centerX }
+	,CenterY{ centerY }
+	,Area{ Rectf{centerX - float(Size / 2), centerY - float(Size / 2), float(Size), float(Size)} }
 	,IsIntersection{ isIntersection }
-	,Area{ Rectf{center.x - Size / 2, center.y - Size / 2, Size, Size} }
 {
 }

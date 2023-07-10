@@ -73,13 +73,14 @@ struct Ellipsef
 
 struct Tile
 {
-	explicit Tile(const int id, const Point2f& center, const bool isIntersection = false);
-	const static int Size;
+	explicit Tile(const int id, const int centerX, const int centerY, const bool isIntersection = false);
+	static int Size;
 
-	const int Id;
-	const Point2f Center;
-	const Rectf Area;
-	const bool IsIntersection;
+	int Id;
+	int CenterX;
+	int CenterY;
+	Rectf Area;
+	bool IsIntersection;
 
 };
 

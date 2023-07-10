@@ -40,6 +40,7 @@ void Game::Draw( ) const
 
 	ClearBackground();
 	glPushMatrix();
+	//glScalef( m_Scale,m_Scale, 1 );
 	m_Camera.Transform(m_Level.GetPlayerPos());
 	//utils::DrawRect(1, 1, 1280 - 1, 720 - 1);
 	m_Level.Draw();

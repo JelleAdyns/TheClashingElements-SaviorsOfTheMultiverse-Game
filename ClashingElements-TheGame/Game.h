@@ -43,7 +43,7 @@ private:
 
 	GameState m_GameState{ GameState::Start };
 	Level m_Level{};
-	Camera m_Camera{ 256, 224 };
+	Camera m_Camera{ GetViewPort().width , GetViewPort().height};
 
 	
 	// FUNCTIONS

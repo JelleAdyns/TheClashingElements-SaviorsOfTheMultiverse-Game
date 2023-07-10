@@ -16,13 +16,16 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Game Files\Sub Classes\Sprites">
+      <UniqueIdentifier>{f1055fee-cc34-41c1-9f67-a82cb06427a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Files\Sub Classes\Screens">
+      <UniqueIdentifier>{d9e26531-2f2a-4fe5-9519-d7aee4263cc5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
       <Filter>Game Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>Engine Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Engine Files</Filter>
@@ -36,23 +39,32 @@
     <ClCompile Include="SkinManager.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
-    <ClCompile Include="Screen.cpp">
-      <Filter>Game Files\Sub Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="StartScreen.cpp">
+    <ClCompile Include="Camera.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
     <ClCompile Include="AnimatedSprite.cpp">
-      <Filter>Game Files\Sub Classes</Filter>
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClCompile>
     <ClCompile Include="Character.cpp">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="StartScreen.cpp">
+      <Filter>Game Files\Sub Classes\Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>Game Files\Sub Classes\Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathGraph.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Game Files</Filter>
     </ClInclude>
@@ -65,19 +77,31 @@
     <ClInclude Include="SkinManager.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
-    <ClInclude Include="Screen.h">
-      <Filter>Game Files\Sub Classes</Filter>
-    </ClInclude>
     <ClInclude Include="FontPath.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
-    <ClInclude Include="StartScreen.h">
+    <ClInclude Include="Camera.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
     <ClInclude Include="AnimatedSprite.h">
-      <Filter>Game Files\Sub Classes</Filter>
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClInclude>
     <ClInclude Include="Character.h">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="StartScreen.h">
+      <Filter>Game Files\Sub Classes\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
+      <Filter>Game Files\Sub Classes\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathGraph.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
   </ItemGroup>
