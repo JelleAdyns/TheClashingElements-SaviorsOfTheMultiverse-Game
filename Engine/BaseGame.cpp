@@ -7,7 +7,7 @@
 #include "BaseGame.h"
 
 
-int BaseGame::m_Scale{1 };
+int BaseGame::m_Scale{4 };
 
 BaseGame::BaseGame(const Window& window)
 	: m_Window{ window }
@@ -50,8 +50,8 @@ void BaseGame::InitializeGameEngine()
 		m_Window.title.c_str(),
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		int(m_Window.width),
-		int(m_Window.height),
+		int(m_Window.width)*m_Scale,
+		int(m_Window.height)*m_Scale,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	if (m_pWindow == nullptr)
 	{
@@ -93,7 +93,7 @@ void BaseGame::InitializeGameEngine()
 
 	// Set the viewport to the client window area
 	// The viewport is the rectangular region of the window where the image is drawn.
-	glViewport(0, 0, int(m_Window.width), int(m_Window.height));
+	glViewport(0, 0, int(m_Window.width) * m_Scale, int(m_Window.height) * m_Scale);
 
 	// Set the Modelview matrix to the identity matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -172,15 +172,15 @@ void BaseGame::Run()
 				case SDLK_1:
 					--m_Scale;
 					m_Scale = std::max(1, m_Scale);
-					glViewport(0, 0, m_Viewport.width * m_Scale, m_Viewport.height * m_Scale);
-					SDL_SetWindowSize(m_pWindow, m_Viewport.width * m_Scale, m_Viewport.height * m_Scale);
+					glViewport(0, 0, GLsizei(m_Viewport.width * m_Scale), GLsizei(m_Viewport.height * m_Scale));
+					SDL_SetWindowSize(m_pWindow, int(m_Viewport.width * m_Scale), int(m_Viewport.height * m_Scale));
 					break;
 					
 				case SDLK_2:
 					++m_Scale;
 					m_Scale = std::min(4, m_Scale);
-					glViewport(0, 0, m_Viewport.width * m_Scale, m_Viewport.height * m_Scale);
-					SDL_SetWindowSize(m_pWindow, m_Viewport.width * m_Scale, m_Viewport.height * m_Scale);
+					glViewport(0, 0, GLsizei(m_Viewport.width * m_Scale), GLsizei(m_Viewport.height * m_Scale));
+					SDL_SetWindowSize(m_pWindow, int(m_Viewport.width * m_Scale), int(m_Viewport.height * m_Scale));
 					break;
 
 				/*case SDLK_F11:
@@ -238,9 +238,10 @@ void BaseGame::Run()
 				if (std::fabs(viewportHeight - float(newWindowHeight)) > 1)
 					viewportY = (float(newWindowHeight) - viewportHeight) / 2;
 
+				
 				glViewport(
-					viewportX, viewportY,
-					viewportWidth, viewportHeight
+					int(viewportX), int(viewportY),
+					int(viewportWidth), int(viewportHeight)
 				);
 				//float viewportWidth{ m_Viewport.width * m_Scale };
 				//float viewportHeight{ m_Viewport.height * m_Scale };
