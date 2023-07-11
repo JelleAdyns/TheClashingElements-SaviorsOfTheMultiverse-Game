@@ -14,6 +14,7 @@ public:
 	void Draw() const;
 	virtual void Update(float elapsedSec);
 
+	Rectf DestRect() const;
 protected:
 	void SetTexture(const Texture* pTexture);
 
@@ -34,6 +35,5 @@ protected:
 private:
 	const Texture* m_pTexture;
 
-	Rectf DestRect() const;
 };
 

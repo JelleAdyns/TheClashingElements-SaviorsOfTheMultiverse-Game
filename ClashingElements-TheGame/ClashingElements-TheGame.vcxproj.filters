@@ -33,9 +33,6 @@
     <ClCompile Include="Level.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Game Files\Sub Classes</Filter>
-    </ClCompile>
     <ClCompile Include="SkinManager.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
@@ -71,9 +68,6 @@
     <ClInclude Include="Level.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Game Files\Sub Classes</Filter>
-    </ClInclude>
     <ClInclude Include="SkinManager.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
@@ -102,6 +96,9 @@
       <Filter>Engine Files</Filter>
     </ClInclude>
     <ClInclude Include="PathGraph.h">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="MyUtils.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
   </ItemGroup>

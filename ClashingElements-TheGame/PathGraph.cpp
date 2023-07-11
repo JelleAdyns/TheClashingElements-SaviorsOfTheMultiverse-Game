@@ -18,9 +18,7 @@ void PathGraph::AddTile(const int id, const int centerX, const int centerY, cons
 }
 void PathGraph::AddEdge(const int srcTileId, const int neighbourId)
 {
-	//if (srcTileId > m_AdjacencyList.size() - 1)m_AdjacencyList.push_back(std::vector<int>{});
 	m_AdjacencyList[srcTileId].push_back(neighbourId);
-	//if (neighbourId > m_AdjacencyList.size() - 1)m_AdjacencyList.push_back(std::vector<int>{});
 	m_AdjacencyList[neighbourId].push_back(srcTileId);
 }
 

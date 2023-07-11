@@ -11,7 +11,6 @@ Camera::Camera(float width, float height):
 
 }
 
-
 void Camera::SetLevelBoundaries(const Rectf& levelBoundaries)
 {
 	m_LevelBoundaries = levelBoundaries;

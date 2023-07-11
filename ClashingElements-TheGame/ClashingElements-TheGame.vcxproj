@@ -158,7 +158,6 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PathGraph.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SkinManager.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="StartScreen.cpp" />
@@ -171,10 +170,10 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="FontPath.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="MyUtils.h" />
     <ClInclude Include="PathGraph.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Screen.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="SkinManager.h" />
     <ClInclude Include="StartScreen.h" />
   </ItemGroup>

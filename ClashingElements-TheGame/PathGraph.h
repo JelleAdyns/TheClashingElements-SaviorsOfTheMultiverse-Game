@@ -11,6 +11,7 @@ public:
 	PathGraph(PathGraph&& other) noexcept = delete;
 	PathGraph& operator=(const PathGraph& other) = delete;
 	PathGraph& operator=(PathGraph&& other) noexcept = delete;
+
 	//DEBUG DRAW
 	void Draw() const;
 	void AddTile(const int id, const int centerX, const int centerY, const bool isIntersection = false);

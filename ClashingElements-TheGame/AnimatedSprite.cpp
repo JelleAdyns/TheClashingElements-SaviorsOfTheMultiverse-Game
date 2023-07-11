@@ -13,7 +13,9 @@ AnimatedSprite::AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFr
 	m_NrOfRows{nrFrames/nrCols},
 	m_FrameTime{frameTime},
 	
-	m_PassedTime{0.f}
+	m_PassedTime{0.f},
+
+	m_pTexture{nullptr}
 {
 
 }
