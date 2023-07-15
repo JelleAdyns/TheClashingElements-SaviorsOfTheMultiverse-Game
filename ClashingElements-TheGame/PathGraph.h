@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
-struct Tile;
+#include <utils.h>
+#include "Tile.h"
+
 class PathGraph
 {
 public:
@@ -20,8 +22,13 @@ public:
 	int GetXCenterOfTile(const int id) const;
 	int GetYCenterOfTile(const int id) const;
 	int GetNrOfTiles() const;
+
+	int GetTileId(const Point2f& playerPos) const;
+
+	bool HasNeighbourInDirection(const Vector2f& dir, const Point2f& playerPos, int& targetLocation) const;
 private:
 	std::vector<std::vector<int>> m_AdjacencyList;
 	std::vector<Tile> m_VecTiles;
+
 };
 

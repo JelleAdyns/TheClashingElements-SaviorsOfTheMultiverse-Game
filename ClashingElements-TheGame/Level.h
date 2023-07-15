@@ -6,6 +6,8 @@
 class AnimatedSprite;
 class Character;
 class PathGraph;
+class Collectable;
+
 class Level final
 {
 public:
@@ -20,16 +22,20 @@ public:
 	void Update(float elapsedSec);
 	void Draw() const;
 
+	void Move();
+
 	Rectf GetPlayerPos() const;
 	Rectf GetLevelBoundaries() const;
 private:
 	int m_StageNumber;
 	int m_LoopNumber;
 	std::vector<AnimatedSprite*> m_VecTestSprites;
+	std::vector<Collectable*> m_pVecCollectables;
 	Character* m_pPlayer;
 
 	SoundStream* m_pBackGroundMusic;
 	PathGraph* m_pGraph;
 
-	void LoadStage() const;
+	void HitCollectable();
+	void LoadStage();
 };
