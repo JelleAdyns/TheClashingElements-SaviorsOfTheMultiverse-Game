@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Game.h"
-#include "BackGround.h"
+#include "SkinScreen.h"
 #include <utils.h>
 #include <iostream>
 
@@ -23,35 +23,40 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_Camera.SetLevelBoundaries(m_Level.GetLevelBoundaries());
+	m_pScreen = new SkinScreen{ Point2f{GetViewPort().width / 2, 0},"", GetViewPort() };
+	//m_pLevel = new Level{};
+	//m_Camera.SetLevelBoundaries(m_Level.GetLevelBoundaries());
 }
 
 void Game::Cleanup( )
 {
 	
-
+	delete m_pScreen;
+	m_pScreen = nullptr;
 }
 
 void Game::Update( float elapsedSec )
 {
-	m_Level.Update(elapsedSec);
+	m_pScreen->Update(elapsedSec);
+	//m_Level.Update(elapsedSec);
 }
 
 void Game::Draw( ) const
 {
 
 	ClearBackground();
-	glPushMatrix();
-	//glScalef( m_Scale,m_Scale, 1 );
-	m_Camera.Transform(m_Level.GetPlayerPos());
-	//utils::DrawRect(1, 1, 1280 - 1, 720 - 1);
-	m_Level.Draw();
-	glPopMatrix();
-	
+	//glPushMatrix();
+	////glScalef( m_Scale,m_Scale, 1 );
+	//m_Camera.Transform(m_Level.GetPlayerPos());
+	////utils::DrawRect(1, 1, 1280 - 1, 720 - 1);
+	//m_Level.Draw();
+	//glPopMatrix();
+	m_pScreen->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
+	m_pScreen->KeyInput(e);
 	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
 }
 

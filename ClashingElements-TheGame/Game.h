@@ -2,6 +2,7 @@
 #include "BaseGame.h"
 #include "Level.h"
 #include "Camera.h"
+#include "Screen.h"
 #include <vector>
 
 
@@ -42,8 +43,9 @@ private:
 	// VARIABLES
 
 	GameState m_GameState{ GameState::Start };
-	Level m_Level{};
+	//Level* m_pLevel;
 	Camera m_Camera{ GetViewPort().width , GetViewPort().height};
+	Screen* m_pScreen;
 
 	
 	// FUNCTIONS

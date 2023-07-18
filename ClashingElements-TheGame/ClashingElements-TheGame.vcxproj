@@ -172,6 +172,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="Collectable.h" />
     <ClInclude Include="FontPath.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GlobalEnumClasses.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="MyUtils.h" />
     <ClInclude Include="PathGraph.h" />

@@ -2,11 +2,13 @@
 
 #include <vector>
 #include <SoundStream.h>
+#include "BackGround.h"
+#include "Collectable.h"
+#include "PathGraph.h"
+
 
 class AnimatedSprite;
 class Character;
-class PathGraph;
-class Collectable;
 
 class Level final
 {
@@ -22,8 +24,6 @@ public:
 	void Update(float elapsedSec);
 	void Draw() const;
 
-	void Move();
-
 	Rectf GetPlayerPos() const;
 	Rectf GetLevelBoundaries() const;
 private:
@@ -34,7 +34,7 @@ private:
 	Character* m_pPlayer;
 
 	SoundStream* m_pBackGroundMusic;
-	PathGraph* m_pGraph;
+	PathGraph m_pGraph;
 
 	void HitCollectable();
 	void LoadStage();

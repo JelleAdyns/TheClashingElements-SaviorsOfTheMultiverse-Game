@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Collectable.h"
-#include <Texture.h>
 
 const Texture* Collectable::m_pTexture{nullptr};
 int Collectable::m_InstanceCouner{0};
@@ -43,7 +42,7 @@ void Collectable::Update(float elapsedSec)
 		m_PassedTime = 0.f;
 	}
 	m_Time += elapsedSec;
-	m_BottomCenter.y = int(m_Amplitude * sinf(m_Period * m_Time) + m_YPos);
+	m_BottomCenter.y = float(round(m_Amplitude * sinf(m_Period * m_Time) + m_YPos));
 }
 
 Circlef Collectable::GetHitBox() const

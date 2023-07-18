@@ -1,57 +1,63 @@
 #include "pch.h"
 #include "SkinScreen.h"
+#include "Character.h"
+#include <iostream>
+#include <utils.h>
 
 SkinScreen::SkinScreen(const Point2f& bottomCenter, const std::string& backGroundFilePath, const Rectf& window) :
 	Screen{ bottomCenter, backGroundFilePath },
-	m_IndexSelectedSkin{ 0 },
-	m_NrOfCols{ 8 },
-	m_NrOfFrames{ 32 },
-	m_CurrentCol{ 0 },
+	m_IndexCurrSkin{ 0 },
 	m_Window{window}
+
 {
-	m_pSkins.push_back(new Texture { "Finn.png" });
-	m_pSkins.push_back(new Texture { "Wesley.png" });
+	m_pSkins.push_back(new Character{ Skin::Finn });
+	m_pSkins.push_back(new Character{ Skin::Wesley});
+	
+	for (int i = 0; i < m_pSkins.size(); i++)
+	{
+		m_pSkins[i]->SetPos(Point2f{ m_Window.width / (m_pSkins.size() + 1) * (i+1), m_Window.height / 2 });
+	}
+	float rectWidth{40};
+	float rectHeight{50};
+	m_SelectionRect = Rectf{ m_pSkins[m_IndexCurrSkin]->GetHitBox().center.x - rectWidth / 2, m_pSkins[m_IndexCurrSkin]->DestRect().bottom - 10, rectWidth,rectHeight };
 }
 SkinScreen::~SkinScreen()
 {
-
+	for (auto& pSkin : m_pSkins)
+	{
+		delete pSkin;
+		pSkin = nullptr;
+	}
 }
 
 void SkinScreen::Draw() const
 {
-	for (int i = 0; i < m_pSkins.size(); i++)
+	for (const auto& pSkin : m_pSkins)
 	{
-		m_pSkins[i]->Draw(DestRect(*m_pSkins[i]), SrcRect(*m_pSkins[i]));
+		pSkin->Draw();
 	}
+	utils::DrawRect(Rectf{ m_SelectionRect });
 }
 void SkinScreen::Update(float elapsedSec)
 {
-	for (const auto& pSkin : m_pSkins)
-	{
-		m_PassedTime += elapsedSec;
-		if (m_PassedTime >= m_FrameTime)
-		{
-			++m_CurrentCol %= m_NrOfCols;
-			m_PassedTime = 0.f;
-		}
-	}
+	m_pSkins[m_IndexCurrSkin]->Update(elapsedSec);
 }
 void SkinScreen::KeyInput(const SDL_KeyboardEvent& e)
 {
-
+	switch (e.keysym.sym)
+	{
+	case SDLK_LEFT:
+		m_pSkins[m_IndexCurrSkin]->ResetFrames();
+		--m_IndexCurrSkin %= m_pSkins.size();
+		m_SelectionRect.left = m_pSkins[m_IndexCurrSkin]->GetHitBox().center.x - m_SelectionRect.width / 2;
+		break;
+	case SDLK_RIGHT:
+		m_pSkins[m_IndexCurrSkin]->ResetFrames();
+		++m_IndexCurrSkin %= m_pSkins.size();
+		m_SelectionRect.left = m_pSkins[m_IndexCurrSkin]->GetHitBox().center.x - m_SelectionRect.width / 2;
+		break;
+	}
+	std::cout << m_IndexCurrSkin << std::endl;
 }
 
-Rectf SkinScreen::DestRect(const Texture& texture) const
-{
-	return Rectf{ m_Window.width / (m_pSkins.size() + 1), m_Window.height / 2 - SrcRect(texture).height / 2, SrcRect(texture).width, SrcRect(texture).height };
-}
 
-Rectf SkinScreen::SrcRect(const Texture& texture) const
-{
-	Rectf srcRect{};
-	srcRect.width = texture.GetWidth() / m_NrOfCols;
-	srcRect.height = texture.GetHeight() / (m_NrOfFrames/m_NrOfCols);
-	srcRect.left = srcRect.width * m_CurrentCol;
-	srcRect.bottom = srcRect.height;
-	return srcRect;
-}

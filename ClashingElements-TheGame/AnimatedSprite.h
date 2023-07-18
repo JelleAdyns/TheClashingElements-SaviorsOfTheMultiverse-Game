@@ -1,5 +1,5 @@
 #pragma once
-class Texture;
+#include <Texture.h>
 class AnimatedSprite
 {
 public:
