@@ -153,20 +153,23 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Collectable.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PathGraph.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="SkinManager.cpp" />
+    <ClCompile Include="SkinScreen.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="StartScreen.cpp" />
+    <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedSprite.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Collectable.h" />
     <ClInclude Include="FontPath.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Level.h" />
@@ -174,8 +177,9 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="PathGraph.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Screen.h" />
-    <ClInclude Include="SkinManager.h" />
+    <ClInclude Include="SkinScreen.h" />
     <ClInclude Include="StartScreen.h" />
+    <ClInclude Include="Tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

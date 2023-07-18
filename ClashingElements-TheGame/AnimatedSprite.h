@@ -4,7 +4,7 @@ class AnimatedSprite
 {
 public:
 	explicit AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime);
-	~AnimatedSprite();
+	virtual ~AnimatedSprite();
 
 	AnimatedSprite(const AnimatedSprite& other) = delete;
 	AnimatedSprite(AnimatedSprite&& other) noexcept = delete;

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "AnimatedSprite.h"
-#include "Texture.h"
+#include <Texture.h>
+
 
 AnimatedSprite::AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime):
 	m_BottomCenter{bottomCenter},
@@ -22,7 +23,6 @@ AnimatedSprite::AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFr
 
 AnimatedSprite::~AnimatedSprite()
 {
-	delete m_pTexture;
 	m_pTexture = nullptr;
 }
 

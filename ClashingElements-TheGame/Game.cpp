@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "Game.h"
-#include "Character.h"
 #include "BackGround.h"
 #include <utils.h>
 #include <iostream>
+
+
+int BaseGame::m_Scale{4};
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window }

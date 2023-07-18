@@ -7,7 +7,7 @@
 #include "BaseGame.h"
 
 
-int BaseGame::m_Scale{4 };
+
 
 BaseGame::BaseGame(const Window& window)
 	: m_Window{ window }

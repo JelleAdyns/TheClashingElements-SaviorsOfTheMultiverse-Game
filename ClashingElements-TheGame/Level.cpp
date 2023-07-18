@@ -49,7 +49,7 @@ void Level::Update(float elapsedSec)
 	}
 	for (const auto& pCollectable : m_pVecCollectables)
 	{
-		if(pCollectable != nullptr) pCollectable->Update(elapsedSec);
+		pCollectable->Update(elapsedSec);
 	}
 	Move();
 	m_pPlayer->Update(elapsedSec);
@@ -65,7 +65,7 @@ void Level::Draw() const
 	//m_pGraph->Draw();
 	for (const auto& pCollectable : m_pVecCollectables)
 	{
-		if (pCollectable != nullptr) pCollectable->Draw();
+		pCollectable->Draw();
 	}
 	m_pPlayer->Draw();
 
@@ -92,7 +92,6 @@ void Level::Move()
 			m_pPlayer->SetTargetLocation(targetX,0);
 			std::cout << "left" << std::endl;
 		}
-		//else m_pPlayer->SetFrame(0);
 	}
 	if (pStates[SDL_SCANCODE_RIGHT] && !m_pPlayer->IsMoving())
 	{
@@ -103,7 +102,6 @@ void Level::Move()
 			m_pPlayer->SetTargetLocation(targetX,0);
 			std::cout << "right" << std::endl;
 		}
-		//else m_pPlayer->SetFrame(0);
 	}
 	if (pStates[SDL_SCANCODE_DOWN] && !m_pPlayer->IsMoving())
 	{
@@ -114,7 +112,6 @@ void Level::Move()
 			m_pPlayer->SetTargetLocation(0, targetY);
 			std::cout << "down" << std::endl;
 		}
-		//else m_pPlayer->SetFrame(0);
 	}
 	if (pStates[SDL_SCANCODE_UP] && !m_pPlayer->IsMoving())
 	{
@@ -125,33 +122,20 @@ void Level::Move()
 			m_pPlayer->SetTargetLocation(0,targetY);
 			std::cout << "up" << std::endl;
 		}
-		//else m_pPlayer->SetFrame(0);
 	}
-
-	//if (!pStates[SDL_SCANCODE_UP] && !pStates[SDL_SCANCODE_DOWN] && !pStates[SDL_SCANCODE_LEFT] && !pStates[SDL_SCANCODE_RIGHT] && !m_pPlayer->IsMoving()) m_pPlayer->SetFrame(0);
 }
 void Level::HitCollectable()
 {
-	/*for (int i = 0; i < m_pVecCollectables.size(); i++)
+	for (int i = 0; i < m_pVecCollectables.size(); i++)
 	{
-	}*/
-		int tileId{ m_pGraph->GetTileId(m_pPlayer->GetHitBox().center) };
-		if (m_pVecCollectables[tileId] != nullptr)
+		std::cout << "Collect" << std::endl;
+		if (utils::IsOverlapping(m_pPlayer->GetHitBox(), m_pVecCollectables[i]->GetHitBox()))
 		{
-			/*if (m_pVecCollectables[tileId]->GetId() == tileId)
-			{*/
-				if (utils::IsOverlapping(m_pPlayer->GetHitBox(), m_pVecCollectables[tileId]->GetHitBox()))
-				{
-					std::cout << "Collect" << std::endl;
-					delete m_pVecCollectables[tileId];
-					std::cout << m_pVecCollectables.capacity()<< std::endl;
-					m_pVecCollectables[tileId] = nullptr;
-					//m_pVecCollectables[tileId] = m_pVecCollectables[m_pVecCollectables.size() - 1];
-					//m_pVecCollectables.pop_back();
-				}
-			//}
+			delete m_pVecCollectables[i];
+			m_pVecCollectables[i] = m_pVecCollectables[m_pVecCollectables.size() - 1];
+			m_pVecCollectables.pop_back();
 		}
-		
+	}	
 
 }
 
@@ -186,9 +170,12 @@ void Level::LoadStage()
 		{
 			m_pPlayer = new Character{ Point2f{float(centerX), float(centerY)}, id };
 		}
+		else
+		{
+			m_pVecCollectables.push_back(new Collectable{ Point2f{float(centerX),float(centerY)} });
+		}
 
 		m_pGraph->AddTile(id, centerX, centerY, true);
-		m_pVecCollectables.push_back(new Collectable{ Point2f{float(centerX),float(centerY)} });
 	}
 
 	getline(inputFile, info, '-');

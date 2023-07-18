@@ -33,9 +33,6 @@
     <ClCompile Include="Level.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
-    <ClCompile Include="SkinManager.cpp">
-      <Filter>Game Files\Sub Classes</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
@@ -60,15 +57,21 @@
     <ClCompile Include="PathGraph.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
+    <ClCompile Include="Collectable.cpp">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinScreen.cpp">
+      <Filter>Game Files\Sub Classes\Screens</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="Level.h">
-      <Filter>Game Files\Sub Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="SkinManager.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
     <ClInclude Include="FontPath.h">
@@ -98,8 +101,17 @@
     <ClInclude Include="PathGraph.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
+    <ClInclude Include="Collectable.h">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClInclude>
     <ClInclude Include="MyUtils.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
       <Filter>Game Files\Sub Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinScreen.h">
+      <Filter>Game Files\Sub Classes\Screens</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Tile.h"
-//#include "Collectable.h"
 
 int Tile::Size{16};
 
