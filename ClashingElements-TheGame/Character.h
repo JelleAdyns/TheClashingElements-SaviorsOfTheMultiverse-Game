@@ -1,10 +1,12 @@
 #pragma once
 #include <utils.h>
 #include "AnimatedSprite.h"
-class Character final: public AnimatedSprite
+#include "PathGraph.h"
+#include "GlobalEnumClasses.h"
+class Character final : public AnimatedSprite
 {
 public:
-	explicit Character(const Point2f& BottomCenter, const int tileId);
+	explicit Character(const Skin& skin);
 	~Character();
 
 	Character(const Character& other) = delete;
@@ -12,36 +14,31 @@ public:
 	Character& operator=(const Character& other) = delete;
 	Character& operator=(Character&& other) noexcept = delete;
 
-	enum class Skin
-	{
-		Finn,
-		Wesley
-	};
 
 	virtual void Update(float elapsedSec) override;
+	void Move(const PathGraph& graph);
+
+	void ResetFrames();
 
 	Circlef GetHitBox() const;
 	bool IsMoving() const;
-
-	void SetIsMoving(bool isMoving);
-	void SetTargetLocation(int targetX, int targetY) ;
+	void SetPos(const Point2f& newPos);
+	void Play();
 
 private:
-
-	const Skin m_Skin;
-
-	enum class Direction
+	enum class CharacterState
 	{
-		Down,
-		Left,
-		Up,
-		Right
+		ChoosingSkin,
+		Playing
 	};
+	CharacterState m_State;
+
 	Direction m_Dir;
 
 	const Texture* m_pTexture;
 
 	Circlef m_HitBox;
+	Point2f m_Pos;
 
 	int m_Speed;
 
@@ -50,4 +47,3 @@ private:
 
 	bool m_IsMoving;
 };
-

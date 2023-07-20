@@ -11,7 +11,6 @@ public:
 	BackGround(BackGround&& other) noexcept = delete;
 	BackGround& operator=(const BackGround& other) = delete;
 	BackGround& operator=(BackGround&& other) noexcept = delete;
-	void randomFun();
 private:
 
 	const Texture* m_pTexture;

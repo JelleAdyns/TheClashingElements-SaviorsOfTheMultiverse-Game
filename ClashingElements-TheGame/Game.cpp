@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Game.h"
-#include "BackGround.h"
+#include "SkinScreen.h"
 #include <utils.h>
 #include <iostream>
 
@@ -23,35 +23,103 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_Camera.SetLevelBoundaries(m_Level.GetLevelBoundaries());
+	m_pScreen = new SkinScreen{ Point2f{GetViewPort().width / 2, 0},"", GetViewPort() };
+	m_pLevel = nullptr;
+	
 }
 
 void Game::Cleanup( )
 {
 	
-
+	delete m_pScreen;
+	m_pScreen = nullptr;
+	if (m_pLevel != nullptr)
+	{
+		delete m_pLevel;
+		m_pLevel = nullptr;
+	}
 }
 
 void Game::Update( float elapsedSec )
 {
-	m_Level.Update(elapsedSec);
+	switch (m_GameState)
+	{
+	case Game::GameState::Start:
+		break;
+	case Game::GameState::ShowingHighScores:
+		break;
+	case Game::GameState::SelectingSkin:
+		m_pScreen->Update(elapsedSec);
+		break;
+	case Game::GameState::Playing:
+		m_pLevel->Update(elapsedSec);
+		break;
+	case Game::GameState::GameOver:
+		break;
+	default:
+		break;
+	}
+
+	
 }
 
 void Game::Draw( ) const
 {
 
 	ClearBackground();
-	glPushMatrix();
-	//glScalef( m_Scale,m_Scale, 1 );
-	m_Camera.Transform(m_Level.GetPlayerPos());
-	//utils::DrawRect(1, 1, 1280 - 1, 720 - 1);
-	m_Level.Draw();
-	glPopMatrix();
+	switch (m_GameState)
+	{
+	case Game::GameState::Start:
+		break;
+	case Game::GameState::ShowingHighScores:
+		break;
+	case Game::GameState::SelectingSkin:
+		m_pScreen->Draw();
+		break;
+	case Game::GameState::Playing:
+		glPushMatrix();
+		//glScalef( m_Scale,m_Scale, 1 );
+		m_Camera.Transform(m_pLevel->GetPlayerPos());
+		//utils::DrawRect(1, 1, 1280 - 1, 720 - 1);
+		m_pLevel->Draw();
+		glPopMatrix();
+		break;
+	case Game::GameState::GameOver:
+		break;
+	default:
+		break;
+	}
+	
 	
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
+	switch (m_GameState)
+	{
+	case Game::GameState::Start:
+		break;
+	case Game::GameState::ShowingHighScores:
+		break;
+	case Game::GameState::SelectingSkin:
+		m_pScreen->KeyInput(e);
+		switch (e.keysym.sym)
+		{
+		case SDLK_SPACE:
+			m_pLevel = new Level{ static_cast<SkinScreen*>(m_pScreen)->GetCharacter() };
+			delete m_pScreen;
+			m_pScreen = nullptr;
+			m_Camera.SetLevelBoundaries(m_pLevel->GetLevelBoundaries());
+			m_GameState = GameState::Playing;
+			break;
+		}
+		break;
+	case Game::GameState::Playing:
+		break;
+	case Game::GameState::GameOver:
+		break;
+	}
+	
 	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
 }
 

@@ -113,5 +113,8 @@
     <ClInclude Include="SkinScreen.h">
       <Filter>Game Files\Sub Classes\Screens</Filter>
     </ClInclude>
+    <ClInclude Include="GlobalEnumClasses.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

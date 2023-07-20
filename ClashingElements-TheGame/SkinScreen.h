@@ -1,7 +1,8 @@
 #pragma once
 #include "Screen.h"
+#include "GlobalEnumClasses.h"
 #include <vector>
-
+class Character;
 class SkinScreen final : public Screen
 {
 public:
@@ -17,15 +18,15 @@ public:
 	virtual void Update(float elapsedSec) override;
 	virtual void KeyInput(const SDL_KeyboardEvent& e) override;
 
-private:
-	std::vector<Texture*> m_pSkins;
-	int m_IndexSelectedSkin;
-	int m_NrOfCols;
-	int m_NrOfFrames;
-	int m_CurrentCol;
-	Rectf m_Window;
+	Character* GetCharacter() const;
 
-	Rectf DestRect(const Texture& texture) const;
-	Rectf SrcRect(const Texture& texture) const;
+private:
+
+	std::vector<Character*> m_pSkins;
+	int m_IndexCurrSkin;
+	
+	Rectf m_Window;
+	Rectf m_SelectionRect;
+
 };
 
