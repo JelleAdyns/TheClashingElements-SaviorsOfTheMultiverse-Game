@@ -23,10 +23,14 @@ SkinScreen::SkinScreen(const Point2f& bottomCenter, const std::string& backGroun
 }
 SkinScreen::~SkinScreen()
 {
-	for (auto& pSkin : m_pSkins)
+	for (int i = 0; i < m_pSkins.size(); ++i)
 	{
-		delete pSkin;
-		pSkin = nullptr;
+		if (i != m_IndexCurrSkin)
+		{
+			delete m_pSkins[i];
+			m_pSkins[i] = nullptr;
+		}
+
 	}
 }
 
@@ -57,7 +61,10 @@ void SkinScreen::KeyInput(const SDL_KeyboardEvent& e)
 		m_SelectionRect.left = m_pSkins[m_IndexCurrSkin]->GetHitBox().center.x - m_SelectionRect.width / 2;
 		break;
 	}
-	std::cout << m_IndexCurrSkin << std::endl;
+}
+Character* SkinScreen::GetCharacter() const
+{
+	return m_pSkins[m_IndexCurrSkin];
 }
 
 

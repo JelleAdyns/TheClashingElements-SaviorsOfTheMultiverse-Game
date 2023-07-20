@@ -11,6 +11,7 @@ Character::Character( const Skin& skin) :
 	m_State{CharacterState::ChoosingSkin},
 	m_Dir{ Direction::Down },
 	m_HitBox{ Circlef{Point2f{}, 6} },
+	m_Pos{},
 
 	m_Speed{ Tile::Size * 4 },
 
@@ -55,10 +56,13 @@ void Character::Update(float elapsedSec)
 		{
 			if (m_TargetXLocation < m_BottomCenter.x) m_Dir = Direction::Left;
 			else m_Dir = Direction::Right;
-			m_BottomCenter.x += Lerp<float>(m_BottomCenter.x, float(m_TargetXLocation), m_Speed * elapsedSec);
-			if (round(m_BottomCenter.x) == m_TargetXLocation)
+
+			m_Pos.x = Lerp<float>(m_Pos.x, float(m_TargetXLocation), m_Speed * elapsedSec);
+			m_BottomCenter.x = round(m_Pos.x);
+			std::cout << m_BottomCenter.x << std::endl;
+			if (m_BottomCenter.x == m_TargetXLocation)
 			{
-				m_BottomCenter.x = float(round(m_BottomCenter.x));
+				//m_BottomCenter.x = float(round(m_BottomCenter.x));
 				m_IsMoving = false;
 			}
 		}
@@ -67,10 +71,12 @@ void Character::Update(float elapsedSec)
 		{
 			if (m_TargetYLocation < m_BottomCenter.y) m_Dir = Direction::Down;
 			else m_Dir = Direction::Up;
-			m_BottomCenter.y += Lerp<float>(m_BottomCenter.y, float(m_TargetYLocation), m_Speed * elapsedSec);
-			if (round(m_BottomCenter.y) == m_TargetYLocation)
+
+			m_Pos.y = Lerp<float>(m_Pos.y, float(m_TargetYLocation), m_Speed * elapsedSec);
+			m_BottomCenter.y = round(m_Pos.y);
+			if (m_BottomCenter.y == m_TargetYLocation)
 			{
-				m_BottomCenter.y = float(round(m_BottomCenter.y));
+				//m_BottomCenter.y = float(round(m_BottomCenter.y));
 				m_IsMoving = false;
 			}
 		}
@@ -145,10 +151,14 @@ void Character::SetPos(const Point2f& newPos)
 {
 	m_BottomCenter = newPos;
 	m_HitBox.center = newPos;
+	m_Pos = newPos;
 	m_TargetXLocation = int(newPos.x);
 	m_TargetYLocation = int(newPos.y);
 }
-
+void Character::Play()
+{
+	m_State = CharacterState::Playing;
+}
 
 //#include "pch.h"
 //#include "Character.h"

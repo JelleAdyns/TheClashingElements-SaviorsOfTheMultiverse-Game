@@ -13,7 +13,7 @@ class Character;
 class Level final
 {
 public:
-	explicit Level();
+	explicit Level(Character* pCharacter);
 	~Level();
 
 	Level(const Level& other) = delete;

@@ -13,7 +13,3 @@ BackGround::~BackGround()
 	delete m_pTexture;
 	m_pTexture = nullptr;
 }
-void BackGround::randomFun()
-{
-
-}

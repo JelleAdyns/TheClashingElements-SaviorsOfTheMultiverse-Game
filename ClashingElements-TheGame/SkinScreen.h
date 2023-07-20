@@ -18,6 +18,8 @@ public:
 	virtual void Update(float elapsedSec) override;
 	virtual void KeyInput(const SDL_KeyboardEvent& e) override;
 
+	Character* GetCharacter() const;
+
 private:
 
 	std::vector<Character*> m_pSkins;

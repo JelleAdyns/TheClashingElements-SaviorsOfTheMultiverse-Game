@@ -42,8 +42,8 @@ private:
 
 	// VARIABLES
 
-	GameState m_GameState{ GameState::Start };
-	//Level* m_pLevel;
+	GameState m_GameState{ GameState::SelectingSkin };
+	Level* m_pLevel;
 	Camera m_Camera{ GetViewPort().width , GetViewPort().height};
 	Screen* m_pScreen;
 

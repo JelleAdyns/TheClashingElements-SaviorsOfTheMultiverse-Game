@@ -8,15 +8,16 @@
 #include <utils.h>
 
 
-Level::Level() :
+Level::Level(Character* pCharacter) :
 	m_StageNumber{ 2 },
 	m_LoopNumber{ 0 },
 	m_pGraph{}
 {
 	
+	m_pPlayer = pCharacter;
+	m_pPlayer->Play();
 	LoadStage();
 	m_VecTestSprites.push_back(new BackGround{ Point2f{500, 0}, "Mall.png" });
-	//m_pPlayer = new Character{ Point2f{500, 400} };
 	m_pBackGroundMusic = new SoundStream{ "Sounds/Spaceship.wav" };
 	m_pBackGroundMusic->Play(true);
 }
@@ -83,7 +84,6 @@ void Level::HitCollectable()
 {
 	for (int i = 0; i < m_pVecCollectables.size(); i++)
 	{
-		std::cout << "Collect" << std::endl;
 		if (utils::IsOverlapping(m_pPlayer->GetHitBox(), m_pVecCollectables[i]->GetHitBox()))
 		{
 			delete m_pVecCollectables[i];
