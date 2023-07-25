@@ -34,6 +34,11 @@ Level::~Level()
 		delete pCollectable;
 		pCollectable = nullptr;;
 	}
+	for (auto& pEscalator : m_pVecEscalators)
+	{
+		delete pEscalator;
+		pEscalator = nullptr;;
+	}
 	delete m_pPlayer;
 	m_pPlayer = nullptr;
 	delete m_pBackGroundMusic;
@@ -51,9 +56,16 @@ void Level::Update(float elapsedSec)
 	{
 		pCollectable->Update(elapsedSec);
 	}
+	for (const auto& pEscalator : m_pVecEscalators)
+	{
+		if (utils::IsPointInRect(m_pPlayer->GetHitBox().center, pEscalator->Area)) m_pPlayer->SetSpeed(pEscalator->Velocity);
+	}
+
 	m_pPlayer->Move(m_pGraph);
 	m_pPlayer->Update(elapsedSec);
+	m_pPlayer->SetSpeed(0);
 	if(m_pPlayer->IsMoving()) HitCollectable();
+	
 }
 
 void Level::Draw() const
@@ -62,7 +74,7 @@ void Level::Draw() const
 	{
 		pSprite->Draw();
 	}
-	//m_pGraph->Draw();
+	m_pGraph.Draw();
 	for (const auto& pCollectable : m_pVecCollectables)
 	{
 		pCollectable->Draw();
@@ -145,7 +157,7 @@ void Level::LoadStage()
 		getline(tile, element, ',');
 		int firstIntersection{ std::stoi(element) };
 
-		getline(tile, element);
+		getline(tile, element, ' ');
 		int secondIntersection{ std::stoi(element) };
 
 		int firstXCenter{ m_pGraph.GetXCenterOfTile(firstIntersection) };
@@ -183,7 +195,18 @@ void Level::LoadStage()
 			nrOfTiles = (firstYCenter - secondYCenter) / Tile::Size - 1;
 
 			//Add a tile to connect to the first intersection
-			m_pGraph.AddTile(m_pGraph.GetNrOfTiles(), firstXCenter, firstYCenter - Tile::Size);
+			std::string escalatorInfo{};
+			getline(tile, escalatorInfo);
+			if (escalatorInfo.find("Escalator") != std::string::npos)
+			{
+				if (escalatorInfo.find("Up") != std::string::npos)
+				{
+					m_pVecEscalators.push_back(new Escalator{ Point2f{float(firstXCenter), float(firstYCenter)}, Point2f{float(secondXCenter), float(secondYCenter)}, false });
+				}
+				else m_pVecEscalators.push_back(new Escalator{ Point2f{float(firstXCenter), float(firstYCenter)}, Point2f{float(secondXCenter), float(secondYCenter)}, true });
+			}
+
+			m_pGraph.AddTile(m_pGraph.GetNrOfTiles(), firstXCenter, firstYCenter - Tile::Size );
 			m_pVecCollectables.push_back(new Collectable{ Point2f{float(firstXCenter), float(firstYCenter - Tile::Size)} });
 			m_pGraph.AddEdge(firstIntersection, m_pGraph.GetNrOfTiles() - 1);
 

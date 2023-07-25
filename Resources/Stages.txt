@@ -15,7 +15,7 @@
 3,4
 4,5
 5,6
-4,7
-5,8
+4,7 Escalator Up
+5,8 Escalator Down
 7,8
 -

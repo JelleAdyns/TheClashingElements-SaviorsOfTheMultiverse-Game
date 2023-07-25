@@ -16,11 +16,11 @@ public:
 
 	//DEBUG DRAW
 	void Draw() const;
-	void AddTile(const int id, const int centerX, const int centerY, const bool isIntersection = false);
-	void AddEdge(const int srcTileId, const int neighboutId);
+	void AddTile(int id, int centerX, int centerY, bool isIntersection = false);
+	void AddEdge(int srcTileId, int neighboutId);
 
-	int GetXCenterOfTile(const int id) const;
-	int GetYCenterOfTile(const int id) const;
+	int GetXCenterOfTile(int id) const;
+	int GetYCenterOfTile(int id) const;
 	int GetNrOfTiles() const;
 
 	bool HasNeighbourInDirection(const Vector2f& dir, const Point2f& playerPos, int& targetLocation) const;

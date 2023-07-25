@@ -32,6 +32,7 @@ private:
 	std::vector<AnimatedSprite*> m_VecTestSprites;
 	std::vector<Collectable*> m_pVecCollectables;
 	Character* m_pPlayer;
+	std::vector<Escalator*> m_pVecEscalators;
 
 	SoundStream* m_pBackGroundMusic;
 	PathGraph m_pGraph;

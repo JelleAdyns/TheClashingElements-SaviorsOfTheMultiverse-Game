@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "Tile.h"
 
-int Tile::Size{16};
+const int Tile::Size{16};
 
-Tile::Tile(const int id, const int centerX, const int centerY, const bool isIntersection)
+Tile::Tile(int id, int centerX, int centerY, bool isIntersection)
 	:Id{ id }
 	, CenterX{ centerX }
 	, CenterY{ centerY }
@@ -11,4 +11,13 @@ Tile::Tile(const int id, const int centerX, const int centerY, const bool isInte
 	, IsIntersection{ isIntersection }
 {
 	
+}
+
+const int Escalator::Speed{Tile::Size};
+
+Escalator::Escalator(const Point2f& startCenter, const Point2f& endCenter, bool isDownwards) :
+	Velocity{isDownwards ? -Speed : Speed},
+	Area{Rectf{startCenter.x - Tile::Size/2, endCenter.y + Tile::Size/2, Tile::Size, (startCenter.y - endCenter.y) - Tile::Size} }
+{
+
 }

@@ -10,23 +10,22 @@ void PathGraph::Draw() const
 		utils::DrawRect(tile.Area);
 	}
 }
-
-void PathGraph::AddTile(const int id, const int centerX, const int centerY, const bool isIntersection)
+void PathGraph::AddTile(int id, int centerX, int centerY, bool isIntersection)
 {
 	m_VecTiles.push_back(Tile{ id, centerX, centerY, isIntersection });
 	m_AdjacencyList.push_back(std::vector<int>{});
 }
-void PathGraph::AddEdge(const int srcTileId, const int neighbourId)
+void PathGraph::AddEdge(int srcTileId, int neighbourId)
 {
 	m_AdjacencyList[srcTileId].push_back(neighbourId);
 	m_AdjacencyList[neighbourId].push_back(srcTileId);
 }
 
-int PathGraph::GetXCenterOfTile(const int id) const
+int PathGraph::GetXCenterOfTile(int id) const
 {
 	return m_VecTiles[id].CenterX;
 }
-int PathGraph::GetYCenterOfTile(const int id) const
+int PathGraph::GetYCenterOfTile(int id) const
 {
 	return m_VecTiles[id].CenterY;
 }

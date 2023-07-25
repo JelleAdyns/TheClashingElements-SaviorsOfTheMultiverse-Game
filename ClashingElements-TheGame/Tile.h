@@ -3,14 +3,22 @@
 
 struct Tile
 {
-	explicit Tile(const int id, const int centerX, const int centerY, const bool isIntersection = false);
-	static int Size;
+	explicit Tile(int id, int centerX, int centerY, bool isIntersection = false);
+	const static int Size;
 
-	int Id;
-	int CenterX;
-	int CenterY;
-	Rectf Area;
-	bool IsIntersection;
+	const int Id;
+	const int CenterX;
+	const int CenterY;
+	const Rectf Area;
+	const bool IsIntersection;
 
 };
 
+struct Escalator
+{
+	explicit Escalator(const Point2f& startCenter, const Point2f& endCenter, bool isDownwards);
+
+	const static int Speed;
+	const int Velocity;
+	const Rectf Area;
+};

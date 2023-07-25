@@ -66,6 +66,9 @@
     <ClCompile Include="SkinScreen.cpp">
       <Filter>Game Files\Sub Classes\Screens</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="GlobalEnumClasses.h">
       <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -23,6 +23,7 @@ public:
 	Circlef GetHitBox() const;
 	bool IsMoving() const;
 	void SetPos(const Point2f& newPos);
+	void SetSpeed(int newSpeed);
 	void Play();
 
 private:
@@ -40,6 +41,7 @@ private:
 	Circlef m_HitBox;
 	Point2f m_Pos;
 
+	int m_DefaultSpeed;
 	int m_Speed;
 
 	int m_TargetXLocation;
