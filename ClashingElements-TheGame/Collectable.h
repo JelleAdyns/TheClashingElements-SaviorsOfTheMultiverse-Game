@@ -11,20 +11,20 @@ public:
 	Collectable& operator=(const Collectable& other) = delete;
 	Collectable& operator=(Collectable&& other) noexcept = delete;
 
+	virtual void Draw() const override;
 	virtual void Update(float elapsedSec) override;
 
 	Circlef GetHitBox() const;
 
 private:
 	const static Texture* m_pTexture;
-	static int m_InstanceCouner;
+	static int m_InstanceCounter;
 	const static int m_Value;
 
 	Circlef m_HitBox;
 
 	const static int m_Amplitude;
 	const float m_Period;
-	const int m_YPos;
 	float m_Time;
 };
 
