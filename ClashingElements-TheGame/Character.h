@@ -2,6 +2,7 @@
 #include <utils.h>
 #include "AnimatedSprite.h"
 #include "PathGraph.h"
+#include "Level.h"
 #include "GlobalEnumClasses.h"
 class Character final : public AnimatedSprite
 {
@@ -16,17 +17,20 @@ public:
 
 
 	virtual void Update(float elapsedSec) override;
-	void Move(const PathGraph& graph);
+	void UpdatePos(const Vector2f& newVelocity, float elapsedSec);
+	void Move(const PathGraph& graph, float elapsedSec);
 
 	void ResetFrames();
 
 	Circlef GetHitBox() const;
 	bool IsMoving() const;
 	void SetPos(const Point2f& newPos);
-	void SetSpeed(int newSpeed);
 	void Play();
 
 private:
+	const static int m_PixelOffset;
+	static int m_DefaultSpeed;
+
 	enum class CharacterState
 	{
 		ChoosingSkin,
@@ -41,8 +45,7 @@ private:
 	Circlef m_HitBox;
 	Point2f m_Pos;
 
-	int m_DefaultSpeed;
-	int m_Speed;
+	Vector2f m_Velocity;
 
 	int m_TargetXLocation;
 	int m_TargetYLocation;

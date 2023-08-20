@@ -5,16 +5,18 @@
 #include <Texture.h>
 #include <iostream>
 
-Character::Character( const Skin& skin) :
+int	Character::m_DefaultSpeed{ Tile::Size * 4 };
+const int Character::m_PixelOffset{1};
+
+Character::Character(const Skin& skin) :
 	AnimatedSprite{ Point2f{}, 8, 32, 1.f / 20 },
-	
-	m_State{CharacterState::ChoosingSkin},
+
+	m_State{ CharacterState::ChoosingSkin },
 	m_Dir{ Direction::Down },
 	m_HitBox{ Circlef{Point2f{}, 6} },
 	m_Pos{},
 
-	m_DefaultSpeed{ Tile::Size * 4 },
-	m_Speed{ 0 },
+	m_Velocity{ Vector2f{0,0} },
 
 	m_TargetXLocation{ 0 },
 	m_TargetYLocation{ 0 },
@@ -53,38 +55,46 @@ void Character::Update(float elapsedSec)
 	
 	if (m_State == CharacterState::Playing)
 	{
-		int speed{ m_DefaultSpeed + (m_Dir == Direction::Down ? -m_Speed : m_Speed)};
-		if (m_TargetXLocation != m_BottomCenter.x)
+		//int speed{ m_DefaultSpeed + (m_Dir == Direction::Down ? -m_Speed : m_Speed)};
+		if (m_TargetXLocation != m_BottomCenter.x && m_IsMoving)
 		{
-			m_Pos.x = Lerp<float>(m_Pos.x, float(m_TargetXLocation), speed * elapsedSec);
-			m_BottomCenter.x = round(m_Pos.x);
+			//m_Pos.x = Lerp<float>(m_Pos.x, float(m_TargetXLocation), speed * elapsedSec);
+			if (m_TargetXLocation < m_BottomCenter.x) m_Velocity.x = float(-m_DefaultSpeed);
+			else m_Velocity.x = float(m_DefaultSpeed);
+
+			UpdatePos(m_Velocity, elapsedSec);
 
 			if (m_BottomCenter.x == m_TargetXLocation) m_IsMoving = false;
 		}
+		else m_Velocity.x = 0;
 
-		if (m_TargetYLocation != m_BottomCenter.y)
+		if (m_TargetYLocation != m_BottomCenter.y && m_IsMoving)
 		{
-			m_Pos.y = Lerp<float>(m_Pos.y, float(m_TargetYLocation), speed * elapsedSec);
-			m_BottomCenter.y = round(m_Pos.y);
+			//m_Pos.y = Lerp<float>(m_Pos.y, float(m_TargetYLocation), speed * elapsedSec);
+
+			if (m_TargetYLocation < m_BottomCenter.y) m_Velocity.y = float(-m_DefaultSpeed);
+			else m_Velocity.y = float(m_DefaultSpeed);
+		
+
+			UpdatePos(m_Velocity, elapsedSec);
 
 			if (m_BottomCenter.y == m_TargetYLocation) m_IsMoving = false;
 		}
-
-		m_HitBox.center = m_BottomCenter;
+		else m_Velocity.y = 0;
 
 		m_CurrentRow = int(m_Dir);
 	}
 }
-void Character::Move(const PathGraph& graph)
+void Character::Move(const PathGraph& graph, float elapsedSec)
 {
 	if (m_State == CharacterState::Playing)
 	{
 		const Uint8* pStates = SDL_GetKeyboardState(nullptr);
 
-		if (pStates[SDL_SCANCODE_LEFT])
+		if (pStates[SDL_SCANCODE_LEFT] && !pStates[SDL_SCANCODE_RIGHT])
 		{
 			int targetX{};
-			if (graph.HasNeighbourInDirection(Vector2f{ -1,0 }, m_BottomCenter, targetX))
+			if (graph.HasNeighbourInDirection(Direction::Left, m_BottomCenter, targetX))
 			{
 				if (m_TargetYLocation == m_BottomCenter.y)
 				{
@@ -94,10 +104,10 @@ void Character::Move(const PathGraph& graph)
 				}
 			}
 		}
-		if (pStates[SDL_SCANCODE_RIGHT])
+		if (pStates[SDL_SCANCODE_RIGHT] && !pStates[SDL_SCANCODE_LEFT])
 		{
 			int targetX{};
-			if (graph.HasNeighbourInDirection(Vector2f{ 1,0 }, m_BottomCenter, targetX))
+			if (graph.HasNeighbourInDirection(Direction::Right, m_BottomCenter, targetX))
 			{
 				if (m_TargetYLocation == m_BottomCenter.y)
 				{
@@ -107,37 +117,49 @@ void Character::Move(const PathGraph& graph)
 				}
 			}
 		}
-		if (pStates[SDL_SCANCODE_DOWN])
+		if (pStates[SDL_SCANCODE_DOWN] && !pStates[SDL_SCANCODE_UP])
 		{
 			int targetY{};
-			if (graph.HasNeighbourInDirection(Vector2f{ 0, -1 }, m_BottomCenter, targetY))
+			if (graph.HasNeighbourInDirection(Direction::Down, m_BottomCenter, targetY))
 			{
 				if (m_TargetXLocation == m_BottomCenter.x)
 				{
 					m_Dir = Direction::Down;
 					m_IsMoving = true;
-					m_TargetYLocation = targetY;
+					m_TargetYLocation = targetY - m_PixelOffset;
 				}
 			}
 		}
-		if (pStates[SDL_SCANCODE_UP] )
+		if (pStates[SDL_SCANCODE_UP] && !pStates[SDL_SCANCODE_DOWN])
 		{
 			int targetY{};
-			if (graph.HasNeighbourInDirection(Vector2f{ 0, 1 }, m_BottomCenter, targetY))
+			if (graph.HasNeighbourInDirection(Direction::Up, m_BottomCenter, targetY))
 			{
 				if (m_TargetXLocation == m_BottomCenter.x)
 				{
 					m_Dir = Direction::Up;
 					m_IsMoving = true;
-					m_TargetYLocation = targetY;
+					m_TargetYLocation = targetY - m_PixelOffset;
 				}
 			}
 		}
+
+		int targetY{};
+		UpdatePos(Vector2f{ 0, graph.GetEscalatorVelocity(m_BottomCenter, targetY) }, elapsedSec);
+		if (targetY != 0)
+		{
+			if (targetY > m_BottomCenter.y) m_Dir = Direction::Up;
+			else m_Dir = Direction::Down;
+
+			m_IsMoving = true;
+			m_TargetYLocation = targetY - m_PixelOffset;
+			
+		}
+
 	}
 
 
 }
-
 void Character::ResetFrames()
 {
 	m_CurrentCol = 0;
@@ -152,15 +174,21 @@ bool Character::IsMoving() const
 }
 void Character::SetPos(const Point2f& newPos)
 {
-	m_BottomCenter = newPos;
-	m_HitBox.center = newPos;
-	m_Pos = newPos;
-	m_TargetXLocation = int(newPos.x);
-	m_TargetYLocation = int(newPos.y);
+	Point2f pos{ newPos.x, newPos.y - m_PixelOffset };
+	m_BottomCenter = pos;
+	m_HitBox.center = pos;
+	m_Pos = pos;
+	m_TargetXLocation = int(pos.x);
+	m_TargetYLocation = int(pos.y);
 }
-void Character::SetSpeed(int newSpeed)
+void Character::UpdatePos(const Vector2f& newVelocity, float elapsedSec)
 {
-	m_Speed = newSpeed;
+	m_Pos.x += newVelocity.x * elapsedSec;
+	m_BottomCenter.x = round(m_Pos.x);
+	m_Pos.y += newVelocity.y * elapsedSec;
+	m_BottomCenter.y = round(m_Pos.y);
+
+	m_HitBox.center = m_BottomCenter;
 }
 void Character::Play()
 {
