@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseGame.h"
 #include "Level.h"
-#include "Camera.h"
+
 #include "Screen.h"
 #include <vector>
 
@@ -44,9 +44,10 @@ private:
 
 	GameState m_GameState{ GameState::SelectingSkin };
 	Level* m_pLevel;
-	Camera m_Camera{ GetViewPort().width , GetViewPort().height};
 	Screen* m_pScreen;
 
+	bool m_DebugScale{ false };
+	float m_DScale{ 0.25f };
 	
 	// FUNCTIONS
 	void Initialize();

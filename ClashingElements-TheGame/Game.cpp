@@ -78,9 +78,11 @@ void Game::Draw( ) const
 		break;
 	case Game::GameState::Playing:
 		glPushMatrix();
-		//glScalef( m_Scale,m_Scale, 1 );
-		m_Camera.Transform(m_pLevel->GetPlayerPos());
-		//utils::DrawRect(1, 1, 1280 - 1, 720 - 1);
+		if (m_DebugScale)
+		{
+			glScalef( m_DScale ,  m_DScale, 0);
+			glTranslatef(GetViewPort().width / m_DScale / 2, GetViewPort().height / m_DScale / 2, 0);
+		}
 		m_pLevel->Draw();
 		glPopMatrix();
 		break;
@@ -106,15 +108,22 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		switch (e.keysym.sym)
 		{
 		case SDLK_SPACE:
-			m_pLevel = new Level{ static_cast<SkinScreen*>(m_pScreen)->GetCharacter() };
+			m_pLevel = new Level{ static_cast<SkinScreen*>(m_pScreen)->GetCharacter(), GetViewPort().width, GetViewPort().height};
 			delete m_pScreen;
 			m_pScreen = nullptr;
-			m_Camera.SetLevelBoundaries(m_pLevel->GetLevelBoundaries());
 			m_GameState = GameState::Playing;
 			break;
 		}
 		break;
 	case Game::GameState::Playing:
+		switch (e.keysym.sym)
+		{
+		case SDLK_s:
+			m_DebugScale = !m_DebugScale;
+			//if (m_DebugScale) m_pLevel->SetWidthHeight(GetViewPort().width / m_DScale, GetViewPort().height / m_DScale);
+			//else m_pLevel->SetWidthHeight(GetViewPort().width, GetViewPort().height);
+			break;
+		}
 		break;
 	case Game::GameState::GameOver:
 		break;
