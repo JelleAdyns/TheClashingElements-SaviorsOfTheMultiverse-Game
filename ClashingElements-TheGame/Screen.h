@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <Texture.h>
-class BackGround;
+class AnimBackGround;
 class Screen
 {
 public:
@@ -18,6 +18,6 @@ public:
 	virtual void KeyInput(const SDL_KeyboardEvent& e) = 0;
 protected:
 	//Sprite
-	BackGround* m_pBackGround;
+	AnimBackGround* m_pBackGround;
 
 };

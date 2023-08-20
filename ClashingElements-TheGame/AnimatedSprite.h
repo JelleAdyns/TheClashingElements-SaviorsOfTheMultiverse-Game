@@ -11,7 +11,7 @@ public:
 	AnimatedSprite& operator=(const AnimatedSprite& other) = delete;
 	AnimatedSprite& operator=(AnimatedSprite&& other) noexcept = delete;
 
-	void Draw() const;
+	virtual void Draw() const;
 	virtual void Update(float elapsedSec);
 
 	Rectf DestRect() const;

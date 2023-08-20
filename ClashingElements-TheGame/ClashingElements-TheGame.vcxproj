@@ -150,7 +150,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedSprite.cpp" />
-    <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="AnimBackGround.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Collectable.cpp" />
@@ -158,6 +158,8 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="PalmTree.cpp" />
     <ClCompile Include="PathGraph.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="SkinScreen.cpp" />
@@ -167,7 +169,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedSprite.h" />
-    <ClInclude Include="BackGround.h" />
+    <ClInclude Include="AnimBackGround.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Collectable.h" />
@@ -177,6 +179,8 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="GlobalEnumClasses.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="MyUtils.h" />
+    <ClInclude Include="BackGround.h" />
+    <ClInclude Include="PalmTree.h" />
     <ClInclude Include="PathGraph.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Screen.h" />

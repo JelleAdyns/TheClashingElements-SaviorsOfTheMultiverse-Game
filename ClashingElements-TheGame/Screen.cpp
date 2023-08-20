@@ -1,11 +1,11 @@
 #include "pch.h"
 #include "Screen.h"
-#include "BackGround.h"
+#include "AnimBackGround.h"
 
 
 Screen::Screen(const Point2f& bottomCenter, const std::string& backGroundFilePath)
 {
-	m_pBackGround = new BackGround{ bottomCenter, backGroundFilePath };
+	m_pBackGround = new AnimBackGround{ bottomCenter, backGroundFilePath };
 }
 
 Screen::~Screen()

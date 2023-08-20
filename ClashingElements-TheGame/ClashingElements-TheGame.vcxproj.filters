@@ -39,7 +39,7 @@
     <ClCompile Include="AnimatedSprite.cpp">
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClCompile>
-    <ClCompile Include="BackGround.cpp">
+    <ClCompile Include="AnimBackGround.cpp">
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClCompile>
     <ClCompile Include="Character.cpp">
@@ -69,6 +69,12 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="PalmTree.cpp">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -86,7 +92,7 @@
     <ClInclude Include="AnimatedSprite.h">
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClInclude>
-    <ClInclude Include="BackGround.h">
+    <ClInclude Include="AnimBackGround.h">
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClInclude>
     <ClInclude Include="Character.h">
@@ -120,6 +126,12 @@
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="PalmTree.h">
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClInclude>
   </ItemGroup>
