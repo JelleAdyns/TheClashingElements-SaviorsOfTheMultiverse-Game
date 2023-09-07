@@ -3,7 +3,7 @@
 class AnimatedSprite
 {
 public:
-	explicit AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime);
+	explicit AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime, bool updateRows);
 	virtual ~AnimatedSprite();
 
 	AnimatedSprite(const AnimatedSprite& other) = delete;
@@ -34,6 +34,7 @@ protected:
 
 private:
 	const Texture* m_pTexture;
+	const bool m_UpdateRows;
 
 };
 

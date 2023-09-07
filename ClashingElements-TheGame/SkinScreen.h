@@ -1,12 +1,14 @@
 #pragma once
 #include "Screen.h"
 #include "GlobalEnumClasses.h"
+#include "BackGround.h"
 #include <vector>
+
 class Character;
 class SkinScreen final : public Screen
 {
 public:
-	explicit SkinScreen(const Point2f& bottomCenter, const std::string& backGroundFilePath, const Rectf& window);
+	explicit SkinScreen(const std::string& backGroundFilePath, const Rectf& window);
 	~SkinScreen();
 
 	SkinScreen(const SkinScreen& other) = delete;
@@ -22,10 +24,11 @@ public:
 
 private:
 
+	BackGround m_BackGround;
+
 	std::vector<Character*> m_pSkins;
 	int m_IndexCurrSkin;
 	
-	Rectf m_Window;
 	Rectf m_SelectionRect;
 
 };

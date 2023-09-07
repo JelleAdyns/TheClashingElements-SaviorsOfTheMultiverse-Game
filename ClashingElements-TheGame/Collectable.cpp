@@ -7,7 +7,7 @@ const int Collectable::m_Value{100};
 const int Collectable::m_Amplitude{ 3 };
 
 Collectable::Collectable(const Point2f& BottomCenter):
-	AnimatedSprite{ BottomCenter, 3, 9, 1.f / 20 },
+	AnimatedSprite{ BottomCenter, 3, 9, 1.f / 20, false },
 	m_HitBox{Circlef{BottomCenter, 3}},
 	m_Period{float(2*M_PI) *  (0.05f * (rand() % 8 + 5))},
 	m_Time{0.f}

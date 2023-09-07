@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "SkinScreen.h"
+#include "StartScreen.h"
 #include <utils.h>
 #include <iostream>
 
@@ -23,9 +24,9 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_pScreen = new SkinScreen{ Point2f{GetViewPort().width / 2, 0},"", GetViewPort() };
+	m_pScreen = new StartScreen{ "Space.png", GetViewPort() };
 	m_pLevel = nullptr;
-	
+	std::cout << sizeof(int) << std::endl;
 }
 
 void Game::Cleanup( )
@@ -45,9 +46,7 @@ void Game::Update( float elapsedSec )
 	switch (m_GameState)
 	{
 	case Game::GameState::Start:
-		break;
 	case Game::GameState::ShowingHighScores:
-		break;
 	case Game::GameState::SelectingSkin:
 		m_pScreen->Update(elapsedSec);
 		break;
@@ -70,9 +69,7 @@ void Game::Draw( ) const
 	switch (m_GameState)
 	{
 	case Game::GameState::Start:
-		break;
 	case Game::GameState::ShowingHighScores:
-		break;
 	case Game::GameState::SelectingSkin:
 		m_pScreen->Draw();
 		break;
@@ -80,15 +77,14 @@ void Game::Draw( ) const
 		glPushMatrix();
 		if (m_DebugScale)
 		{
+			glTranslatef(GetViewPort().width /2  , GetViewPort().height /2 , 0);
 			glScalef( m_DScale ,  m_DScale, 0);
-			glTranslatef(GetViewPort().width / m_DScale / 2, GetViewPort().height / m_DScale / 2, 0);
+			glTranslatef(-(GetViewPort().width  /2) , -(GetViewPort().height / 2) , 0);
 		}
 		m_pLevel->Draw();
 		glPopMatrix();
 		break;
 	case Game::GameState::GameOver:
-		break;
-	default:
 		break;
 	}
 	
@@ -100,6 +96,17 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 	switch (m_GameState)
 	{
 	case Game::GameState::Start:
+		m_pScreen->KeyInput(e);
+		switch (e.keysym.sym)
+		{
+		case SDLK_SPACE:
+			delete m_pScreen;
+			m_pScreen = new SkinScreen{ "Space.png", GetViewPort() };
+			m_GameState = GameState::SelectingSkin;
+			break;
+		}
+		break;
+		
 		break;
 	case Game::GameState::ShowingHighScores:
 		break;

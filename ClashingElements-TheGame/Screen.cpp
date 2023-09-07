@@ -1,15 +1,8 @@
 #include "pch.h"
 #include "Screen.h"
-#include "AnimBackGround.h"
 
-
-Screen::Screen(const Point2f& bottomCenter, const std::string& backGroundFilePath)
+Screen::Screen(const Rectf& window) :
+	m_Window{window}
 {
-	m_pBackGround = new AnimBackGround{ bottomCenter, backGroundFilePath };
-}
 
-Screen::~Screen()
-{
-	delete m_pBackGround;
-	m_pBackGround = nullptr;
 }

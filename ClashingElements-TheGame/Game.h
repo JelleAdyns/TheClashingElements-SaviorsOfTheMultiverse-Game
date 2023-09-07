@@ -42,7 +42,7 @@ private:
 
 	// VARIABLES
 
-	GameState m_GameState{ GameState::SelectingSkin };
+	GameState m_GameState{ GameState::Start };
 	Level* m_pLevel;
 	Screen* m_pScreen;
 

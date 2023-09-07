@@ -17,12 +17,13 @@ public:
 	void Draw() const;
 	float GetParallaxSpeed() const;
 
+	Rectf DestRect() const;
+
 private:
 
 	const Texture* m_pBackGround;
 	const float m_ParallaxSpeed;
 
-	Rectf DestRect() const;
 	const Point2f m_BottemLeft;
 
 };

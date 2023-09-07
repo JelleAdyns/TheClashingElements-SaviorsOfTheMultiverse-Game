@@ -4,18 +4,17 @@
 #include <iostream>
 #include <utils.h>
 
-SkinScreen::SkinScreen(const Point2f& bottomCenter, const std::string& backGroundFilePath, const Rectf& window) :
-	Screen{ bottomCenter, backGroundFilePath },
-	m_IndexCurrSkin{ 0 },
-	m_Window{window}
-
+SkinScreen::SkinScreen( const std::string& backGroundFilePath, const Rectf& window) :
+	Screen{window},
+	m_BackGround{ backGroundFilePath },
+	m_IndexCurrSkin{ 0 }
 {
 	m_pSkins.push_back(new Character{ Skin::Finn });
 	m_pSkins.push_back(new Character{ Skin::Wesley});
 	
 	for (int i = 0; i < m_pSkins.size(); i++)
 	{
-		m_pSkins[i]->SetPos(Point2f{ m_Window.width / (m_pSkins.size() + 1) * (i+1), m_Window.height / 2 });
+		m_pSkins[i]->SetPos(Point2f{ std::round(m_Window.width / (m_pSkins.size() + 1) * (i+1)), std::round(m_Window.height / 2) });
 	}
 	float rectWidth{40};
 	float rectHeight{50};
@@ -36,6 +35,7 @@ SkinScreen::~SkinScreen()
 
 void SkinScreen::Draw() const
 {
+	m_BackGround.Draw();
 	for (const auto& pSkin : m_pSkins)
 	{
 		pSkin->Draw();

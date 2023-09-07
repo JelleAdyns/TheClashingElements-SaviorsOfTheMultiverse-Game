@@ -6,7 +6,7 @@ int PalmTree::m_InstanceCounter{ 0 };
 
 
 PalmTree::PalmTree(const Point2f& bottomCenter):
-	AnimatedSprite{bottomCenter, 3, 3, 1.f/8 }
+	AnimatedSprite{bottomCenter, 3, 3, 1.f/8, true }
 {
 	++m_InstanceCounter;
 

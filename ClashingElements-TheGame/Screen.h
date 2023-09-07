@@ -1,12 +1,9 @@
 #pragma once
-#include <vector>
-#include <Texture.h>
-class AnimBackGround;
 class Screen
 {
 public:
-	explicit Screen(const Point2f& bottomCenter, const std::string& backGroundFilePath);
-	virtual ~Screen();
+	explicit Screen(const Rectf& window);
+	virtual ~Screen() = default;
 
 	Screen(const Screen& other) = delete;
 	Screen(Screen&& other) noexcept = delete;
@@ -17,7 +14,5 @@ public:
 	virtual void Update(float elapsedSec) = 0;
 	virtual void KeyInput(const SDL_KeyboardEvent& e) = 0;
 protected:
-	//Sprite
-	AnimBackGround* m_pBackGround;
-
+	Rectf m_Window;
 };

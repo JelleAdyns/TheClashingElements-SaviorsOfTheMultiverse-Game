@@ -3,7 +3,7 @@
 #include <Texture.h>
 
 
-AnimatedSprite::AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime):
+AnimatedSprite::AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime, bool updateRows):
 	m_BottomCenter{bottomCenter},
 
 	m_CurrentCol{0},
@@ -16,7 +16,8 @@ AnimatedSprite::AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFr
 	
 	m_PassedTime{0.f},
 
-	m_pTexture{nullptr}
+	m_pTexture{nullptr},
+	m_UpdateRows{updateRows}
 {
 
 }
@@ -36,7 +37,10 @@ void AnimatedSprite::Update(float elapsedSec)
 	m_PassedTime += elapsedSec;
 	if (m_PassedTime >= m_FrameTime)
 	{
-		if (m_CurrentCol == m_NrOfCols - 1) ++m_CurrentRow %= m_NrOfRows;
+		if (m_UpdateRows)
+		{
+			if (m_CurrentCol == m_NrOfCols - 1) ++m_CurrentRow %= m_NrOfRows;
+		}
 		++m_CurrentCol %= m_NrOfCols;
 		m_PassedTime = 0.f;
 	}
