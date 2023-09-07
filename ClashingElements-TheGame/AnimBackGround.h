@@ -4,17 +4,15 @@
 class AnimBackGround final: public AnimatedSprite
 {
 public:
-	explicit AnimBackGround(const Point2f& bottomCenter, const std::string& filePath);
+	explicit AnimBackGround(const std::string& filePath);
 	~AnimBackGround();
 
 	AnimBackGround(const AnimBackGround& other) = delete;
 	AnimBackGround(AnimBackGround&& other) noexcept = delete;
 	AnimBackGround& operator=(const AnimBackGround& other) = delete;
 	AnimBackGround& operator=(AnimBackGround&& other) noexcept = delete;
-
-	//virtual void Update(float elapsedSec) override;
 private:
-
+	const static int m_NrOfCols;
 	const Texture* m_pTexture;
 };
 

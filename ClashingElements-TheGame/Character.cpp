@@ -9,7 +9,7 @@ int	Character::m_DefaultSpeed{ Tile::Size * 4 };
 const int Character::m_PixelOffset{1};
 
 Character::Character(const Skin& skin) :
-	AnimatedSprite{ Point2f{}, 8, 32, 1.f / 20 },
+	AnimatedSprite{ Point2f{}, 8, 32, 1.f / 20, false },
 
 	m_State{ CharacterState::ChoosingSkin },
 	m_Dir{ Direction::Down },
@@ -180,6 +180,7 @@ void Character::SetPos(const Point2f& newPos)
 	m_Pos = pos;
 	m_TargetXLocation = int(pos.x);
 	m_TargetYLocation = int(pos.y);
+	m_IsMoving = false;
 }
 void Character::UpdatePos(const Vector2f& newVelocity, float elapsedSec)
 {

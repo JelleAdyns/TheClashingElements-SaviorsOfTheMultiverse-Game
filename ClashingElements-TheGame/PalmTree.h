@@ -1,11 +1,10 @@
 #pragma once
-#include <Texture.h>
 #include "AnimatedSprite.h"
-class PalmTree : public AnimatedSprite
+class PalmTree final: public AnimatedSprite
 {
 public:
 	explicit PalmTree(const Point2f& bottomCenter);
-	virtual ~PalmTree();
+	~PalmTree();
 
 	PalmTree(const PalmTree& other) = delete;
 	PalmTree(PalmTree&& other) noexcept = delete;

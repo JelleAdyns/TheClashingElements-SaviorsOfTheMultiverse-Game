@@ -26,10 +26,10 @@ public:
 	void Update(float elapsedSec);
 	void Draw() const;
 
-	void SetWidthHeight(float width, float height);
-	Rectf GetPlayerPos() const;
-	Rectf GetLevelBoundaries() const;
 private:
+	const std::vector<std::pair<std::string,std::pair<std::string, Point2f>>> m_VecBackGrounds;
+	const std::vector<std::string> m_VecMusic;
+
 	int m_StageNumber;
 	int m_LoopNumber;
 
@@ -43,10 +43,11 @@ private:
 
 	Character* m_pPlayer;
 
-
 	SoundStream* m_pBackGroundMusic;
-	PathGraph m_pGraph;
+
+	PathGraph m_Graph;
 
 	void HitCollectable();
 	void LoadStage();
+	void Reset();
 };
