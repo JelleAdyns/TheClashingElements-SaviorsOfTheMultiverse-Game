@@ -75,6 +75,15 @@
     <ClCompile Include="PalmTree.cpp">
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClCompile>
+    <ClCompile Include="Mobility.cpp">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Escalator.cpp">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="FallingBoy.cpp">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -132,6 +141,15 @@
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
     <ClInclude Include="PalmTree.h">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="Mobility.h">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Escalator.h">
+      <Filter>Game Files\Sub Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="FallingBoy.h">
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClInclude>
   </ItemGroup>

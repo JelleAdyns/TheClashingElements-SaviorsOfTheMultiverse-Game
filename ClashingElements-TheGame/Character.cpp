@@ -23,9 +23,15 @@ Character::Character(const Skin& skin) :
 
 	m_IsMoving{ false }
 {
-	if (skin == Skin::Finn) m_pTexture = new Texture{ "Finn.png" };
-	else if (skin == Skin::Wesley) m_pTexture = new Texture{ "Wesley.png" };
-	
+	switch (skin)
+	{
+	case Skin::Finn:
+		m_pTexture = new Texture{ "Finn.png" };
+		break;
+	case Skin::Wesley:
+		m_pTexture = new Texture{ "Wesley.png" };
+		break;
+	}
 	AnimatedSprite::SetTexture(m_pTexture);
 }
 Character::~Character()

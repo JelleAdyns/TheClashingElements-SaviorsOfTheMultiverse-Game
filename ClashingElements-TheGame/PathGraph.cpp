@@ -9,6 +9,11 @@ void PathGraph::Draw() const
 	{
 		utils::DrawRect(tile.Area);
 	}
+	for (const Escalator& area : m_VecEscalators)
+	{
+		utils::DrawRect(area.Area);
+		utils::DrawRect(area.TargetRect);
+	}
 }
 void PathGraph::AddTile(int id, int centerX, int centerY, bool isIntersection)
 {
@@ -19,6 +24,10 @@ void PathGraph::AddEdge(int srcTileId, int neighbourId)
 {
 	m_AdjacencyList[srcTileId].push_back(neighbourId);
 	m_AdjacencyList[neighbourId].push_back(srcTileId);
+}
+void PathGraph::AddEscalator(const Point2f& startCenter, const Point2f& endCenter, bool isDownwards)
+{
+	m_VecEscalators.push_back(Escalator{ startCenter, endCenter, isDownwards });
 }
 
 int PathGraph::GetXCenterOfTile(int id) const
@@ -45,12 +54,12 @@ int PathGraph::GetTileId(const Point2f& playerPos) const
 	}
 	return 0;
 }
-bool PathGraph::HasNeighbourInDirection(const Vector2f& dir, const Point2f& playerPos, int& targetLocation) const
+bool PathGraph::HasNeighbourInDirection(const Direction& dir, const Point2f& playerPos, int& targetLocation) const
 {
 	int id{ GetTileId(playerPos) };
 	for (const auto& neighbour : m_AdjacencyList[id])
 	{
-		if (dir.x < 0)
+		if (dir == Direction::Left)
 		{
 			if (m_VecTiles[neighbour].CenterX < m_VecTiles[id].CenterX)
 			{
@@ -59,7 +68,7 @@ bool PathGraph::HasNeighbourInDirection(const Vector2f& dir, const Point2f& play
 			}
 		}
 				
-		if (dir.x > 0)
+		if (dir == Direction::Right)
 		{
 			if (m_VecTiles[neighbour].CenterX > m_VecTiles[id].CenterX)
 			{
@@ -68,7 +77,7 @@ bool PathGraph::HasNeighbourInDirection(const Vector2f& dir, const Point2f& play
 			}
 		}
 				
-		if (dir.y < 0)
+		if (dir == Direction::Down)
 		{
 			if (m_VecTiles[neighbour].CenterY < m_VecTiles[id].CenterY)
 			{
@@ -77,7 +86,7 @@ bool PathGraph::HasNeighbourInDirection(const Vector2f& dir, const Point2f& play
 			}
 		}
 
-		if (dir.y > 0)
+		if (dir == Direction::Up)
 		{
 			if (m_VecTiles[neighbour].CenterY > m_VecTiles[id].CenterY)
 			{
@@ -88,4 +97,23 @@ bool PathGraph::HasNeighbourInDirection(const Vector2f& dir, const Point2f& play
 				
 	}
 	return false;
+}
+float PathGraph::GetEscalatorVelocity(const Point2f& playerPos, int& targetY) const
+{
+	if (!m_VecEscalators.empty())
+	{
+		for (const auto& pEscalator : m_VecEscalators)
+		{
+			bool isInArea{ utils::IsPointInRect(playerPos, pEscalator.Area) };
+			if (utils::IsPointInRect(playerPos, pEscalator.Area)) return float(pEscalator.Velocity);
+			if (utils::IsPointInRect(playerPos, pEscalator.TargetRect)) targetY = int(pEscalator.TargetRect.bottom);
+		}
+	}
+	
+	return 0;
+}
+
+void PathGraph::Reset()
+{
+
 }
