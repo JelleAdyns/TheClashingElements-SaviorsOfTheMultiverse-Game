@@ -185,130 +185,68 @@ void Level::LoadStage()
 	m_Camera.SetLevelBoundaries(m_pAnimBackGround->DestRect());
 	m_pBackGround = new BackGround{ m_VecBackGrounds[m_StageNumber].second.second, m_VecBackGrounds[m_StageNumber].second.first ,0.7f };
 	m_pBackGroundMusic = new SoundStream{ m_VecMusic[m_StageNumber]};
-	m_pBackGroundMusic->Play(true);
+	//m_pBackGroundMusic->Play(true);
 	
 
-	std::ifstream inputFile{"Stages.txt"};
+	std::ifstream inputFile{"StagePatternTest.txt"};
 
 	std::string info{};
 
-	getline(inputFile, info, '-');
-
-	std::stringstream infoInput{info};
-
-	std::string intersection{};
-
-	while (getline(infoInput, intersection))
+	std::stringstream stageTest{};
+	while (getline(inputFile, info, '/'))
 	{
-
-		std::stringstream tile{intersection};
-		std::string element{};
-		getline(tile, element, ' ');
-		int id{ std::stoi(element) };
-
-		getline(tile, element, ',');
-		int centerX{ std::stoi(element) };
-
-		getline(tile, element);
-		int centerY{ std::stoi(element) };
-
-		if (intersection.find("Player") != std::string::npos)
+		if (info.find("Stage " + std::to_string(m_StageNumber)) != std::string::npos)
 		{
-			m_pPlayer->SetPos(Point2f{ float(centerX), float(centerY)});
+			info.erase(0, info.find(std::to_string(m_StageNumber) + '\n'));
+			stageTest << info;
 		}
-		else
-		{
-			m_pVecCollectables.push_back(new Collectable{ Point2f{float(centerX),float(centerY)} });
-		}
-
-		m_Graph.AddTile(id, centerX, centerY, true);
 	}
 
-	getline(inputFile, info, '-');
-	info.erase(0,1);
-	std::stringstream edgeInfoInput{info};
-	std::string edges{};
-	while (getline(edgeInfoInput, edges))
+	int currTileId{};
+	while (getline(stageTest, info))
 	{
+		std::string rowString{};
+		std::stringstream infoStream{info};
+		getline(infoStream, rowString, '\"');
+		int row{ std::stoi(rowString) };
+		int col{};
 
-		std::stringstream tile{edges};
-		std::string element{};
-		getline(tile, element, ',');
-		int firstIntersection{ std::stoi(element) };
+		getline(infoStream, rowString);
 
-		getline(tile, element, ' ');
-		int secondIntersection{ std::stoi(element) };
+		std::string possibleSymbols{ ".,P" };
 
-		int firstXCenter{ m_Graph.GetXCenterOfTile(firstIntersection) };
-		int firstYCenter{ m_Graph.GetYCenterOfTile(firstIntersection) };
-
-		int secondXCenter{ m_Graph.GetXCenterOfTile(secondIntersection) };
-		int secondYCenter{ m_Graph.GetYCenterOfTile(secondIntersection) };
-
-		int nrOfTiles{};
-		if (firstYCenter - secondYCenter == 0 )
+		while (rowString.find_first_of(possibleSymbols,col) != std::string::npos)
 		{
+			col = int(rowString.find_first_of(possibleSymbols, col));
+
+			int xCenter{ Tile::Size / 2 + Tile::Size * col };
+			int yCenter{ Tile::Size / 2 + Tile::Size * row };
+
+			bool isIntersection{};
+
+			switch (rowString[col])
+			{
+			case '.':
+				break;
+			case 'P':
+				m_pPlayer->SetPos(Point2f{ float(xCenter), float(yCenter) });
+			case ',':
+				isIntersection = true;
+				break;
+			}
+
+			m_Graph.AddTile(currTileId, xCenter, yCenter, isIntersection);
+			if(rowString[col] != 'P') m_pVecCollectables.push_back(new Collectable{Point2f{float(xCenter),float(yCenter)}});
+
+			int previousColTileId{ m_Graph.GetTileId(Point2f{ float(xCenter) - Tile::Size, float(yCenter) }) };
+			if(previousColTileId >= 0) m_Graph.AddEdge(currTileId, previousColTileId);
 			
-			nrOfTiles = abs(secondXCenter - firstXCenter) / Tile::Size -1;
-			int tileSize{ secondXCenter > firstXCenter ? Tile::Size : -Tile::Size };
+			int previousRowTileId{ m_Graph.GetTileId(Point2f{ float(xCenter), float(yCenter + Tile::Size) }) };
+			if(previousRowTileId >= 0) m_Graph.AddEdge(currTileId, previousRowTileId);
 
-			//Add a tile to connect to the first intersection
-			m_Graph.AddTile(m_Graph.GetNrOfTiles(), firstXCenter + tileSize, firstYCenter);
-			m_pVecCollectables.push_back(new Collectable{ Point2f{float(firstXCenter + tileSize), float(firstYCenter)}});
-			m_Graph.AddEdge(firstIntersection, m_Graph.GetNrOfTiles() - 1);
 
-			//Loop to make and connect all the tiles between the intersections
-			for (int i = 1; i < nrOfTiles; i++)
-			{
-				int newId{ m_Graph.GetNrOfTiles() };
-				int x{ m_Graph.GetXCenterOfTile(newId - 1) + tileSize };
-
-				m_Graph.AddTile(newId , x, firstYCenter);
-				m_pVecCollectables.push_back(new Collectable{ Point2f{float(x), float(firstYCenter)}});
-				m_Graph.AddEdge(newId , newId - 1);
-			}
-
-			//Connect last tile with the second intersection
-			m_Graph.AddEdge(m_Graph.GetNrOfTiles() - 1, secondIntersection);
-		}
-		else if (secondXCenter - firstXCenter == 0)
-		{
-			nrOfTiles = abs(secondYCenter - firstYCenter) / Tile::Size - 1;
-			int tileSize{ secondYCenter > firstYCenter ? Tile::Size : -Tile::Size };
-
-			std::string escalatorInfo{};
-			getline(tile, escalatorInfo);
-
-			if (escalatorInfo.find("Escalator") != std::string::npos)
-			{
-				Point2f startCenter{ float(firstXCenter), float(firstYCenter) };
-				Point2f endCenter{ float(secondXCenter), float(secondYCenter) };
-				bool isDownWards{};
-
-				if (escalatorInfo.find("Up") != std::string::npos) isDownWards = false;
-				else isDownWards = true;
-
-				m_Graph.AddEscalator(startCenter, endCenter, isDownWards);
-			}
-
-			//Add a tile to connect to the first intersection
-			m_Graph.AddTile(m_Graph.GetNrOfTiles(), firstXCenter, firstYCenter + tileSize);
-			m_pVecCollectables.push_back(new Collectable{ Point2f{float(firstXCenter), float(firstYCenter + tileSize)} });
-			m_Graph.AddEdge(firstIntersection, m_Graph.GetNrOfTiles() - 1);
-
-			//Loop to make and connect all the tiles between the intersections
-			for (int i = 1; i < nrOfTiles; i++)
-			{
-				int newId{ m_Graph.GetNrOfTiles() };
-				int y{ m_Graph.GetYCenterOfTile(newId - 1) + tileSize };
-
-				m_Graph.AddTile(newId, firstXCenter, y);
-				m_pVecCollectables.push_back(new Collectable{ Point2f{float(firstXCenter), float(y)} });
-				m_Graph.AddEdge(newId, newId - 1);
-			}
-
-			//Connect last tile with the second intersection
-			m_Graph.AddEdge(m_Graph.GetNrOfTiles() - 1, secondIntersection);
+			++currTileId;
+			++col;
 		}
 	}
 }

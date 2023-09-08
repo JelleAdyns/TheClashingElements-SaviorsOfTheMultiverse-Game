@@ -9,6 +9,15 @@ void PathGraph::Draw() const
 	{
 		utils::DrawRect(tile.Area);
 	}
+	for (const std::vector<int>& vector : m_AdjacencyList)
+	{
+		std::vector<Point2f> points{};
+		for (const int id : vector)
+		{
+			points.push_back(Point2f{ float(GetXCenterOfTile(id)), float(GetYCenterOfTile(id)) });
+		}
+		utils::DrawPolygon(points);
+	}
 	for (const Escalator& area : m_VecEscalators)
 	{
 		utils::DrawRect(area.Area);
@@ -38,21 +47,21 @@ int PathGraph::GetYCenterOfTile(int id) const
 {
 	return m_VecTiles[id].CenterY;
 }
-int PathGraph::GetNrOfTiles() const
-{
-	return int(m_VecTiles.size());
-}
+//int PathGraph::GetNrOfTiles() const
+//{
+//	return int(m_VecTiles.size());
+//}
 
-int PathGraph::GetTileId(const Point2f& playerPos) const
+int PathGraph::GetTileId(const Point2f& location) const
 {
 	for (const auto& tile : m_VecTiles)
 	{
-		if (utils::IsPointInRect(playerPos, tile.Area))
+		if (utils::IsPointInRect(location, tile.Area))
 		{
 			return tile.Id;
 		}
 	}
-	return 0;
+	return -1;
 }
 bool PathGraph::HasNeighbourInDirection(const Direction& dir, const Point2f& playerPos, int& targetLocation) const
 {
@@ -111,9 +120,4 @@ float PathGraph::GetEscalatorVelocity(const Point2f& playerPos, int& targetY) co
 	}
 	
 	return 0;
-}
-
-void PathGraph::Reset()
-{
-
 }

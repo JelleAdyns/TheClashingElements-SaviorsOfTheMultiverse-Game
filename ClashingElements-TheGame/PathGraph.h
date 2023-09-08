@@ -23,17 +23,17 @@ public:
 
 	int GetXCenterOfTile(int id) const;
 	int GetYCenterOfTile(int id) const;
-	int GetNrOfTiles() const;
+	//int GetNrOfTiles() const;
+
+	int GetTileId(const Point2f& location) const;
 
 	bool HasNeighbourInDirection(const Direction& dir, const Point2f& playerPos, int& targetLocation) const;
 	float GetEscalatorVelocity(const Point2f& playerPos, int& targetY) const;
 
-	void Reset();
 private:
 	std::vector<std::vector<int>> m_AdjacencyList;
 	std::vector<Tile> m_VecTiles;
 	std::vector<Escalator> m_VecEscalators;
 
-	int GetTileId(const Point2f& playerPos) const;
 };
 
