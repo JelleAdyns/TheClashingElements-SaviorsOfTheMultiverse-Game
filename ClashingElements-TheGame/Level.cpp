@@ -25,16 +25,13 @@ Level::Level(Character* pCharacter, float viewportWidth, float viewportHeight) :
 
 	m_StageNumber{ 0 },
 	m_LoopNumber{ 0 },
-	m_Graph{},
 	m_Camera{viewportWidth, viewportHeight}
 {
 
 	m_pPlayer = pCharacter;
 	m_pPlayer->Play();
 	LoadStage();
-	
-	m_pVecSprites.push_back(new PalmTree{ Point2f{434, 704} });
-	m_pVecSprites.push_back(new PalmTree{ Point2f{566, 704} });
+
 
 
 	
@@ -156,7 +153,7 @@ void Level::HitCollectable()
 	{
 		if (utils::IsOverlapping(m_pPlayer->GetHitBox(), m_pVecCollectables[i]->GetHitBox()))
 		{
-			if (m_StageNumber == 0)
+			/*if (m_StageNumber == 0)
 			{
 				for (int i = 0; i < m_pVecCollectables.size(); i++)
 				{
@@ -167,10 +164,10 @@ void Level::HitCollectable()
 			}
 			else if (m_StageNumber == 1)
 			{
+			}*/
 				delete m_pVecCollectables[i];
 				m_pVecCollectables[i] = m_pVecCollectables[m_pVecCollectables.size() - 1];
 				m_pVecCollectables.pop_back();
-			}
 			
 			
 		}
@@ -213,10 +210,11 @@ void Level::LoadStage()
 
 		getline(infoStream, rowString);
 
-		std::string possibleSymbols{ ".,P" };
+		std::string possibleSymbols{ ".,PT" };
 
 		while (rowString.find_first_of(possibleSymbols,col) != std::string::npos)
 		{
+		
 			col = int(rowString.find_first_of(possibleSymbols, col));
 
 			int xCenter{ Tile::Size / 2 + Tile::Size * col };
@@ -226,26 +224,35 @@ void Level::LoadStage()
 
 			switch (rowString[col])
 			{
-			case '.':
+			case 'T':
+				m_pVecSprites.push_back(new PalmTree{ Point2f{float(xCenter), float(yCenter)} });
 				break;
 			case 'P':
+
 				m_pPlayer->SetPos(Point2f{ float(xCenter), float(yCenter) });
+
 			case ',':
+
 				isIntersection = true;
+
+			case '.':
+
+				m_Graph.AddTile(currTileId, xCenter, yCenter, isIntersection);
+				if(rowString[col] != 'P') m_pVecCollectables.push_back(new Collectable{Point2f{float(xCenter),float(yCenter)}});
+
+				int previousColTileId{ m_Graph.GetTileId(Point2f{ float(xCenter) - Tile::Size, float(yCenter) }) };
+				if(previousColTileId >= 0) m_Graph.AddEdge(currTileId, previousColTileId);
+				
+				int previousRowTileId{ m_Graph.GetTileId(Point2f{ float(xCenter), float(yCenter + Tile::Size) }) };
+				if(previousRowTileId >= 0) m_Graph.AddEdge(currTileId, previousRowTileId);
+
+				++currTileId;
+
+
 				break;
 			}
 
-			m_Graph.AddTile(currTileId, xCenter, yCenter, isIntersection);
-			if(rowString[col] != 'P') m_pVecCollectables.push_back(new Collectable{Point2f{float(xCenter),float(yCenter)}});
 
-			int previousColTileId{ m_Graph.GetTileId(Point2f{ float(xCenter) - Tile::Size, float(yCenter) }) };
-			if(previousColTileId >= 0) m_Graph.AddEdge(currTileId, previousColTileId);
-			
-			int previousRowTileId{ m_Graph.GetTileId(Point2f{ float(xCenter), float(yCenter + Tile::Size) }) };
-			if(previousRowTileId >= 0) m_Graph.AddEdge(currTileId, previousRowTileId);
-
-
-			++currTileId;
 			++col;
 		}
 	}
