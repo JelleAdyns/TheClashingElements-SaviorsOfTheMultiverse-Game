@@ -14,12 +14,3 @@ struct Tile
 
 };
 
-struct Escalator
-{
-	explicit Escalator(const Point2f& startCenter, const Point2f& endCenter, bool isDownwards);
-	const static int Speed;
-
-	const int Velocity;
-	const Rectf Area;
-	const Rectf TargetRect;
-};

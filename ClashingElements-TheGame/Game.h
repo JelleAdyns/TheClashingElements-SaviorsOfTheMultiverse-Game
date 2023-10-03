@@ -1,9 +1,8 @@
 #pragma once
 #include "BaseGame.h"
 #include "Level.h"
-
+#include "GlobalEnumClasses.h"
 #include "Screen.h"
-#include <vector>
 
 
 class Game : public BaseGame
@@ -31,14 +30,7 @@ public:
 	
 private:
 
-	enum class GameState
-	{
-		Start,
-		ShowingHighScores,
-		SelectingSkin,
-		Playing,
-		GameOver
-	};
+	
 
 	// VARIABLES
 

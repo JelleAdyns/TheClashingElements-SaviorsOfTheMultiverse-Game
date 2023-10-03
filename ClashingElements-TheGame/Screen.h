@@ -1,4 +1,7 @@
 #pragma once
+#include <iostream>
+#include <utils.h>
+#include <vector>
 class Screen
 {
 public:

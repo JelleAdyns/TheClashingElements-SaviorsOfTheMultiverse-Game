@@ -12,3 +12,12 @@ enum class Direction
 	Up,
 	Right
 };
+
+enum class GameState
+{
+	Start,
+	ShowingHighScores,
+	SelectingSkin,
+	Playing,
+	GameOver
+};

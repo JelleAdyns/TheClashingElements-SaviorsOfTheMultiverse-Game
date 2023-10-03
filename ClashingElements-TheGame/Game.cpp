@@ -26,7 +26,6 @@ void Game::Initialize( )
 {
 	m_pScreen = new StartScreen{ "Space.png", GetViewPort() };
 	m_pLevel = nullptr;
-	std::cout << sizeof(int) << std::endl;
 }
 
 void Game::Cleanup( )
@@ -45,15 +44,15 @@ void Game::Update( float elapsedSec )
 {
 	switch (m_GameState)
 	{
-	case Game::GameState::Start:
-	case Game::GameState::ShowingHighScores:
-	case Game::GameState::SelectingSkin:
+	case GameState::Start:
+	case GameState::ShowingHighScores:
+	case GameState::SelectingSkin:
 		m_pScreen->Update(elapsedSec);
 		break;
-	case Game::GameState::Playing:
+	case GameState::Playing:
 		m_pLevel->Update(elapsedSec);
 		break;
-	case Game::GameState::GameOver:
+	case GameState::GameOver:
 		break;
 	default:
 		break;
@@ -68,12 +67,12 @@ void Game::Draw( ) const
 	ClearBackground();
 	switch (m_GameState)
 	{
-	case Game::GameState::Start:
-	case Game::GameState::ShowingHighScores:
-	case Game::GameState::SelectingSkin:
+	case GameState::Start:
+	case GameState::ShowingHighScores:
+	case GameState::SelectingSkin:
 		m_pScreen->Draw();
 		break;
-	case Game::GameState::Playing:
+	case GameState::Playing:
 		glPushMatrix();
 		if (m_DebugScale)
 		{
@@ -84,7 +83,7 @@ void Game::Draw( ) const
 		m_pLevel->Draw();
 		glPopMatrix();
 		break;
-	case Game::GameState::GameOver:
+	case GameState::GameOver:
 		break;
 	}
 	
@@ -95,7 +94,7 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
 	switch (m_GameState)
 	{
-	case Game::GameState::Start:
+	case GameState::Start:
 		m_pScreen->KeyInput(e);
 		switch (e.keysym.sym)
 		{
@@ -108,31 +107,29 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		break;
 		
 		break;
-	case Game::GameState::ShowingHighScores:
+	case GameState::ShowingHighScores:
 		break;
-	case Game::GameState::SelectingSkin:
+	case GameState::SelectingSkin:
 		m_pScreen->KeyInput(e);
 		switch (e.keysym.sym)
 		{
 		case SDLK_SPACE:
-			m_pLevel = new Level{ static_cast<SkinScreen*>(m_pScreen)->GetCharacter(), GetViewPort().width, GetViewPort().height};
+			m_pLevel = new Level{ static_cast<SkinScreen*>(m_pScreen)->GetPlayer(), GetViewPort().width, GetViewPort().height};
 			delete m_pScreen;
 			m_pScreen = nullptr;
 			m_GameState = GameState::Playing;
 			break;
 		}
 		break;
-	case Game::GameState::Playing:
+	case GameState::Playing:
 		switch (e.keysym.sym)
 		{
 		case SDLK_s:
 			m_DebugScale = !m_DebugScale;
-			//if (m_DebugScale) m_pLevel->SetWidthHeight(GetViewPort().width / m_DScale, GetViewPort().height / m_DScale);
-			//else m_pLevel->SetWidthHeight(GetViewPort().width, GetViewPort().height);
 			break;
 		}
 		break;
-	case Game::GameState::GameOver:
+	case GameState::GameOver:
 		break;
 	}
 	

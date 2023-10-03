@@ -19,21 +19,18 @@ public:
 	void Draw() const;
 	void AddTile(int id, int centerX, int centerY, bool isIntersection = false);
 	void AddEdge(int srcTileId, int neighboutId);
-	void AddEscalator(const Point2f& startCenter, const Point2f& endCenter, bool isDownwards);
 
 	int GetXCenterOfTile(int id) const;
 	int GetYCenterOfTile(int id) const;
-	//int GetNrOfTiles() const;
 
 	int GetTileId(const Point2f& location) const;
+	bool IsCurrTileIntersection(const Point2f& location) const;
 
 	bool HasNeighbourInDirection(const Direction& dir, const Point2f& playerPos, int& targetLocation) const;
-	float GetEscalatorVelocity(const Point2f& playerPos, int& targetY) const;
 
 private:
 	std::vector<std::vector<int>> m_AdjacencyList;
 	std::vector<Tile> m_VecTiles;
-	std::vector<Escalator> m_VecEscalators;
 
 };
 

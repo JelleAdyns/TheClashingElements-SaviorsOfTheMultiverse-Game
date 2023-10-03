@@ -26,7 +26,7 @@ void Camera::Transform(float parallax) const
 {
 	Vector2f translation{ (1 - parallax) * (m_CurrCamBottomLeft.x + m_Width / 2 - m_LevelCenter.x),
 						  (1 - parallax) * (m_CurrCamBottomLeft.y + m_Height / 2 - m_LevelCenter.y) };
-	glTranslatef(-(m_CurrCamBottomLeft.x - translation.x ), -(m_CurrCamBottomLeft.y - translation.y) , 0);
+	glTranslatef(-float(round((m_CurrCamBottomLeft.x - translation.x ))), -float(round((m_CurrCamBottomLeft.y - translation.y))) , 0);
 }
 void Camera::Update(const Rectf& target)
 {
