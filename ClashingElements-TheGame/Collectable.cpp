@@ -6,7 +6,7 @@ int Collectable::m_InstanceCounter{0};
 const int Collectable::m_Value{100};
 const int Collectable::m_Amplitude{ 3 };
 
-Collectable::Collectable(const Point2f& BottomCenter):
+Collectable::Collectable(const Point2f& BottomCenter, bool randomize):
 	AnimatedSprite{ BottomCenter, 3, 9, 1.f / 20, false },
 	m_HitBox{Circlef{BottomCenter, 3}},
 	m_Period{float(2*M_PI) *  (0.05f * (rand() % 8 + 5))},
@@ -19,7 +19,7 @@ Collectable::Collectable(const Point2f& BottomCenter):
 		m_pTexture = new Texture{ "Collectable.png" };
 	}
 	AnimatedSprite::SetTexture(m_pTexture);
-	m_CurrentRow = rand() % 3;
+	if (randomize) m_CurrentRow = rand() % 3;
 }
 
 Collectable::~Collectable()

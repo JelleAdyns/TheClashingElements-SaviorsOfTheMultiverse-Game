@@ -151,6 +151,8 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <ItemGroup>
     <ClCompile Include="AnimatedSprite.cpp" />
     <ClCompile Include="AnimBackGround.cpp" />
+    <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Collectable.cpp" />
@@ -158,13 +160,15 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Escalator.cpp" />
     <ClCompile Include="FallingBoy.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="BackGround.cpp" />
-    <ClCompile Include="Mobility.cpp" />
+    <ClCompile Include="Minion.cpp" />
     <ClCompile Include="PalmTree.cpp" />
     <ClCompile Include="PathGraph.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SkinScreen.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="StartScreen.cpp" />
@@ -173,22 +177,27 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <ItemGroup>
     <ClInclude Include="AnimatedSprite.h" />
     <ClInclude Include="AnimBackGround.h" />
+    <ClInclude Include="Boss.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Collectable.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Escalator.h" />
     <ClInclude Include="FallingBoy.h" />
-    <ClInclude Include="FontPath.h" />
+    <ClInclude Include="GlobalFont.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GlobalEnumClasses.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="Level.h" />
-    <ClInclude Include="Mobility.h" />
+    <ClInclude Include="Minion.h" />
+    <ClInclude Include="MobilityItem.h" />
     <ClInclude Include="MyUtils.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="PalmTree.h" />
     <ClInclude Include="PathGraph.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SkinScreen.h" />
     <ClInclude Include="StartScreen.h" />

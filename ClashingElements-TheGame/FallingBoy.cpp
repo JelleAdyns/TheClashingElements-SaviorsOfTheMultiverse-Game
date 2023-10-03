@@ -24,12 +24,12 @@ FallingBoy::FallingBoy(const Point2f& bottomCenter, const Rectf& window) :
 	for (int i = 0; i < m_NrOfRows/2; i++)
 	{
 		m_VecPositions.push_back(Point2f{ distanceFromBorder ,
-									   -(SrcRect().height + (window.height / (m_NrOfRows / 2 - 1)) * i) });
+									   -(DestRect().height + (window.height / (m_NrOfRows / 2 - 1)) * i) });
 	}
 	for (int i = 0; i < m_NrOfRows/2; i++)
 	{
 		m_VecPositions.push_back(Point2f{ window.width - distanceFromBorder,
-									   -(SrcRect().height + (window.height / (m_NrOfRows / 2 - 1)) * i) });
+									   -(DestRect().height + (window.height / (m_NrOfRows / 2 - 1)) * i) });
 	}
 }
 
@@ -47,13 +47,13 @@ void FallingBoy::Draw() const
 	for (int i = 0; i < m_VecPositions.size(); ++i)
 	{
 		glPushMatrix();
-		glTranslatef(m_VecPositions[i].x , m_VecPositions[i].y + SrcRect().height /2, 0);
+		glTranslatef(m_VecPositions[i].x , m_VecPositions[i].y + DestRect().height /2, 0);
 		glRotatef(float(i%2 == 0 ? 30 : -30), 0, 0, 1);
-		glTranslatef(-SrcRect().width / 2,  - SrcRect().height / 2, 0);
-		m_pTexture->Draw(m_BottomCenter, Rectf{SrcRect().width * m_CurrentCol,
-											   SrcRect().height * (i+1),
-											   SrcRect().width,
-											   SrcRect().height});
+		glTranslatef(-DestRect().width / 2,  - DestRect().height / 2, 0);
+		m_pTexture->Draw(m_BottomCenter, Rectf{DestRect().width * m_CurrentCol,
+											   DestRect().height * (i+1),
+											   DestRect().width,
+											   DestRect().height});
 		glPopMatrix();
 	}
 }
@@ -67,7 +67,7 @@ void FallingBoy::UpdatePos(float elapsedSec)
 	}
 }
 
-void FallingBoy::Reset(float yDist)
-{
-	m_BottomCenter.y = -yDist;
-}
+//void FallingBoy::Reset(float yDist)
+//{
+//	m_BottomCenter.y = -yDist;
+//}

@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "AnimatedSprite.h"
-#include <Texture.h>
-
 
 AnimatedSprite::AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime, bool updateRows):
 	m_BottomCenter{bottomCenter},
@@ -46,9 +44,13 @@ void AnimatedSprite::Update(float elapsedSec)
 	}
 }
 
-void AnimatedSprite::SetTexture(const Texture* texturePtr)
+void AnimatedSprite::SetTexture(const Texture* texturePtr, const Rectf& textureArea)
 {
 	m_pTexture = texturePtr;
+	if (textureArea.width == 0 && textureArea.height == 0)
+		m_TextureArea = Rectf{ 0,0, m_pTexture->GetWidth(), m_pTexture->GetHeight() };
+	else m_TextureArea = textureArea;
+
 }
 
 Rectf AnimatedSprite::DestRect() const
@@ -59,9 +61,9 @@ Rectf AnimatedSprite::DestRect() const
 Rectf AnimatedSprite::SrcRect() const
 {
 	Rectf srcRect{};
-	srcRect.width = m_pTexture->GetWidth() / m_NrOfCols;
-	srcRect.height = m_pTexture->GetHeight() / m_NrOfRows;
-	srcRect.left = srcRect.width * m_CurrentCol;
-	srcRect.bottom = srcRect.height * (m_CurrentRow + 1);
+	srcRect.width = m_TextureArea.width / m_NrOfCols;
+	srcRect.height = m_TextureArea.height / m_NrOfRows;
+	srcRect.left = m_TextureArea.left + srcRect.width * m_CurrentCol;
+	srcRect.bottom = m_TextureArea.bottom + srcRect.height * (m_CurrentRow + 1);
 	return srcRect;
 }

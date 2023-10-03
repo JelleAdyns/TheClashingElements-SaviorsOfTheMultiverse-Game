@@ -22,6 +22,15 @@
     <Filter Include="Game Files\Sub Classes\Screens">
       <UniqueIdentifier>{d9e26531-2f2a-4fe5-9519-d7aee4263cc5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Files\Sub Classes\Mobility">
+      <UniqueIdentifier>{220e4ba9-ab1c-43b1-80d1-6d06836df39b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Files\Sub Classes\Sprites\Characters">
+      <UniqueIdentifier>{34365fa0-1806-486b-84a7-a85689d95b61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Files\Sub Classes\Sprites\Characters\Enemies">
+      <UniqueIdentifier>{9075d101-2915-4e99-932c-b9459e1a9ff9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -40,9 +49,6 @@
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClCompile>
     <ClCompile Include="AnimBackGround.cpp">
-      <Filter>Game Files\Sub Classes\Sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="Character.cpp">
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClCompile>
     <ClCompile Include="StartScreen.cpp">
@@ -66,23 +72,38 @@
     <ClCompile Include="SkinScreen.cpp">
       <Filter>Game Files\Sub Classes\Screens</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Game Files\Sub Classes\Sprites</Filter>
-    </ClCompile>
     <ClCompile Include="BackGround.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
     <ClCompile Include="PalmTree.cpp">
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClCompile>
-    <ClCompile Include="Mobility.cpp">
+    <ClCompile Include="FallingBoy.cpp">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
     <ClCompile Include="Escalator.cpp">
+      <Filter>Game Files\Sub Classes\Mobility</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
-    <ClCompile Include="FallingBoy.cpp">
-      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Game Files\Sub Classes\Sprites\Characters\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Game Files\Sub Classes\Sprites\Characters\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Minion.cpp">
+      <Filter>Game Files\Sub Classes\Sprites\Characters\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game Files\Sub Classes\Sprites\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Game Files\Sub Classes\Sprites\Characters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,9 +113,6 @@
     <ClInclude Include="Level.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
-    <ClInclude Include="FontPath.h">
-      <Filter>Game Files\Sub Classes</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
@@ -102,9 +120,6 @@
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClInclude>
     <ClInclude Include="AnimBackGround.h">
-      <Filter>Game Files\Sub Classes\Sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="Character.h">
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClInclude>
     <ClInclude Include="StartScreen.h">
@@ -134,23 +149,44 @@
     <ClInclude Include="GlobalEnumClasses.h">
       <Filter>Game Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Game Files\Sub Classes\Sprites</Filter>
-    </ClInclude>
     <ClInclude Include="BackGround.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
     <ClInclude Include="PalmTree.h">
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClInclude>
-    <ClInclude Include="Mobility.h">
+    <ClInclude Include="FallingBoy.h">
+      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
     <ClInclude Include="Escalator.h">
+      <Filter>Game Files\Sub Classes\Mobility</Filter>
+    </ClInclude>
+    <ClInclude Include="MobilityItem.h">
+      <Filter>Game Files\Sub Classes\Mobility</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
-    <ClInclude Include="FallingBoy.h">
-      <Filter>Game Files\Sub Classes\Sprites</Filter>
+    <ClInclude Include="Boss.h">
+      <Filter>Game Files\Sub Classes\Sprites\Characters\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Game Files\Sub Classes\Sprites\Characters\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Minion.h">
+      <Filter>Game Files\Sub Classes\Sprites\Characters\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game Files\Sub Classes\Sprites\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalFont.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Game Files\Sub Classes\Sprites\Characters</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 class Collectable final : public AnimatedSprite
 {
 public:
-	explicit Collectable(const Point2f& BottomCenter);
+	explicit Collectable(const Point2f& BottomCenter, bool randomize = true);
 	~Collectable();
 
 	Collectable(const Collectable& other) = delete;

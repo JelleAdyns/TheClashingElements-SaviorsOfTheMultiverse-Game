@@ -1,9 +1,11 @@
 #pragma once
 #include <Texture.h>
+#include <utils.h>
+#include <iostream>
 class AnimatedSprite
 {
 public:
-	explicit AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime, bool updateRows);
+	explicit AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime, bool updateRows = true);
 	virtual ~AnimatedSprite();
 
 	AnimatedSprite(const AnimatedSprite& other) = delete;
@@ -16,7 +18,7 @@ public:
 
 	Rectf DestRect() const;
 protected:
-	void SetTexture(const Texture* pTexture);
+	void SetTexture(const Texture* pTexture, const Rectf& textureArea = Rectf{});
 
 	Point2f m_BottomCenter;
 
@@ -30,11 +32,12 @@ protected:
 
 	float m_PassedTime;
 
-	Rectf SrcRect() const;
 
 private:
+	Rectf SrcRect() const;
 	const Texture* m_pTexture;
 	const bool m_UpdateRows;
+	Rectf m_TextureArea;
 
 };
 
