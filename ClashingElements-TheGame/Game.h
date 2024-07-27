@@ -35,8 +35,8 @@ private:
 	// VARIABLES
 
 	GameState m_GameState{ GameState::Start };
-	Level* m_pLevel;
-	Screen* m_pScreen;
+	std::unique_ptr<Level> m_pLevel;
+	std::unique_ptr<Screen> m_pScreen;
 
 	bool m_DebugScale{ false };
 	float m_DScale{ 0.25f };

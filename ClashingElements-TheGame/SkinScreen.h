@@ -2,13 +2,16 @@
 #include "Screen.h"
 #include "GlobalEnumClasses.h"
 #include "BackGround.h"
-#include <vector>
+#include <functional>
 
-class Character;
+
+
+class Player;
+class Button;
 class SkinScreen final : public Screen
 {
 public:
-	explicit SkinScreen(const std::string& backGroundFilePath, const Rectf& window);
+	explicit SkinScreen(const std::string& backGroundFilePath, const Rectf& window, std::function<void()> nextEvent);
 	~SkinScreen();
 
 	SkinScreen(const SkinScreen& other) = delete;
@@ -20,16 +23,16 @@ public:
 	virtual void Update(float elapsedSec) override;
 	virtual void KeyInput(const SDL_KeyboardEvent& e) override;
 
-	Character* GetCharacter() const;
+	std::shared_ptr<Player> GetPlayer() const;
 
 private:
 
 	BackGround m_BackGround;
 
-	std::vector<Character*> m_pSkins;
+	std::vector<std::shared_ptr<Player>> m_pVecSkins;
+	std::vector<std::unique_ptr<Button>> m_pVecSkinButtons;
 	int m_IndexCurrSkin;
 	
 	Rectf m_SelectionRect;
-
 };
 

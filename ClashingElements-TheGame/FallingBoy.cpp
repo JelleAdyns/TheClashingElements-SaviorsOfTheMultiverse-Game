@@ -60,6 +60,7 @@ void FallingBoy::Draw() const
 
 void FallingBoy::UpdatePos(float elapsedSec)
 {
+	AnimatedSprite::Update(elapsedSec);
 	for (int i = 0; i < m_NrOfRows; i++)
 	{
 		m_VecPositions[i].y += m_FallingSpeed * elapsedSec;

@@ -2,18 +2,22 @@
 #include "StartScreen.h"
 
 
-StartScreen::StartScreen(const std::string& backGroundFilePath, const Rectf& window):
-	Screen{window},
-	m_BackGround{backGroundFilePath},
-	m_YTranslation{0.f},
+StartScreen::StartScreen(const std::string& backGroundFilePath, const Rectf& window, 
+	std::function<void()> startButton, std::function<void()> highscoreButton) :
+	Screen{ window },
+	m_BackGround{ backGroundFilePath },
+	m_YTranslation{ 0.f },
 	m_DistanceBetweenBoys{ window.height / (FallingBoy::m_NrOfBoys / 2 - 1) },
-	m_BackGroundSpeed{10},
-	m_FallingBoys{Point2f{}, window}
+	m_BackGroundSpeed{ 10 },
+	m_SelectedButtonIndex{0},
+	m_FallingBoys{ Point2f{}, window }
 {
+	m_pVecButtons.push_back(std::make_unique<Button>("Start", Point2f{window.width / 2,window.height / 3},startButton, true));
+	m_pVecButtons.push_back(std::make_unique<Button>("High Scores", Point2f{window.width / 2,window.height / 3 - 15}, highscoreButton ));
 }
 StartScreen::~StartScreen()
 {
-	
+
 }
 
 void StartScreen::Draw() const
@@ -26,13 +30,19 @@ void StartScreen::Draw() const
 	glPopMatrix();
 
 	m_FallingBoys.Draw();
+
+
+	for (auto& button : m_pVecButtons)
+	{
+		button->Draw();
+	}
+
 }
 void StartScreen::Update(float elapsedSec)
 {
 	m_YTranslation += m_BackGroundSpeed * elapsedSec;
 	if (m_YTranslation >= m_Window.height) m_YTranslation = 0.f;
 
-	m_FallingBoys.Update(elapsedSec);
 	m_FallingBoys.UpdatePos(elapsedSec);
 	//for (auto& pBoy : m_FallingBoys)
 	//{
@@ -43,5 +53,20 @@ void StartScreen::Update(float elapsedSec)
 }
 void StartScreen::KeyInput(const SDL_KeyboardEvent& e)
 {
-
+	switch (e.keysym.sym)
+	{
+	case SDLK_UP:
+		m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();
+		++m_SelectedButtonIndex %= m_pVecButtons.size();
+		m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();
+		break;
+	case SDLK_DOWN:
+		m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();
+		--m_SelectedButtonIndex %= m_pVecButtons.size();
+		m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();
+		break;
+	case SDLK_SPACE:
+		m_pVecButtons[m_SelectedButtonIndex]->ExecuteFunction();
+		break;
+	}
 }

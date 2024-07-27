@@ -24,20 +24,27 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_pScreen = new StartScreen{ "Space.png", GetViewPort() };
+	m_pScreen = std::make_unique<StartScreen>( "Space.png", GetViewPort(),
+		[&]()
+		{
+			m_GameState = GameState::SelectingSkin;
+			m_pScreen.reset(new SkinScreen{ "Space.png", GetViewPort(),  []() {} });
+		},
+		[](){}
+	);
 	m_pLevel = nullptr;
 }
 
 void Game::Cleanup( )
 {
 	
-	delete m_pScreen;
-	m_pScreen = nullptr;
-	if (m_pLevel != nullptr)
-	{
-		delete m_pLevel;
-		m_pLevel = nullptr;
-	}
+	//delete m_pScreen;
+	//m_pScreen = nullptr;
+	//if (m_pLevel != nullptr)
+	//{
+	//	delete m_pLevel;
+	//	m_pLevel = nullptr;
+	//}
 }
 
 void Game::Update( float elapsedSec )
@@ -63,7 +70,7 @@ void Game::Update( float elapsedSec )
 
 void Game::Draw( ) const
 {
-
+	utils::DrawLine(Point2f{ 0,0 }, Point2f{ GetViewPort().width - 1, 200 });
 	ClearBackground();
 	switch (m_GameState)
 	{
@@ -99,9 +106,9 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		switch (e.keysym.sym)
 		{
 		case SDLK_SPACE:
-			delete m_pScreen;
-			m_pScreen = new SkinScreen{ "Space.png", GetViewPort() };
-			m_GameState = GameState::SelectingSkin;
+			//m_pScreen.reset(new SkinScreen{ "Space.png", GetViewPort() });
+			////m_pScreen = new SkinScreen{ "Space.png", GetViewPort() };
+			//m_GameState = GameState::SelectingSkin;
 			break;
 		}
 		break;
@@ -114,9 +121,10 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		switch (e.keysym.sym)
 		{
 		case SDLK_SPACE:
-			m_pLevel = new Level{ static_cast<SkinScreen*>(m_pScreen)->GetPlayer(), GetViewPort().width, GetViewPort().height};
-			delete m_pScreen;
-			m_pScreen = nullptr;
+			m_pLevel = std::make_unique<Level>(static_cast<SkinScreen*>(m_pScreen.get())->GetPlayer(), GetViewPort().width, GetViewPort().height);
+			m_pScreen.reset();
+			//delete m_pScreen;
+			//m_pScreen = nullptr;
 			m_GameState = GameState::Playing;
 			break;
 		}
