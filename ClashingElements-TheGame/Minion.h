@@ -1,9 +1,11 @@
-#pragma once
+#ifndef MINION_H
+#define MINION_H
+
 #include "Enemy.h"
 class Minion final : public Enemy
 {
 public:
-	explicit Minion(const Point2f& bottomCenter);
+	explicit Minion(const Point2Int& bottomCenter);
 	~Minion();
 
 	Minion(const Minion& other) = delete;
@@ -14,8 +16,9 @@ public:
 	//virtual void Draw() const override;
 	//virtual void Update(float elapsedSec) override;
 private:
-	const static Texture* m_pTexture;
+	static std::unique_ptr<Texture> m_pTexture;
 	static int m_InstanceCounter;
 	static int m_DefaultSpeed;
 }; 
 
+#endif // !MINION_H

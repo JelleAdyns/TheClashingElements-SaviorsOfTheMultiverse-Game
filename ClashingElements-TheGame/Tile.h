@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TILE_H
+#define TILE_H
+
 #include "Collectable.h"
 
 struct Tile
@@ -9,8 +11,11 @@ struct Tile
 	const int Id;
 	const int CenterX;
 	const int CenterY;
-	const Rectf Area;
+	const RectInt Area;
 	const bool IsIntersection;
 
 };
+
+
+#endif // !TILE_H
 

@@ -1,32 +1,30 @@
-#include "pch.h"
 #include "Character.h"
 
-Character::Character(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime) :
+Character::Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime) :
 	AnimatedSprite{ bottomCenter, nrCols, nrFrames, frameTime, false },
 
 	m_Dir{ Direction::Down },
-	m_HitBox{ Circlef{Point2f{bottomCenter}, 6} },
+	m_HitBox{ CircleInt{Point2Int{bottomCenter}, 6} },
 
-	m_Velocity{ Vector2f{} },
+	m_Velocity{ },
 	m_TargetXLocation{},
 	m_TargetYLocation{},
 
 	m_IsMoving{ false },
 
-	m_Pos{},
 	m_DefaultSpeed{}
 {
 	SetPos(bottomCenter);
 }
 
-void Character::Update(float elapsedSec)
+void Character::Update()
 {
 	if (m_TargetXLocation != m_BottomCenter.x && m_IsMoving)
 	{
 		if (m_TargetXLocation < m_BottomCenter.x) m_Velocity.x = float(-m_DefaultSpeed);
 		else m_Velocity.x = float(m_DefaultSpeed);
 
-		UpdatePos(m_Velocity, elapsedSec);
+		UpdatePos(m_Velocity);
 
 		if (m_BottomCenter.x == m_TargetXLocation) m_IsMoving = false;
 	}
@@ -37,30 +35,31 @@ void Character::Update(float elapsedSec)
 		if (m_TargetYLocation < m_BottomCenter.y) m_Velocity.y = float(-m_DefaultSpeed);
 		else m_Velocity.y = float(m_DefaultSpeed);
 
-		UpdatePos(m_Velocity, elapsedSec);
+		UpdatePos(m_Velocity);
 
 		if (m_BottomCenter.y == m_TargetYLocation) m_IsMoving = false;
 	}
 	else m_Velocity.y = 0;
 }
 
-void Character::SetPos(const Point2f& newPos)
+void Character::SetPos(const Point2Int& newPos)
 {
-	//Point2f pos{ newPos.x, newPos.y}
+	//Point2Int pos{ newPos.x, newPos.y}
 	m_BottomCenter = newPos;
 	m_HitBox.center = newPos;
-	m_Pos = newPos;
+	m_ActualPosX = static_cast<float>(newPos.x);
+	m_ActualPosY = static_cast<float>(newPos.y);
 	m_TargetXLocation = int(newPos.x);
 	m_TargetYLocation = int(newPos.y);
 	m_IsMoving = false;
 }
 
-void Character::UpdatePos(const Vector2f& newVeloctiy, float elapsedSec)
+void Character::UpdatePos(const Vector2f& newVeloctiy)
 {
-	m_Pos.x += newVeloctiy.x * elapsedSec;
-	m_BottomCenter.x = round(m_Pos.x);
-	m_Pos.y += newVeloctiy.y * elapsedSec;
-	m_BottomCenter.y = round(m_Pos.y);
+	m_ActualPosX += newVeloctiy.x * ENGINE.GetDeltaTime();
+	m_BottomCenter.x = static_cast<int>(round(m_ActualPosX));
+	m_ActualPosY += newVeloctiy.y * ENGINE.GetDeltaTime();
+	m_BottomCenter.y = static_cast<int>(round(m_ActualPosY));
 	m_HitBox.center = m_BottomCenter;
 }
 
@@ -69,7 +68,7 @@ void Character::SetDefaultSpeed(int speed)
 	m_DefaultSpeed = speed;
 }
 
-Circlef Character::GetHitBox()const
+CircleInt Character::GetHitBox()const
 {
 	return m_HitBox;
 }

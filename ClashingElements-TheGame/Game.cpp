@@ -4,7 +4,8 @@
 
 Game::Game()
 {
-
+//ENGINE.SetTitle(_T("The Clashing Elements - The Game"));
+	//ENGINE.SetWindowDimensions(256*3,224*3);
 }
 Game::~Game()
 {
@@ -14,23 +15,22 @@ void Game::Initialize()
 {
 	BaseGame::Initialize();
 
-	ENGINE.SetTitle(_T("The Clashing Elements - The Game"));
-	ENGINE.SetWindowDimensions(256*3,224*3);
+	
 
-	m_pScreen = std::make_unique<StartScreen>("Space.png", ENGINE.GetWindowSize(),
+	/*m_pScreen = std::make_unique<StartScreen>(L"Space.png", ENGINE.GetWindowSize(),
 		[&]()
 		{
 			m_GameState = GameState::SelectingSkin;
-			m_pScreen.reset(new SkinScreen{ "Space.png", ENGINE.GetWindowSize(),  []() {} });
+			m_pScreen.reset(new SkinScreen{ L"Space.png", ENGINE.GetWindowSize(),  []() {} });
 		},
 		[]() {}
 	);
-	m_pLevel = nullptr;
+	m_pLevel = nullptr;*/
 }
 void Game::Draw() const
 {
-	ENGINE.DrawLine(Point2Int{ 0,0 }, Point2Int{ ENGINE.GetWindowSize().width - 1, 200 });
-	ClearBackground();
+	/*ENGINE.DrawLine(Point2Int{ 0,0 }, Point2Int{ ENGINE.GetWindowSize().width - 1, 200 });
+
 	switch (m_GameState)
 	{
 	case GameState::Start:
@@ -39,38 +39,38 @@ void Game::Draw() const
 		m_pScreen->Draw();
 		break;
 	case GameState::Playing:
-		glPushMatrix();
+
 		if (m_DebugScale)
 		{
-			glTranslatef(ENGINE.GetWindowSize().width / 2, ENGINE.GetWindowSize().height / 2, 0);
-			glScalef(m_DScale, m_DScale, 0);
-			glTranslatef(-(ENGINE.GetWindowSize().width / 2), -(ENGINE.GetWindowSize().height / 2), 0);
+			ENGINE.Translate(ENGINE.GetWindowSize().width / 2, ENGINE.GetWindowSize().height / 2);
+			ENGINE.Scale(m_DScale, 0, 0);
+			ENGINE.Translate(-(ENGINE.GetWindowSize().width / 2), -(ENGINE.GetWindowSize().height / 2));
 		}
 		m_pLevel->Draw();
-		glPopMatrix();
+		ENGINE.EndTransform();
 		break;
 	case GameState::GameOver:
 		break;
-	}
+	}*/
 
 }
 void Game::Tick()
 {
-	switch (m_GameState)
+	/*switch (m_GameState)
 	{
 	case GameState::Start:
 	case GameState::ShowingHighScores:
 	case GameState::SelectingSkin:
-		m_pScreen->Update(ENGINE.GetDeltaTime());
+		m_pScreen->Tick();
 		break;
 	case GameState::Playing:
-		m_pLevel->Update(ENGINE.GetDeltaTime());
+		m_pLevel->Tick();
 		break;
 	case GameState::GameOver:
 		break;
 	default:
 		break;
-	}
+	}*/
 
 }
 void Game::KeyDown(int virtualKeycode)

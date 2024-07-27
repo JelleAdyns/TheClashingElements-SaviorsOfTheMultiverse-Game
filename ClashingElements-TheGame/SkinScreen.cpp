@@ -3,7 +3,7 @@
 #include "Button.h"
 
 
-SkinScreen::SkinScreen( const std::string& backGroundFilePath, const RectInt& window, std::function<void()> nextEvent) :
+SkinScreen::SkinScreen( const std::wstring& backGroundFilePath, const RectInt& window, std::function<void()> nextEvent) :
 	Screen{window},
 	m_BackGround{ backGroundFilePath },
 	m_IndexCurrSkin{ 0 }
@@ -11,21 +11,21 @@ SkinScreen::SkinScreen( const std::string& backGroundFilePath, const RectInt& wi
 	//m_pVecSkins.push_back(std::make_shared<Player>( Skin::Finn ));
 	//m_pVecSkins.push_back(std::make_shared<Player>(Skin::Wesley));
 
-	std::vector<Point2f> positions;
+	std::vector<Point2Int> positions;
 	for (int i = 0; i < m_pVecSkins.size(); i++)
 	{
-		positions[i] = Point2f{ std::round(m_Window.width / (m_pVecSkins.size() + 1) * (i + 1)), std::round(m_Window.height / 2) };
+		positions[i] = Point2Int{ m_Window.width / (static_cast<int>(m_pVecSkins.size()) + 1) * (i + 1), m_Window.height / 2 };
 	}
 
 	//auto finnFunction = [&](){}
-	m_pVecSkinButtons.push_back(std::make_unique<Button>("Finn", positions[0], nextEvent));
-	m_pVecSkinButtons.push_back(std::make_unique<Button>("Wesley", positions[1], nextEvent));
+	m_pVecSkinButtons.push_back(std::make_unique<Button>(_T("Finn"), positions[0], nextEvent));
+	m_pVecSkinButtons.push_back(std::make_unique<Button>(_T("Wesley"), positions[1], nextEvent));
 	//m_pVecSkinButtons.push_back(std::make_shared<Button>("Finn", positions[0], Skin::Finn));
 	//m_pVecSkinButtons.push_back(std::make_shared<Button>(Skin::Wesley));
 	
 	/*for (int i = 0; i < m_pVecSkins.size(); i++)
 	{
-		m_pVecSkins[i]->SetPos(Point2f{ std::round(m_Window.width / (m_pVecSkins.size() + 1) * (i+1)), std::round(m_Window.height / 2) });
+		m_pVecSkins[i]->SetPos(Point2Int{ std::round(m_Window.width / (m_pVecSkins.size() + 1) * (i+1)), std::round(m_Window.height / 2) });
 	}*/
 	float rectWidth{40};
 	float rectHeight{50};
@@ -51,11 +51,11 @@ void SkinScreen::Draw() const
 	{
 		pSkin->Draw();
 	}
-	utils::DrawRect(Rectf{ m_SelectionRect });
+	ENGINE.DrawRectangle(RectInt{ m_SelectionRect });
 }
-void SkinScreen::Update(float elapsedSec)
+void SkinScreen::Tick()
 {
-	m_pVecSkins[m_IndexCurrSkin]->Update(elapsedSec);
+	m_pVecSkins[m_IndexCurrSkin]->Update();
 }
 void SkinScreen::KeyInput(int virtualKeyCode)
 {

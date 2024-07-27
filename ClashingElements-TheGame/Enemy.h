@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ENEMY_H
+#define ENEMY_H
+
 #include "Character.h"
 #include "GlobalEnumClasses.h"
 #include "PathGraph.h"
@@ -7,7 +9,7 @@
 class Enemy : public Character
 {
 public:
-	explicit Enemy(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime );
+	explicit Enemy(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime );
 	virtual ~Enemy() = default;
 
 	Enemy(const Enemy& other) = delete;
@@ -15,7 +17,7 @@ public:
 	Enemy& operator=(const Enemy& other) = delete;
 	Enemy& operator=(Enemy&& other) noexcept = delete;
 
-	virtual void Move(const PathGraph& graph, float elapsedSec) override;
+	virtual void Move(const PathGraph& graph) override;
 	//virtual void InteractWithMobilityItem(const MobilityItem& mobilityItem) override;
 
 
@@ -27,4 +29,8 @@ private:
 
 	std::vector<std::pair<Direction, int>> m_DirMap;
 };
+
+
+#endif // !ENEMY_H
+
 

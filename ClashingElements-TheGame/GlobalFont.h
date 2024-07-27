@@ -1,5 +1,8 @@
-#pragma once
-#include <SDL_ttf.h> 
+#ifndef GLOBALFONT_H
+#define GLOBALFONT_H
+
+#include "Engine.h"
+
 class GlobalFont
 {
 public:
@@ -10,10 +13,10 @@ public:
         return font;
     }
 
-    static TTF_Font* GetFont() 
+    static const Font& GetFont() 
     { 
-        static TTF_Font* font = TTF_OpenFont("8BitFont.otf", 16);
-        return font;
+        static std::unique_ptr<Font> font = std::make_unique<Font>(L"8BitFont.otf", 16, false, false, true);
+        return *font;
     }
 
     GlobalFont(const GlobalFont& other) = delete;
@@ -26,4 +29,6 @@ private:
 
    // static GlobalFont s_Font;
 };
+
+#endif // !GLOBALFONT_H
 

@@ -1,19 +1,20 @@
-#pragma once
-#include <Texture.h>
+#ifndef HUD_H
+#define HUD_H
+
 #include "Collectable.h"
 
 class HUD
 {
 public:
-	 HUD(float windowWidth, float windowHeight);
-	~HUD();
+	 HUD(int windowWidth, int windowHeight);
+	~HUD() = default;
 
 	HUD(const HUD& other) = delete;
 	HUD(HUD&& other) noexcept = delete;
 	HUD& operator=(const HUD& other) = delete;
 	HUD& operator=(HUD&& other) noexcept = delete;
 
-	void Update(float elapsedSec);
+	void Update();
 	void Draw() const;
 
 	void SetNrCollectables(int nrOfCollectables);
@@ -24,11 +25,13 @@ private:
 
 	const static int m_HudHeight;
 
-	const Rectf m_HudArea;
+	const RectInt m_HudArea;
 
-	const Color4f m_TextColor{ 1.f,0.f,1.f,0.f };
-	const Texture* m_pTextCollectables{ nullptr };
+	COLORREF m_TextColor{ RGB(255,0,255) };
+	tstring m_pTextCollectables{ nullptr };
 	const Collectable m_pCollectable;
 
 };
 
+
+#endif // !HUD_H

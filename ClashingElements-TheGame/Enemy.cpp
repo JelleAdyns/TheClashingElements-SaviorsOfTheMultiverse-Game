@@ -1,14 +1,13 @@
-#include "pch.h"
 #include "Enemy.h"
 
-Enemy::Enemy(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime) :
+Enemy::Enemy(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime) :
 	Character{bottomCenter, nrCols,nrFrames,frameTime},
 	m_SmartnessLevel{0}
 {
 
 }
 
-void Enemy::Move(const PathGraph& graph, float elapsedSec)
+void Enemy::Move(const PathGraph& graph)
 {
 
 	if (graph.IsCurrTileIntersection(m_BottomCenter))

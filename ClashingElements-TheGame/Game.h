@@ -36,10 +36,6 @@ private:
     bool m_DebugScale{ false };
     float m_DScale{ 0.25f };
 
-    // FUNCTIONS
-    void Initialize();
-    void Cleanup();
-    void ClearBackground() const;
 };
 
 #endif // !GAME_H

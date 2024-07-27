@@ -1,7 +1,8 @@
-#pragma once
+#ifndef LEVEL_H
+#define LEVEL_H
+
 
 #include <vector>
-#include <SoundStream.h>
 #include <memory>
 #include "AnimBackGround.h"
 #include "BackGround.h"
@@ -18,7 +19,7 @@ class Enemy;
 class Level final
 {
 public:
-	explicit Level(std::shared_ptr<Player> pCharacter, float viewportWidth, float viewportHeight);
+	explicit Level(std::shared_ptr<Player> pCharacter, int viewportWidth, int viewportHeight);
 	~Level();
 
 	Level(const Level& other) = delete;
@@ -26,12 +27,12 @@ public:
 	Level& operator=(const Level& other) = delete;
 	Level& operator=(Level&& other) noexcept = delete;
 
-	void Update(float elapsedSec);
+	void Tick();
 	void Draw() const;
 
 private:
-	const std::vector<std::pair<std::string, std::pair<std::string, Point2f>>> m_VecBackGrounds;
-	const std::vector<std::string> m_VecMusic;
+	const std::vector<std::pair<tstring, std::pair<tstring, Point2Int>>> m_VecBackGrounds;
+	const std::vector<tstring> m_VecMusic;
 
 	int m_StageNumber;
 	int m_LoopNumber;
@@ -50,8 +51,6 @@ private:
 
 	std::shared_ptr<Player> m_pPlayer;
 
-	std::unique_ptr < SoundStream > m_pBackGroundMusic;
-
 	PathGraph m_Graph;
 
 	void HitCollectable();
@@ -60,3 +59,4 @@ private:
 	void SetUpDrawBuffer();
 
 };
+#endif // !LEVEL_H

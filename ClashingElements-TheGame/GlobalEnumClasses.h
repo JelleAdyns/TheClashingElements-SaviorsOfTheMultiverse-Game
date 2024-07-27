@@ -1,4 +1,7 @@
-#pragma once
+#ifndef GLOBALENUMCLASSES_H
+#define GLOBALENUMCLASSES_H
+
+
 enum class Skin
 {
 	Finn,
@@ -21,3 +24,5 @@ enum class GameState
 	Playing,
 	GameOver
 };
+
+#endif // !GLOBALENUMCLASSES_H

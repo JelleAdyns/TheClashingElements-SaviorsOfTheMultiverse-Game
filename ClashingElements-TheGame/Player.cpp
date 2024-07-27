@@ -1,11 +1,10 @@
-#include "pch.h"
 #include "Player.h"
 
 int	Player::m_DefaultSpeed{ Tile::Size * 4 };
 const int Player::m_PixelOffset{ 1 };
 
 Player::Player(const Skin& skin):
-	Character{ Point2f{}, 8, 32, 1.f / 20 },
+	Character{ Point2Int{}, 8, 32, 1.f / 20 },
 	m_State{ PlayerState::ChoosingSkin },
 	m_pTexture{nullptr}
 {
@@ -13,24 +12,18 @@ Player::Player(const Skin& skin):
 	switch (skin)
 	{
 	case Skin::Finn:
-		m_pTexture = new Texture{ "Finn.png" };
+		m_pTexture = std::make_unique<Texture>( L"Finn.png" );
 		break;
 	case Skin::Wesley:
-		m_pTexture = new Texture{ "Wesley.png" };
+		m_pTexture = std::make_unique<Texture>(L"Wesley.png");
 		break;
 	}
-	AnimatedSprite::SetTexture(m_pTexture);
+	AnimatedSprite::SetTexture(m_pTexture.get());
 }
-Player::~Player()
-{
-	delete m_pTexture;
-	m_pTexture = nullptr;
-}
-
-void Player::Update(float elapsedSec)
+void Player::Update()
 {
 
-	m_PassedTime += elapsedSec;
+	m_PassedTime += ENGINE.GetDeltaTime();
 	if (m_PassedTime >= m_FrameTime)
 	{
 		if (m_State == PlayerState::Playing)
@@ -48,16 +41,14 @@ void Player::Update(float elapsedSec)
 
 	if (m_State == PlayerState::Playing)
 	{
-		Character::Update(elapsedSec);
+		Character::Update();
 	}
 }
-void Player::Move(const PathGraph& graph, float elapsedSec)
+void Player::Move(const PathGraph& graph)
 {
 	if (m_State == PlayerState::Playing)
 	{
-		const Uint8* pStates = SDL_GetKeyboardState(nullptr);
-
-		if (pStates[SDL_SCANCODE_LEFT] && !pStates[SDL_SCANCODE_RIGHT])
+		if (ENGINE.IsKeyPressed(VK_LEFT) && !ENGINE.IsKeyPressed(VK_RIGHT))
 		{
 			int targetX{};
 			if (graph.HasNeighbourInDirection(Direction::Left, m_BottomCenter, targetX))
@@ -71,7 +62,7 @@ void Player::Move(const PathGraph& graph, float elapsedSec)
 				}
 			}
 		}
-		if (pStates[SDL_SCANCODE_RIGHT] && !pStates[SDL_SCANCODE_LEFT])
+		if (ENGINE.IsKeyPressed(VK_RIGHT) && !ENGINE.IsKeyPressed(VK_LEFT))
 		{
 			int targetX{};
 			if (graph.HasNeighbourInDirection(Direction::Right, m_BottomCenter, targetX))
@@ -85,7 +76,7 @@ void Player::Move(const PathGraph& graph, float elapsedSec)
 				}
 			}
 		}
-		if (pStates[SDL_SCANCODE_DOWN] && !pStates[SDL_SCANCODE_UP])
+		if (ENGINE.IsKeyPressed(VK_DOWN) && !ENGINE.IsKeyPressed(VK_UP))
 		{
 			int targetY{};
 			if (graph.HasNeighbourInDirection(Direction::Down, m_BottomCenter, targetY))
@@ -99,7 +90,7 @@ void Player::Move(const PathGraph& graph, float elapsedSec)
 				}
 			}
 		}
-		if (pStates[SDL_SCANCODE_UP] && !pStates[SDL_SCANCODE_DOWN])
+		if (ENGINE.IsKeyPressed(VK_UP) && !ENGINE.IsKeyPressed(VK_DOWN))
 		{
 			int targetY{};
 			if (graph.HasNeighbourInDirection(Direction::Up, m_BottomCenter, targetY))
@@ -123,9 +114,9 @@ void Player::Play()
 {
 	m_State = PlayerState::Playing;
 }
-void Player::SetPos(const Point2f& newPos)
+void Player::SetPos(const Point2Int& newPos)
 {
-	Point2f pos{ newPos.x, newPos.y - m_PixelOffset };
+	Point2Int pos{ newPos.x, newPos.y - m_PixelOffset };
 	Character::SetPos(pos);
 }
 //void Player::InteractWithMobilityItem(const MobilityItem& mobilityItem)

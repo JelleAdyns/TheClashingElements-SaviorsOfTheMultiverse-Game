@@ -1,6 +1,8 @@
-#pragma once
+#ifndef PATHGRAPH_H
+#define PATHGRAPH_H
+
+
 #include <vector>
-#include <utils.h>
 #include "Tile.h"
 #include "GlobalEnumClasses.h"
 
@@ -23,10 +25,10 @@ public:
 	int GetXCenterOfTile(int id) const;
 	int GetYCenterOfTile(int id) const;
 
-	int GetTileId(const Point2f& location) const;
-	bool IsCurrTileIntersection(const Point2f& location) const;
+	int GetTileId(const Point2Int& location) const;
+	bool IsCurrTileIntersection(const Point2Int& location) const;
 
-	bool HasNeighbourInDirection(const Direction& dir, const Point2f& playerPos, int& targetLocation) const;
+	bool HasNeighbourInDirection(const Direction& dir, const Point2Int& playerPos, int& targetLocation) const;
 
 private:
 	std::vector<std::vector<int>> m_AdjacencyList;
@@ -34,3 +36,5 @@ private:
 
 };
 
+
+#endif // !PATHGRAPH_H

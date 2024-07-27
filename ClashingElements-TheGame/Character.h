@@ -1,11 +1,13 @@
-#pragma once
+#ifndef CHARACTER_H
+#define CHARACTER_H
+
 #include "AnimatedSprite.h"
 #include "PathGraph.h"
 #include "GlobalEnumClasses.h"
 class Character : public AnimatedSprite
 {
 public:
-	explicit Character(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime);
+	explicit Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime);
 	virtual ~Character() = default;
 
 	Character(const Character& other) = delete;
@@ -14,11 +16,11 @@ public:
 	Character& operator=(Character&& other) noexcept = delete;
 
 
-	virtual void Update(float elapsedSec) override;
-	virtual void Move(const PathGraph& graph, float elapsedSec) = 0;
-	virtual void SetPos(const Point2f& newPos);
+	virtual void Update() override;
+	virtual void Move(const PathGraph& graph) = 0;
+	virtual void SetPos(const Point2Int& newPos);
 
-	Circlef GetHitBox() const;
+	CircleInt GetHitBox() const;
 	bool IsMoving() const;
 
 
@@ -29,12 +31,14 @@ protected:
 	int m_TargetXLocation;
 	int m_TargetYLocation;
 	bool m_IsMoving;
-	Circlef m_HitBox;
+	CircleInt m_HitBox;
 
-	void UpdatePos(const Vector2f& newVelocity, float elapsedSec);
+	void UpdatePos(const Vector2f& newVelocity);
 	void SetDefaultSpeed(int speed);
 private:
-	Point2f m_Pos;
+	float m_ActualPosX;
+	float m_ActualPosY;
 	int m_DefaultSpeed;
 };
 
+#endif // !CHARACTER_H

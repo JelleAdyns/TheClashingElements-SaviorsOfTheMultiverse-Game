@@ -1,25 +1,27 @@
-#include "pch.h"
 #include "PathGraph.h"
-#include <utils.h>
-
 
 void PathGraph::Draw() const
 {
 
-	utils::SetColor(Color4f{ 1.f,1.f,1.f,1.f });
+	ENGINE.SetColor(RGB(255, 255, 255));
 	for (const Tile& tile : m_VecTiles)
 	{
-		utils::DrawRect(tile.Area);
+		ENGINE.DrawRectangle(tile.Area);
 	}
 	
 	for (const std::vector<int>& vector : m_AdjacencyList)
 	{
-		std::vector<Point2f> points{};
+		std::vector<Point2Int> points{};
 		for (const int id : vector)
 		{
-			points.push_back(Point2f{ float(GetXCenterOfTile(id)), float(GetYCenterOfTile(id)) });
+			points.push_back(Point2Int{ GetXCenterOfTile(id), GetYCenterOfTile(id) });
 		}
-		utils::DrawPolygon(points);
+		for (size_t i = 1; i < points.size(); i++)
+		{
+			ENGINE.DrawLine(points.at(i - 1), points.at(i));
+		}
+		ENGINE.DrawLine(points.at(points.size()-1), points.at(0));
+
 	}
 }
 void PathGraph::AddTile(int id, int centerX, int centerY, bool isIntersection)
@@ -42,7 +44,7 @@ int PathGraph::GetYCenterOfTile(int id) const
 	return m_VecTiles[id].CenterY;
 }
 
-int PathGraph::GetTileId(const Point2f& location) const
+int PathGraph::GetTileId(const Point2Int& location) const
 {
 	for (const auto& tile : m_VecTiles)
 	{
@@ -53,12 +55,12 @@ int PathGraph::GetTileId(const Point2f& location) const
 	}
 	return -1;
 }
-bool PathGraph::IsCurrTileIntersection(const Point2f& location) const
+bool PathGraph::IsCurrTileIntersection(const Point2Int& location) const
 {	
 	return m_VecTiles[GetTileId(location)].IsIntersection;
 }
 
-bool PathGraph::HasNeighbourInDirection(const Direction& dir, const Point2f& CharacterPos, int& targetLocation) const
+bool PathGraph::HasNeighbourInDirection(const Direction& dir, const Point2Int& CharacterPos, int& targetLocation) const
 {
 	int id{ GetTileId(CharacterPos) };
 	
