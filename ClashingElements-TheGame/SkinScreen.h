@@ -11,7 +11,7 @@ class Button;
 class SkinScreen final : public Screen
 {
 public:
-	explicit SkinScreen(const std::string& backGroundFilePath, const Rectf& window, std::function<void()> nextEvent);
+	explicit SkinScreen(const std::string& backGroundFilePath, const RectInt& window, std::function<void()> nextEvent);
 	~SkinScreen();
 
 	SkinScreen(const SkinScreen& other) = delete;
@@ -21,7 +21,7 @@ public:
 
 	virtual void Draw() const override;
 	virtual void Update(float elapsedSec) override;
-	virtual void KeyInput(const SDL_KeyboardEvent& e) override;
+	virtual void KeyInput(int virtualKeyCode) override;
 
 	std::shared_ptr<Player> GetPlayer() const;
 

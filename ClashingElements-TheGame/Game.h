@@ -1,48 +1,45 @@
-#pragma once
-#include "BaseGame.h"
+#ifndef GAME_H
+#define GAME_H
+
+#include "Engine.h"
 #include "Level.h"
 #include "GlobalEnumClasses.h"
 #include "Screen.h"
 
-
-class Game : public BaseGame
+class Game final: public BaseGame
 {
 public:
-	explicit Game( const Window& window );
-	Game(const Game& other) = delete;
-	Game& operator=(const Game& other) = delete;
-	Game( Game&& other) = delete;
-	Game& operator=(Game&& other) = delete;
-	// http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-override
-	~Game();
+    Game();
+    virtual ~Game();
 
-	void Update( float elapsedSec ) override;
-	void Draw( ) const override;
+    Game(const Game& other) = delete;
+    Game(Game&& other) noexcept = delete;
+    Game& operator=(const Game& other) = delete;
+    Game& operator=(Game&& other) noexcept = delete;
 
-	// Event handling
-	void ProcessKeyDownEvent( const SDL_KeyboardEvent& e ) override;
-	void ProcessKeyUpEvent( const SDL_KeyboardEvent& e ) override;
-	void ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e ) override;
-	void ProcessMouseDownEvent( const SDL_MouseButtonEvent& e ) override;
-	void ProcessMouseUpEvent( const SDL_MouseButtonEvent& e ) override;
-
-
-	
+    virtual void Initialize() override;
+    virtual void Draw() const override;
+    virtual void Tick() override;
+    virtual void KeyDown(int virtualKeycode) override;
+    virtual void KeyUp(int virtualKeycode) override;
+    virtual void MouseDown(bool isLeft, int x, int y) override;
+    virtual void MouseUp(bool isLeft, int x, int y) override;
+    virtual void MouseMove(int x, int y, int keyDown) override;
+    virtual void MouseWheelTurn(int x, int y, int turnDistance, int keyDown) override;
 private:
+    // VARIABLES
 
-	
+    GameState m_GameState{ GameState::Start };
+    std::unique_ptr<Level> m_pLevel;
+    std::unique_ptr<Screen> m_pScreen;
 
-	// VARIABLES
+    bool m_DebugScale{ false };
+    float m_DScale{ 0.25f };
 
-	GameState m_GameState{ GameState::Start };
-	std::unique_ptr<Level> m_pLevel;
-	std::unique_ptr<Screen> m_pScreen;
-
-	bool m_DebugScale{ false };
-	float m_DScale{ 0.25f };
-	
-	// FUNCTIONS
-	void Initialize();
-	void Cleanup( );
-	void ClearBackground( ) const;
+    // FUNCTIONS
+    void Initialize();
+    void Cleanup();
+    void ClearBackground() const;
 };
+
+#endif // !GAME_H

@@ -15,7 +15,7 @@ public:
 
 	virtual void Draw() const = 0;
 	virtual void Update(float elapsedSec) = 0;
-	virtual void KeyInput(const SDL_KeyboardEvent& e) = 0;
+	virtual void KeyInput(int virtualKeyCode) = 0;
 protected:
 	Rectf m_Window;
 };

@@ -1,10 +1,9 @@
-#include "pch.h"
 #include "SkinScreen.h"
 #include "Player.h"
 #include "Button.h"
 
 
-SkinScreen::SkinScreen( const std::string& backGroundFilePath, const Rectf& window, std::function<void()> nextEvent) :
+SkinScreen::SkinScreen( const std::string& backGroundFilePath, const RectInt& window, std::function<void()> nextEvent) :
 	Screen{window},
 	m_BackGround{ backGroundFilePath },
 	m_IndexCurrSkin{ 0 }
@@ -58,16 +57,16 @@ void SkinScreen::Update(float elapsedSec)
 {
 	m_pVecSkins[m_IndexCurrSkin]->Update(elapsedSec);
 }
-void SkinScreen::KeyInput(const SDL_KeyboardEvent& e)
+void SkinScreen::KeyInput(int virtualKeyCode)
 {
-	switch (e.keysym.sym)
+	switch (virtualKeyCode)
 	{
-	case SDLK_LEFT:
+	case VK_LEFT:
 		m_pVecSkins[m_IndexCurrSkin]->ResetFrames();
 		--m_IndexCurrSkin %= m_pVecSkins.size();
 		m_SelectionRect.left = m_pVecSkins[m_IndexCurrSkin]->GetHitBox().center.x - m_SelectionRect.width / 2;
 		break;
-	case SDLK_RIGHT:
+	case VK_RIGHT:
 		m_pVecSkins[m_IndexCurrSkin]->ResetFrames();
 		++m_IndexCurrSkin %= m_pVecSkins.size();
 		m_SelectionRect.left = m_pVecSkins[m_IndexCurrSkin]->GetHitBox().center.x - m_SelectionRect.width / 2;
