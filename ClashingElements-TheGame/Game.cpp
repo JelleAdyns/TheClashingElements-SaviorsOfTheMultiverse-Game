@@ -4,8 +4,7 @@
 
 Game::Game()
 {
-//ENGINE.SetTitle(_T("The Clashing Elements - The Game"));
-	//ENGINE.SetWindowDimensions(256*3,224*3);
+	
 }
 Game::~Game()
 {
@@ -15,21 +14,22 @@ void Game::Initialize()
 {
 	BaseGame::Initialize();
 
-	
+	ENGINE.SetTitle(_T("The Clashing Elements - The Game"));
+	ENGINE.SetWindowDimensions(256,224);
 
-	/*m_pScreen = std::make_unique<StartScreen>(L"Space.png", ENGINE.GetWindowSize(),
+	m_pScreen = std::make_unique<StartScreen>(L"Space.png", ENGINE.GetWindowSize(),
 		[&]()
 		{
-			m_GameState = GameState::SelectingSkin;
-			m_pScreen.reset(new SkinScreen{ L"Space.png", ENGINE.GetWindowSize(),  []() {} });
+			/*m_GameState = GameState::SelectingSkin;
+			m_pScreen.reset(new SkinScreen{ L"Space.png", ENGINE.GetWindowSize(),  []() {} });*/
 		},
 		[]() {}
 	);
-	m_pLevel = nullptr;*/
+	m_pLevel = nullptr;
 }
 void Game::Draw() const
 {
-	/*ENGINE.DrawLine(Point2Int{ 0,0 }, Point2Int{ ENGINE.GetWindowSize().width - 1, 200 });
+	ENGINE.DrawLine(Point2Int{ 0,0 }, Point2Int{ ENGINE.GetWindowSize().width - 1, 200 });
 
 	switch (m_GameState)
 	{
@@ -40,23 +40,22 @@ void Game::Draw() const
 		break;
 	case GameState::Playing:
 
+		ENGINE.PushTransform();
 		if (m_DebugScale)
 		{
-			ENGINE.Translate(ENGINE.GetWindowSize().width / 2, ENGINE.GetWindowSize().height / 2);
-			ENGINE.Scale(m_DScale, 0, 0);
-			ENGINE.Translate(-(ENGINE.GetWindowSize().width / 2), -(ENGINE.GetWindowSize().height / 2));
+			ENGINE.Scale(m_DScale, ENGINE.GetWindowSize().width / 2, ENGINE.GetWindowSize().height / 2);
 		}
 		m_pLevel->Draw();
-		ENGINE.EndTransform();
+		ENGINE.PopTransform();
 		break;
 	case GameState::GameOver:
 		break;
-	}*/
+	}
 
 }
 void Game::Tick()
 {
-	/*switch (m_GameState)
+	switch (m_GameState)
 	{
 	case GameState::Start:
 	case GameState::ShowingHighScores:
@@ -70,7 +69,7 @@ void Game::Tick()
 		break;
 	default:
 		break;
-	}*/
+	}
 
 }
 void Game::KeyDown(int virtualKeycode)
@@ -92,9 +91,9 @@ void Game::KeyDown(int virtualKeycode)
 		switch (virtualKeycode)
 		{
 		case VK_SPACE:
-			//m_pScreen.reset(new SkinScreen{ "Space.png", ENGINE.GetWindowSize() });
-			////m_pScreen = new SkinScreen{ "Space.png", ENGINE.GetWindowSize() };
-			//m_GameState = GameState::SelectingSkin;
+			m_pScreen = std::make_unique<SkinScreen>( L"Space.png", ENGINE.GetWindowSize(), [] (){} );
+			//m_pScreen = new SkinScreen{ "Space.png", ENGINE.GetWindowSize() };
+			m_GameState = GameState::SelectingSkin;
 			break;
 		}
 		break;

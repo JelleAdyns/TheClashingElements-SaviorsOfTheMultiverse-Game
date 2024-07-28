@@ -45,15 +45,15 @@ void FallingBoy::Draw() const
 	for (int i = 0; i < m_VecPositions.size(); ++i)
 	{
 
-		
+		ENGINE.PushTransform();
 		ENGINE.Translate(m_VecPositions[i].x , m_VecPositions[i].y + DestRect().height /2);
-		ENGINE.Rotate(float(i%2 == 0 ? 30 : -30), 0, 0, false);
-		ENGINE.Translate(-DestRect().width / 2,  - DestRect().height / 2);
+		ENGINE.Rotate(float(i%2 == 0 ? 30 : -30), m_BottomCenter.x, m_BottomCenter.y+ DestRect().height / 2);
+		//ENGINE.Translate(-DestRect().width / 2,  - DestRect().height / 2);
 		ENGINE.DrawTexture(*m_pTexture, m_BottomCenter, RectInt{DestRect().width * m_CurrentCol,
-											   DestRect().height * (i+1),
+											   DestRect().height * (i),
 											   DestRect().width,
 											   DestRect().height});
-		ENGINE.EndTransform();
+		ENGINE.PopTransform();
 	}
 }
 
@@ -62,7 +62,9 @@ void FallingBoy::UpdatePos()
 	AnimatedSprite::Update();
 	for (int i = 0; i < m_NrOfRows; i++)
 	{
-		m_VecPositions[i].y += m_FallingSpeed * ENGINE.GetDeltaTime();
+		float posY{ static_cast<float>(m_VecPositions[i].y) };
+		posY += m_FallingSpeed * ENGINE.GetDeltaTime();
+		m_VecPositions[i].y = static_cast<int>(std::round(posY));
 		if (m_VecPositions[i].y > m_Window.height) m_VecPositions[i].y = -(m_Window.height / (m_NrOfRows / 2 - 1));
 	}
 }

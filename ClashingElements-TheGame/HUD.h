@@ -28,7 +28,7 @@ private:
 	const RectInt m_HudArea;
 
 	COLORREF m_TextColor{ RGB(255,0,255) };
-	tstring m_pTextCollectables{ nullptr };
+	tstring m_pTextCollectables{  };
 	const Collectable m_pCollectable;
 
 };

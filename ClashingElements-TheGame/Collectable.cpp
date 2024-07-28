@@ -31,9 +31,10 @@ Collectable::~Collectable()
 }
 void Collectable::Draw() const
 {
+	ENGINE.PushTransform();
 	ENGINE.Translate(0, int(round(m_Amplitude * sinf(m_Period * m_Time))) + m_Amplitude);
 	AnimatedSprite::Draw();
-	ENGINE.EndTransform();
+	ENGINE.PopTransform();
 }
 
 void Collectable::Update()

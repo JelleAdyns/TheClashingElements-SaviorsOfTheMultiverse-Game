@@ -49,8 +49,8 @@ void Character::SetPos(const Point2Int& newPos)
 	m_HitBox.center = newPos;
 	m_ActualPosX = static_cast<float>(newPos.x);
 	m_ActualPosY = static_cast<float>(newPos.y);
-	m_TargetXLocation = int(newPos.x);
-	m_TargetYLocation = int(newPos.y);
+	m_TargetXLocation = newPos.x;
+	m_TargetYLocation = newPos.y;
 	m_IsMoving = false;
 }
 

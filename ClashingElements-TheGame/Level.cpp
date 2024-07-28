@@ -108,46 +108,14 @@ void Level::Tick()
 
 void Level::Draw() const
 {
-
-	//std::vector<AnimatedSprite*> pVecSprites{};
-	//pVecSprites.reserve(m_pVecCollectables.size() + m_pVecEnemies.size() + 1);
-	//pVecSprites.insert(pVecSprites.end(), m_pVecCollectables.cbegin(), m_pVecCollectables.cend());
-	//pVecSprites.insert(pVecSprites.end(), m_pVecEnemies.cbegin(), m_pVecEnemies.cend());
-	//pVecSprites.push_back(m_pPlayer);
-	//std::merge(m_pVecEnemies.begin(), m_pVecEnemies.end(), m_pVecCollectables.begin(), m_pVecCollectables.end(), pVecSprites);
-	//std::sort(pVecSprites.cbegin(), pVecSprites.cend(), std::bind(std::less<float>{}, std::placeholders::_1, std::placeholders::_2))
-	//auto it = std::copy(m_pVecCollectables.cbegin(), m_pVecCollectables.cend(), pVecSprites.begin());
-	//std::copy(m_pVecEnemies.cbegin(), m_pVecEnemies.cend(), it);
-	//pVecSprites.push_back(m_pPlayer);
-	//for (const auto& pCollectable : m_pVecCollectables)
-	//{
-	//	pVecSprites.push_back(pCollectable);
-	//}
-	//for (const auto& pEnemy : m_pVecEnemies)
-	//{
-	//	pVecSprites.push_back(pEnemy);
-	//}
-
-
-	//std::multimap<float,int> YMap{};
-	//for (int i = 0; i < pVecSprites.size(); i++)
-	//{
-	//	YMap.insert(std::make_pair(pVecSprites[i]->DestRect().bottom,i ));
-	//}
-	//
-	//std::vector<int> VecIndexes{};
-	//for (const std::pair<const float, const int>& p : YMap)
-	//{
-	//	VecIndexes.push_back(p.second);
-	//}
-
 	
-	
+	ENGINE.PushTransform();
 	m_Camera.Transform(m_pBackGround->GetParallaxSpeed());
 	m_pBackGround->Draw();
-	ENGINE.EndTransform();
+	ENGINE.PopTransform();
 
 	
+	ENGINE.PushTransform();
 	m_Camera.Transform();
 		
 	m_pAnimBackGround->Draw();
@@ -164,7 +132,7 @@ void Level::Draw() const
 	{
 		pSprite->Draw();
 	}
-	ENGINE.EndTransform();
+	ENGINE.PopTransform();
 
 	m_Hud.Draw();
 }
@@ -282,11 +250,11 @@ void Level::LoadStage()
 
 			case _T('B'):
 
-				if (rowString[col] != _T('P')) m_pVecEnemies.push_back(std::make_shared<Boss>( center, Player::m_DefaultSpeed ));
+				//if (rowString[col] != _T('P')) m_pVecEnemies.push_back(std::make_shared<Boss>( center, Player::m_DefaultSpeed ));
 
 			case _T('M'):
 
-				if (rowString[col] != _T('P') && rowString[col] != _T('B')) m_pVecEnemies.push_back(std::make_shared<Minion>(center));
+				//if (rowString[col] != _T('P') && rowString[col] != _T('B')) m_pVecEnemies.push_back(std::make_shared<Minion>(center));
 
 			case _T(','):
 

@@ -63,6 +63,6 @@ RectInt AnimatedSprite::SrcRect() const
 	srcRect.width = m_TextureArea.width / m_NrOfCols;
 	srcRect.height = m_TextureArea.height / m_NrOfRows;
 	srcRect.left = m_TextureArea.left + srcRect.width * m_CurrentCol;
-	srcRect.bottom = m_TextureArea.bottom + srcRect.height * (m_CurrentRow + 1);
+	srcRect.bottom = m_TextureArea.bottom + srcRect.height * m_CurrentRow;
 	return srcRect;
 }

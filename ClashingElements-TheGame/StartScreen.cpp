@@ -17,11 +17,12 @@ StartScreen::StartScreen(const std::wstring& backGroundFilePath, const RectInt& 
 
 void StartScreen::Draw() const
 {
+	ENGINE.PushTransform();
 	ENGINE.Translate(0, static_cast<int>(std::round(m_YTranslation)));
 	m_BackGround.Draw();
 	ENGINE.Translate(0, -m_Window.height);
 	m_BackGround.Draw();
-	ENGINE.EndTransform();
+	ENGINE.PopTransform();
 
 	m_FallingBoys.Draw();
 
