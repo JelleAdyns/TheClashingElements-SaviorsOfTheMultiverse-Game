@@ -66,40 +66,43 @@ bool PathGraph::HasNeighbourInDirection(const Direction& dir, const Point2Int& C
 	
 	for (const auto& neighbour : m_AdjacencyList[id])
 	{
-		if (dir == Direction::Left)
+		switch (dir)
 		{
+		case Direction::Left:
+
 			if (m_VecTiles[neighbour].CenterX < m_VecTiles[id].CenterX)
 			{
 				targetLocation = m_VecTiles[neighbour].CenterX;
 				return true;
 			}
-		}
+			break;
 
-		if (dir == Direction::Right)
-		{
+		case Direction::Right:
+
 			if (m_VecTiles[neighbour].CenterX > m_VecTiles[id].CenterX)
 			{
 				targetLocation = m_VecTiles[neighbour].CenterX;
 				return true;
 			}
-		}
+			break;
 
-		if (dir == Direction::Down)
-		{
+		case Direction::Down:
+
 			if (m_VecTiles[neighbour].CenterY < m_VecTiles[id].CenterY)
 			{
 				targetLocation = m_VecTiles[neighbour].CenterY;
 				return true;
 			}
-		}
+			break;
 
-		if (dir == Direction::Up)
-		{
+		case Direction::Up:
+
 			if (m_VecTiles[neighbour].CenterY > m_VecTiles[id].CenterY)
 			{
 				targetLocation = m_VecTiles[neighbour].CenterY;
 				return true;
 			}
+			break;
 		}
 
 	}

@@ -19,6 +19,8 @@ Character::Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, fl
 
 void Character::Update()
 {
+
+
 	if (m_TargetXLocation != m_BottomCenter.x && m_IsMoving)
 	{
 		if (m_TargetXLocation < m_BottomCenter.x) m_Velocity.x = float(-m_DefaultSpeed);
@@ -26,7 +28,22 @@ void Character::Update()
 
 		UpdatePos(m_Velocity);
 
-		if (m_BottomCenter.x == m_TargetXLocation) m_IsMoving = false;
+		if (m_Velocity.x > 0 and m_BottomCenter.x > m_TargetXLocation)
+		{
+			m_BottomCenter.x = m_TargetXLocation;
+			m_ActualPosX = static_cast<float>(m_TargetXLocation);
+		}
+		else if (m_Velocity.x < 0 and m_BottomCenter.x < m_TargetXLocation)
+		{
+			m_BottomCenter.x = m_TargetXLocation;
+			m_ActualPosX = static_cast<float>(m_TargetXLocation);
+		}
+
+		if (m_BottomCenter.x == m_TargetXLocation)
+		{
+			m_IsMoving = false;
+			m_Velocity.x = 0;
+		}
 	}
 	else m_Velocity.x = 0;
 
@@ -37,7 +54,22 @@ void Character::Update()
 
 		UpdatePos(m_Velocity);
 
-		if (m_BottomCenter.y == m_TargetYLocation) m_IsMoving = false;
+		if (m_Velocity.y > 0 and m_BottomCenter.y > m_TargetYLocation)
+		{
+			m_BottomCenter.y = m_TargetYLocation;
+			m_ActualPosY = static_cast<float>(m_TargetYLocation);
+		}
+		else if (m_Velocity.y < 0 and m_BottomCenter.y < m_TargetYLocation)
+		{
+			m_BottomCenter.y = m_TargetYLocation;
+			m_ActualPosY = static_cast<float>(m_TargetYLocation);
+		}
+
+		if (m_BottomCenter.y == m_TargetYLocation)
+		{
+			m_IsMoving = false;
+			m_Velocity.y = 0;
+		}
 	}
 	else m_Velocity.y = 0;
 }
@@ -60,6 +92,7 @@ void Character::UpdatePos(const Vector2f& newVeloctiy)
 	m_BottomCenter.x = static_cast<int>(round(m_ActualPosX));
 	m_ActualPosY += newVeloctiy.y * ENGINE.GetDeltaTime();
 	m_BottomCenter.y = static_cast<int>(round(m_ActualPosY));
+
 	m_HitBox.center = m_BottomCenter;
 }
 

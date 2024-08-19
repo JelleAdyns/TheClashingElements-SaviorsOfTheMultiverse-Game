@@ -200,6 +200,9 @@ int Engine::Run()
     MakeWindow();       
     CreateRenderTarget(); // ALWAYS CREATE RENDERTARGET BEFORE CALLING CONSTRUCTOR OF pGAME.
                              // TEXTURES ARE CREATED IN THE CONSTRUCTOR AND THEY NEED THE RENDERTARGET. 
+
+    srand(static_cast<unsigned int>(time(nullptr)));
+
     m_pGame = new Game{};
     m_pGame->Initialize();
 

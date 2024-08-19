@@ -15,6 +15,7 @@ void HUD::Draw() const
 {
 	ENGINE.SetColor(RGB(0,0,0));
 	ENGINE.FillRectangle(m_HudArea);
+	ENGINE.SetColor(RGB(255,0,0));
 	ENGINE.DrawString(m_pTextCollectables, GlobalFont::Get().GetFont(), Point2Int{m_HudArea.left +20, m_HudArea.bottom + 5}, 100);
 	m_pCollectable.Draw();
 }

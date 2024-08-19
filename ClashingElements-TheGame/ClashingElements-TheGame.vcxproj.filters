@@ -93,9 +93,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>Game Files\Sub Classes\Sprites\Characters</Filter>
     </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>Game Files\Sub Classes\Sprites\Characters</Filter>
-    </ClCompile>
     <ClCompile Include="Audio.cpp">
       <Filter>Engine Files</Filter>
     </ClCompile>
@@ -119,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Game Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Game Files\Sub Classes\Sprites\Characters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

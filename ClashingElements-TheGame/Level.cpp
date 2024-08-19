@@ -154,7 +154,7 @@ void Level::SetUpDrawBuffer()
 
 void Level::HitCollectable()
 {
-	std::cout << "collect" << std::endl;
+	OutputDebugString(_T("Collect"));
 	//m_pVecCollectables.erase(std::remove_if(m_pVecCollectables.begin(), m_pVecCollectables.end(), std::bind( &Level::Test , this, std::placeholders::_1)),
 	//	m_pVecCollectables.end());
 
@@ -199,7 +199,7 @@ void Level::LoadStage()
 	//m_pBackGroundMusic->Play(true);
 	
 
-	tifstream inputFile{ L"StagePattern.txt" };
+	tifstream inputFile{ ENGINE.GetResourcePath() + L"StagePattern.txt" };
 
 	tstring info{};
 
@@ -250,11 +250,11 @@ void Level::LoadStage()
 
 			case _T('B'):
 
-				//if (rowString[col] != _T('P')) m_pVecEnemies.push_back(std::make_shared<Boss>( center, Player::m_DefaultSpeed ));
+				if (rowString[col] != _T('P')) m_pVecEnemies.push_back(std::make_shared<Boss>( center, Player::m_DefaultSpeed ));
 
 			case _T('M'):
 
-				//if (rowString[col] != _T('P') && rowString[col] != _T('B')) m_pVecEnemies.push_back(std::make_shared<Minion>(center));
+				if (rowString[col] != _T('P') && rowString[col] != _T('B')) m_pVecEnemies.push_back(std::make_shared<Minion>(center));
 
 			case _T(','):
 

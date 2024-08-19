@@ -15,9 +15,10 @@ void Game::Initialize()
 	BaseGame::Initialize();
 
 	ENGINE.SetTitle(_T("The Clashing Elements - The Game"));
+	ENGINE.SetWindowScale(3.f);
 	ENGINE.SetWindowDimensions(256,224);
 
-	m_pScreen = std::make_unique<StartScreen>(L"Space.png", ENGINE.GetWindowSize(),
+	m_pScreen = std::make_unique<StartScreen>(L"Space.png", ENGINE.GetWindowRect(),
 		[&]()
 		{
 			/*m_GameState = GameState::SelectingSkin;
@@ -29,8 +30,7 @@ void Game::Initialize()
 }
 void Game::Draw() const
 {
-	ENGINE.DrawLine(Point2Int{ 0,0 }, Point2Int{ ENGINE.GetWindowSize().width - 1, 200 });
-
+	
 	switch (m_GameState)
 	{
 	case GameState::Start:
@@ -43,7 +43,7 @@ void Game::Draw() const
 		ENGINE.PushTransform();
 		if (m_DebugScale)
 		{
-			ENGINE.Scale(m_DScale, ENGINE.GetWindowSize().width / 2, ENGINE.GetWindowSize().height / 2);
+			ENGINE.Scale(m_DScale, ENGINE.GetWindowRect().width / 2, ENGINE.GetWindowRect().height / 2);
 		}
 		m_pLevel->Draw();
 		ENGINE.PopTransform();
@@ -91,7 +91,7 @@ void Game::KeyDown(int virtualKeycode)
 		switch (virtualKeycode)
 		{
 		case VK_SPACE:
-			m_pScreen = std::make_unique<SkinScreen>( L"Space.png", ENGINE.GetWindowSize(), [] (){} );
+			m_pScreen = std::make_unique<SkinScreen>( L"Space.png", ENGINE.GetWindowRect(), [] (){} );
 			//m_pScreen = new SkinScreen{ "Space.png", ENGINE.GetWindowSize() };
 			m_GameState = GameState::SelectingSkin;
 			break;
@@ -106,7 +106,7 @@ void Game::KeyDown(int virtualKeycode)
 		switch (virtualKeycode)
 		{
 		case VK_SPACE:
-			m_pLevel = std::make_unique<Level>(static_cast<SkinScreen*>(m_pScreen.get())->GetPlayer(), ENGINE.GetWindowSize().width, ENGINE.GetWindowSize().height);
+			m_pLevel = std::make_unique<Level>(static_cast<SkinScreen*>(m_pScreen.get())->GetPlayer(), ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height);
 			m_pScreen.reset();
 			//delete m_pScreen;
 			//m_pScreen = nullptr;

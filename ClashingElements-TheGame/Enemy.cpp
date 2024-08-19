@@ -9,9 +9,11 @@ Enemy::Enemy(const Point2Int& bottomCenter, int nrCols, int nrFrames, float fram
 
 void Enemy::Move(const PathGraph& graph)
 {
+	OutputDebugString((_T("Target:") + to_tstring(m_TargetXLocation) + _T(',') + to_tstring(m_TargetYLocation) + _T(" | Pos:") + to_tstring(m_BottomCenter.x) + _T(',') + to_tstring(m_BottomCenter.y) + _T('\n')).c_str());
 
 	if (graph.IsCurrTileIntersection(m_BottomCenter))
 	{
+		OutputDebugString(_T("Intersection\n"));
 		m_DirMap.clear();
 		int target{};
 		if (graph.HasNeighbourInDirection(Direction::Left, m_BottomCenter, target))
