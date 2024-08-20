@@ -27,6 +27,7 @@ void Game::Initialize()
 		[]() {}
 	);
 	m_pLevel = nullptr;
+	wesley = std::make_unique<Texture>(L"Wesley.png");
 }
 void Game::Draw() const
 {
@@ -52,6 +53,9 @@ void Game::Draw() const
 		break;
 	}
 
+	//ENGINE.DrawTexture(*wesley, RectInt{ 50,50,12,27*2 }, RectInt{ 0,27,12,27 });
+	//ENGINE.DrawTexture(*wesley, RectInt{ 50,50,96,200 });
+	//ENGINE.DrawTexture(*wesley);
 }
 void Game::Tick()
 {

@@ -17,7 +17,7 @@ Level::Level(std::shared_ptr<Player> pPlayer, int viewportWidth, int viewportHei
 	m_VecBackGrounds
 	{
 		{ _T("Mall.png")      , {_T("BGMall.png")      ,Point2Int{0, 300}} },
-		{ _T("GloirbnPit.png"), {_T("BGGloirbnPit.png"),Point2Int{0, 300}} }
+		{ _T("GloirbnPit.png"), {_T("GloirbnPit.png"),Point2Int{0, 300}} }
     },
 
 	m_VecMusic
@@ -85,10 +85,9 @@ void Level::Tick()
 		for (const auto& pEnemy : m_pVecEnemies)
 		{
 			pEnemy->Update();
-			if(!pEnemy->IsMoving()) pEnemy->Move(m_Graph);
+			if (!pEnemy->IsMoving()) pEnemy->Move(m_Graph);
 		}
 
-		
 		m_pPlayer->Move(m_Graph);
 		m_pPlayer->Update();
 		if (m_pPlayer->IsMoving()) HitCollectable();
@@ -254,7 +253,7 @@ void Level::LoadStage()
 
 			case _T('M'):
 
-				if (rowString[col] != _T('P') && rowString[col] != _T('B')) m_pVecEnemies.push_back(std::make_shared<Minion>(center));
+				//if (rowString[col] != _T('P') && rowString[col] != _T('B')) m_pVecEnemies.push_back(std::make_shared<Minion>(center));
 
 			case _T(','):
 

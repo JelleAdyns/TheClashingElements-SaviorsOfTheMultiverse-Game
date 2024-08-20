@@ -49,7 +49,7 @@ void FallingBoy::Draw() const
 		ENGINE.Translate(m_VecPositions[i].x , m_VecPositions[i].y + DestRect().height /2);
 		ENGINE.Rotate(float(i%2 == 0 ? 30 : -30), m_BottomCenter.x, m_BottomCenter.y+ DestRect().height / 2);
 		//ENGINE.Translate(-DestRect().width / 2,  - DestRect().height / 2);
-		ENGINE.DrawTexture(*m_pTexture, m_BottomCenter, RectInt{DestRect().width * m_CurrentCol,
+		ENGINE.DrawTexture(*m_pTexture, DestRect(), RectInt{DestRect().width * m_CurrentCol,
 											   DestRect().height * (i),
 											   DestRect().width,
 											   DestRect().height});

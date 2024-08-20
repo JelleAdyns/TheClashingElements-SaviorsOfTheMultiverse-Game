@@ -1,4 +1,5 @@
 #include "PathGraph.h"
+#include <map>
 
 void PathGraph::Draw() const
 {
@@ -108,4 +109,111 @@ bool PathGraph::HasNeighbourInDirection(const Direction& dir, const Point2Int& C
 	}
 	
 	return false;
+}
+
+std::vector<int> PathGraph::CalculatShortestPath(const Direction& dir, const Point2Int& intersectionPos, const Point2Int& targetPos) const
+{
+	//This guy helped me out a lot!
+	//https://www.youtube.com/watch?v=mZfyt03LDH4&t=1094s
+
+	int target{}; 
+	assert(HasNeighbourInDirection(dir, intersectionPos, target));
+	
+	Point2Int startPos{intersectionPos};
+	switch (dir)
+	{
+	case Direction::Left:
+		startPos.x -= Tile::Size;
+		break;
+	case Direction::Right:
+		startPos.x += Tile::Size;
+		break;
+	case Direction::Down:
+		startPos.y -= Tile::Size;
+		break;
+	case Direction::Up:
+		startPos.y += Tile::Size;
+		break;
+	}
+	int startId{ GetTileId(startPos) };
+	int endId{ GetTileId(targetPos) };
+
+	Point2Int endPos{ GetXCenterOfTile(endId), GetYCenterOfTile(endId) };
+
+	int intersectionId{ GetTileId(intersectionPos) };
+
+	std::map<int, Node> openNodes{};
+	std::map<int, Node> closedNodes{};
+
+	openNodes.emplace(startId, Node{.hCost = Node::CalculateCost(startPos, endPos), .tileId = startId });
+
+	int AmountOfTiles{};
+	while (!openNodes.empty())
+	{
+		// get the node with the lowest f_cost
+		std::pair<int, Node> pair = *openNodes.cbegin();
+		auto [currentTileId, currentNode] = pair;
+		for (auto& [tileId, node] : openNodes)
+		{
+			if (node.fCost() < currentNode.fCost() or 
+				(node.fCost() == currentNode.fCost() and node.hCost < currentNode.hCost))
+			{
+				currentNode = node;
+				currentTileId = tileId;
+			}
+		}
+
+		// close this node
+		openNodes.erase(currentTileId);
+		closedNodes.emplace(currentTileId, currentNode); 
+
+		if (currentTileId == endId) return RetracePath(closedNodes, startId, endId);
+
+		for (auto& neighbourTileId : m_AdjacencyList[currentTileId])
+		{
+			if (intersectionId == neighbourTileId or closedNodes.contains(neighbourTileId)) continue;
+
+			Point2Int neighbourPos{ GetXCenterOfTile(neighbourTileId), GetYCenterOfTile(neighbourTileId) };
+			Point2Int currentPos{ GetXCenterOfTile(currentTileId), GetYCenterOfTile(currentTileId) };
+
+			int newCostToNeighbour = currentNode.gCost + Node::CalculateCost(currentPos, neighbourPos);
+			if (!openNodes.contains(neighbourTileId) || newCostToNeighbour < openNodes.at(neighbourTileId).gCost)
+			{
+				
+				if (openNodes.contains(neighbourTileId))
+				{
+					openNodes.at(neighbourTileId).gCost = newCostToNeighbour;
+					openNodes.at(neighbourTileId).hCost = Node::CalculateCost(neighbourPos, endPos);
+					openNodes.at(neighbourTileId).parentId = currentTileId;
+				}
+				else
+				{
+					openNodes.emplace(neighbourTileId, Node{
+						.gCost = newCostToNeighbour, 
+						.hCost = Node::CalculateCost(neighbourPos, endPos),
+						.tileId = neighbourTileId,
+						.parentId = currentTileId 
+						});
+				}
+			}
+		}
+
+
+		++AmountOfTiles;
+	}
+	return std::vector<int>{};
+}
+
+std::vector<int> PathGraph::RetracePath(const std::map<int, Node>& closedNodes, int startId, int endId) const
+{
+	std::vector<int> path{ };
+	int currentTile{closedNodes.at(endId).tileId};
+	do
+	{
+		path.push_back(currentTile);
+		currentTile = closedNodes.at(currentTile).parentId;
+
+	} while (path.back() != startId);
+
+	return path;
 }

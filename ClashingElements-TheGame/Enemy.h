@@ -17,6 +17,7 @@ public:
 	Enemy& operator=(const Enemy& other) = delete;
 	Enemy& operator=(Enemy&& other) noexcept = delete;
 
+	virtual void Draw() const override;
 	virtual void Move(const PathGraph& graph) override;
 	//virtual void InteractWithMobilityItem(const MobilityItem& mobilityItem) override;
 
@@ -28,6 +29,7 @@ protected:
 private:
 
 	std::vector<std::pair<Direction, int>> m_DirMap;
+	std::vector<Point2Int> m_Path;
 };
 
 

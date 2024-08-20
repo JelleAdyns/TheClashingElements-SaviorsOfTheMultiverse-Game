@@ -7,6 +7,18 @@ Enemy::Enemy(const Point2Int& bottomCenter, int nrCols, int nrFrames, float fram
 
 }
 
+void Enemy::Draw() const
+{
+	AnimatedSprite::Draw();
+
+	int halfTile = Tile::Size / 2;
+	ENGINE.SetColor(RGB(0, 255, 0));
+	for (auto& center : m_Path)
+	{
+		ENGINE.FillRectangle(center.x - halfTile, center.y - halfTile, Tile::Size, Tile::Size);
+	}
+}
+
 void Enemy::Move(const PathGraph& graph)
 {
 	OutputDebugString((_T("Target:") + to_tstring(m_TargetXLocation) + _T(',') + to_tstring(m_TargetYLocation) + _T(" | Pos:") + to_tstring(m_BottomCenter.x) + _T(',') + to_tstring(m_BottomCenter.y) + _T('\n')).c_str());
@@ -37,7 +49,13 @@ void Enemy::Move(const PathGraph& graph)
 		int index{rand() % int(m_DirMap.size())};
 
 		m_Dir = m_DirMap[index].first;
-
+		m_Path.clear();
+		auto path = graph.CalculatShortestPath(m_Dir, m_BottomCenter, Point2Int{72,664});
+		m_Path.reserve(path.size());
+		for (auto& tileId : path)
+		{
+			m_Path.push_back(Point2Int{ graph.GetXCenterOfTile(tileId), graph.GetYCenterOfTile(tileId) });
+		}
 		int targetCoordinate{ m_DirMap[index].second };
 
 		if (m_Dir == Direction::Down || m_Dir == Direction::Up) m_TargetYLocation = targetCoordinate;

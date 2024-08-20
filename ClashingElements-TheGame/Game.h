@@ -36,6 +36,7 @@ private:
     bool m_DebugScale{ false };
     float m_DScale{ 0.25f };
 
+    std::unique_ptr<Texture> wesley{nullptr};
 };
 
 #endif // !GAME_H

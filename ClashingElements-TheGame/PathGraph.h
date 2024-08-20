@@ -3,6 +3,7 @@
 
 
 #include <vector>
+#include <map>
 #include "Tile.h"
 #include "GlobalEnumClasses.h"
 
@@ -30,7 +31,31 @@ public:
 
 	bool HasNeighbourInDirection(const Direction& dir, const Point2Int& playerPos, int& targetLocation) const;
 
+	//This guy helped me out a lot!
+	//https://www.youtube.com/watch?v=mZfyt03LDH4&t=1094s
+	std::vector<int> CalculatShortestPath(const Direction& dir, const Point2Int& intersectionPos, const Point2Int& endPos) const;
+
 private:
+
+	struct Node
+	{
+		int gCost{};
+		int hCost{};
+		int tileId{};
+		int parentId{};
+
+		int fCost() const { return gCost + hCost; }
+
+		static int CalculateCost(const Point2Int& A, const Point2Int& B)
+		{
+			int x = std::abs(A.x - B.x) / Tile::Size;
+			int y = std::abs(A.y - B.y) / Tile::Size;
+			return x + y;
+		}
+	};
+
+	std::vector<int> RetracePath(const std::map<int, Node>& closedNodes, int startId, int endId) const;
+
 	std::vector<std::vector<int>> m_AdjacencyList;
 	std::vector<Tile> m_VecTiles;
 
