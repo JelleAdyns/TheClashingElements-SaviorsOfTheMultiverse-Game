@@ -21,7 +21,7 @@ void Enemy::Draw() const
 
 void Enemy::Move(const PathGraph& graph)
 {
-	OutputDebugString((_T("Target:") + to_tstring(m_TargetXLocation) + _T(',') + to_tstring(m_TargetYLocation) + _T(" | Pos:") + to_tstring(m_BottomCenter.x) + _T(',') + to_tstring(m_BottomCenter.y) + _T('\n')).c_str());
+	OutputDebugString((_T("Target:") + to_tstring(m_TargetLocation.x) + _T(',') + to_tstring(m_TargetLocation.y) + _T(" | Pos:") + to_tstring(m_BottomCenter.x) + _T(',') + to_tstring(m_BottomCenter.y) + _T('\n')).c_str());
 
 	if (graph.IsCurrTileIntersection(m_BottomCenter))
 	{
@@ -56,10 +56,15 @@ void Enemy::Move(const PathGraph& graph)
 		{
 			m_Path.push_back(Point2Int{ graph.GetXCenterOfTile(tileId), graph.GetYCenterOfTile(tileId) });
 		}
-		int targetCoordinate{ m_DirMap[index].second };
+		}
 
-		if (m_Dir == Direction::Down || m_Dir == Direction::Up) m_TargetYLocation = targetCoordinate;
-		else m_TargetXLocation = targetCoordinate;
+
+		int index{rand() % int(m_DirMap.size())};
+		const auto& [direction, targetCoord] = m_DirMap[index];
+
+		m_Dir = direction;
+		if (m_Dir == Direction::Down || m_Dir == Direction::Up) m_TargetLocation.y = targetCoord;
+		else m_TargetLocation.x = targetCoord;
 
 	}
 	else 
@@ -67,8 +72,8 @@ void Enemy::Move(const PathGraph& graph)
 		int target{};
 		if (graph.HasNeighbourInDirection(m_Dir, m_BottomCenter, target))
 		{
-			if (m_Dir == Direction::Down || m_Dir == Direction::Up) m_TargetYLocation = target;
-			else m_TargetXLocation = target;
+			if (m_Dir == Direction::Down || m_Dir == Direction::Up) m_TargetLocation.y = target;
+			else m_TargetLocation.x = target;
 		}
 
 	}

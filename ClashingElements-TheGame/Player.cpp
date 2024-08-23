@@ -52,12 +52,12 @@ void Player::Move(const PathGraph& graph)
 			int targetX{};
 			if (graph.HasNeighbourInDirection(Direction::Left, m_BottomCenter, targetX))
 			{
-				if (m_TargetYLocation == m_BottomCenter.y)
+				if (m_TargetLocation.y == m_BottomCenter.y)
 				{
 					m_Dir = Direction::Left;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetXLocation = targetX;
+					m_TargetLocation.x = targetX;
 				}
 			}
 		}
@@ -66,12 +66,12 @@ void Player::Move(const PathGraph& graph)
 			int targetX{};
 			if (graph.HasNeighbourInDirection(Direction::Right, m_BottomCenter, targetX))
 			{
-				if (m_TargetYLocation == m_BottomCenter.y)
+				if (m_TargetLocation.y == m_BottomCenter.y)
 				{
 					m_Dir = Direction::Right;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetXLocation = targetX;
+					m_TargetLocation.x = targetX;
 				}
 			}
 		}
@@ -80,12 +80,12 @@ void Player::Move(const PathGraph& graph)
 			int targetY{};
 			if (graph.HasNeighbourInDirection(Direction::Down, m_BottomCenter, targetY))
 			{
-				if (m_TargetXLocation == m_BottomCenter.x)
+				if (m_TargetLocation.x == m_BottomCenter.x)
 				{
 					m_Dir = Direction::Down;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetYLocation = targetY;
+					m_TargetLocation.y = targetY;
 				}
 			}
 		}
@@ -94,12 +94,12 @@ void Player::Move(const PathGraph& graph)
 			int targetY{};
 			if (graph.HasNeighbourInDirection(Direction::Up, m_BottomCenter, targetY))
 			{
-				if (m_TargetXLocation == m_BottomCenter.x)
+				if (m_TargetLocation.x == m_BottomCenter.x)
 				{
 					m_Dir = Direction::Up;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetYLocation = targetY;
+					m_TargetLocation.y = targetY;
 				}
 			}
 		}

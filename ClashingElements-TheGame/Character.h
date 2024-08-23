@@ -29,8 +29,7 @@ protected:
 	Direction m_Dir;
 	Vector2f m_Velocity;
 
-	int m_TargetXLocation;
-	int m_TargetYLocation;
+	Point2Int m_TargetLocation;
 	bool m_IsMoving;
 
 	void UpdatePos(const Vector2f& newVelocity);

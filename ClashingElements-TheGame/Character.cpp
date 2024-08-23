@@ -8,8 +8,7 @@ Character::Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, fl
 	m_HitBox{ CircleInt{Point2Int{bottomCenter}, 6} },
 
 	m_Velocity{ },
-	m_TargetXLocation{},
-	m_TargetYLocation{},
+	m_TargetLocation{},
 
 	m_IsMoving{ false },
 
@@ -28,47 +27,41 @@ void Character::Draw() const
 
 void Character::Update()
 {
-
-	if (m_TargetXLocation != m_BottomCenter.x && m_IsMoving)
+	
+	if (m_TargetLocation.x != m_BottomCenter.x && m_IsMoving)
 	{
-		if (m_TargetXLocation < m_BottomCenter.x) m_Velocity.x = float(-m_DefaultSpeed);
+		bool decreasing{ m_TargetLocation.x < m_BottomCenter.x };
+
+		if (decreasing) m_Velocity.x = float(-m_DefaultSpeed);
 		else m_Velocity.x = float(m_DefaultSpeed);
 
 		UpdatePos(m_Velocity);
 
-		if ((m_Velocity.x > 0 and m_BottomCenter.x > m_TargetXLocation) or
-			(m_Velocity.x < 0 and m_BottomCenter.x < m_TargetXLocation))
+		if ((not decreasing and m_BottomCenter.x >= m_TargetLocation.x) or
+			(decreasing and m_BottomCenter.x <= m_TargetLocation.x))
 		{
-			SetPos(Point2Int{ m_TargetXLocation, m_BottomCenter.y});
-		}
-		if (m_BottomCenter.x == m_TargetXLocation)
-		{
-			m_IsMoving = false;
+			SetPos(Point2Int{ m_TargetLocation.x, m_BottomCenter.y});
 			m_Velocity.x = 0;
 		}
 	}
-	else m_Velocity.x = 0;
 
-	if (m_TargetYLocation != m_BottomCenter.y && m_IsMoving)
+	if (m_TargetLocation.y != m_BottomCenter.y && m_IsMoving)
 	{
-		if (m_TargetYLocation < m_BottomCenter.y) m_Velocity.y = float(-m_DefaultSpeed);
+		bool decreasing{ m_TargetLocation.y < m_BottomCenter.y };
+
+		if (decreasing) m_Velocity.y = float(-m_DefaultSpeed);
 		else m_Velocity.y = float(m_DefaultSpeed);
 
 		UpdatePos(m_Velocity);
 
-		if ((m_Velocity.y > 0 and m_BottomCenter.y > m_TargetYLocation) or
-			(m_Velocity.y < 0 and m_BottomCenter.y < m_TargetYLocation))
+		if ((not decreasing and m_BottomCenter.y >= m_TargetLocation.y) or
+			(decreasing and m_BottomCenter.y <= m_TargetLocation.y))
 		{
-			SetPos(Point2Int{ m_BottomCenter.x, m_TargetYLocation });
-		}
-
-		if (m_BottomCenter.y == m_TargetYLocation)
-		{
-			m_IsMoving = false;
+			SetPos(Point2Int{ m_BottomCenter.x, m_TargetLocation.y });
 			m_Velocity.y = 0;
 		}
 	}
-	else m_Velocity.y = 0;
+
 } 
 
 void Character::SetPos(const Point2Int& newPos)
@@ -77,8 +70,7 @@ void Character::SetPos(const Point2Int& newPos)
 	m_HitBox.center = newPos;
 	m_ActualPosX = static_cast<float>(newPos.x);
 	m_ActualPosY = static_cast<float>(newPos.y);
-	m_TargetXLocation = newPos.x;
-	m_TargetYLocation = newPos.y;
+	m_TargetLocation = newPos;
 	m_IsMoving = false;
 }
 
