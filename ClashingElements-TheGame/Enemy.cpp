@@ -9,13 +9,13 @@ Enemy::Enemy(const Point2Int& bottomCenter, int nrCols, int nrFrames, float fram
 
 void Enemy::Draw() const
 {
-	AnimatedSprite::Draw();
+	Character::Draw();
 
 	int halfTile = Tile::Size / 2;
 	ENGINE.SetColor(RGB(0, 255, 0));
 	for (auto& center : m_Path)
 	{
-		ENGINE.FillRectangle(center.x - halfTile, center.y - halfTile, Tile::Size, Tile::Size);
+		ENGINE.FillRectangle(center.x - Tile::Size / 2, center.y - Tile::Size / 2, Tile::Size, Tile::Size);
 	}
 }
 

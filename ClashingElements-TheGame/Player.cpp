@@ -1,10 +1,9 @@
 #include "Player.h"
 
 int	Player::m_DefaultSpeed{ Tile::Size * 4 };
-const int Player::m_PixelOffset{ 1 };
 
 Player::Player(const Skin& skin):
-	Character{ Point2Int{}, 8, 32, 1.f / 20 },
+	Character{ Point2Int{}, 8, 32, 1.f / 20, 1 },
 	m_State{ PlayerState::ChoosingSkin },
 	m_pTexture{nullptr}
 {
@@ -86,7 +85,7 @@ void Player::Move(const PathGraph& graph)
 					m_Dir = Direction::Down;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetYLocation = targetY - m_PixelOffset;
+					m_TargetYLocation = targetY;
 				}
 			}
 		}
@@ -100,7 +99,7 @@ void Player::Move(const PathGraph& graph)
 					m_Dir = Direction::Up;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetYLocation = targetY - m_PixelOffset;
+					m_TargetYLocation = targetY;
 				}
 			}
 		}
@@ -113,11 +112,6 @@ void Player::ResetFrames()
 void Player::Play()
 {
 	m_State = PlayerState::Playing;
-}
-void Player::SetPos(const Point2Int& newPos)
-{
-	Point2Int pos{ newPos.x, newPos.y - m_PixelOffset };
-	Character::SetPos(pos);
 }
 //void Player::InteractWithMobilityItem(const MobilityItem& mobilityItem)
 //{

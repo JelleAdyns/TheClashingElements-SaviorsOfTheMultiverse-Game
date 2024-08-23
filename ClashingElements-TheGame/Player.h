@@ -15,7 +15,6 @@ public:
 
 	virtual void Update() override;
 	virtual void Move(const PathGraph& graph) override;
-	virtual void SetPos(const Point2Int& newPos) override;
 	//virtual void InteractWithMobilityItem(const MobilityItem& mobilityItem) override;
 
 	void ResetFrames();
@@ -23,7 +22,7 @@ public:
 
 	static int m_DefaultSpeed;
 private:
-	const static int m_PixelOffset;
+
 	enum class PlayerState
 	{
 		ChoosingSkin,

@@ -7,7 +7,7 @@
 class Character : public AnimatedSprite
 {
 public:
-	explicit Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime);
+	explicit Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime, int pixelOffset = 0);
 	virtual ~Character() = default;
 
 	Character(const Character& other) = delete;
@@ -16,9 +16,10 @@ public:
 	Character& operator=(Character&& other) noexcept = delete;
 
 
+	virtual void Draw() const override;
 	virtual void Update() override;
 	virtual void Move(const PathGraph& graph) = 0;
-	virtual void SetPos(const Point2Int& newPos);
+	void SetPos(const Point2Int& newPos);
 
 	CircleInt GetHitBox() const;
 	bool IsMoving() const;
@@ -31,14 +32,15 @@ protected:
 	int m_TargetXLocation;
 	int m_TargetYLocation;
 	bool m_IsMoving;
-	CircleInt m_HitBox;
 
 	void UpdatePos(const Vector2f& newVelocity);
 	void SetDefaultSpeed(int speed);
 private:
+	const int m_PixelOffset;
 	float m_ActualPosX;
 	float m_ActualPosY;
 	int m_DefaultSpeed;
+	CircleInt m_HitBox;
 };
 
 #endif // !CHARACTER_H

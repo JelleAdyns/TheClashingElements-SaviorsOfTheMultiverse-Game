@@ -1,7 +1,8 @@
 #include "Character.h"
 
-Character::Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime) :
+Character::Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime, int pixelOffset) :
 	AnimatedSprite{ bottomCenter, nrCols, nrFrames, frameTime, false },
+	m_PixelOffset{ pixelOffset },
 
 	m_Dir{ Direction::Down },
 	m_HitBox{ CircleInt{Point2Int{bottomCenter}, 6} },
@@ -17,9 +18,16 @@ Character::Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, fl
 	SetPos(bottomCenter);
 }
 
+void Character::Draw() const
+{
+	ENGINE.PushTransform();
+	ENGINE.Translate(0, -m_PixelOffset);
+	AnimatedSprite::Draw();
+	ENGINE.PopTransform();
+}
+
 void Character::Update()
 {
-
 
 	if (m_TargetXLocation != m_BottomCenter.x && m_IsMoving)
 	{
@@ -28,17 +36,11 @@ void Character::Update()
 
 		UpdatePos(m_Velocity);
 
-		if (m_Velocity.x > 0 and m_BottomCenter.x > m_TargetXLocation)
+		if ((m_Velocity.x > 0 and m_BottomCenter.x > m_TargetXLocation) or
+			(m_Velocity.x < 0 and m_BottomCenter.x < m_TargetXLocation))
 		{
-			m_BottomCenter.x = m_TargetXLocation;
-			m_ActualPosX = static_cast<float>(m_TargetXLocation);
+			SetPos(Point2Int{ m_TargetXLocation, m_BottomCenter.y});
 		}
-		else if (m_Velocity.x < 0 and m_BottomCenter.x < m_TargetXLocation)
-		{
-			m_BottomCenter.x = m_TargetXLocation;
-			m_ActualPosX = static_cast<float>(m_TargetXLocation);
-		}
-
 		if (m_BottomCenter.x == m_TargetXLocation)
 		{
 			m_IsMoving = false;
@@ -54,15 +56,10 @@ void Character::Update()
 
 		UpdatePos(m_Velocity);
 
-		if (m_Velocity.y > 0 and m_BottomCenter.y > m_TargetYLocation)
+		if ((m_Velocity.y > 0 and m_BottomCenter.y > m_TargetYLocation) or
+			(m_Velocity.y < 0 and m_BottomCenter.y < m_TargetYLocation))
 		{
-			m_BottomCenter.y = m_TargetYLocation;
-			m_ActualPosY = static_cast<float>(m_TargetYLocation);
-		}
-		else if (m_Velocity.y < 0 and m_BottomCenter.y < m_TargetYLocation)
-		{
-			m_BottomCenter.y = m_TargetYLocation;
-			m_ActualPosY = static_cast<float>(m_TargetYLocation);
+			SetPos(Point2Int{ m_BottomCenter.x, m_TargetYLocation });
 		}
 
 		if (m_BottomCenter.y == m_TargetYLocation)
@@ -72,11 +69,10 @@ void Character::Update()
 		}
 	}
 	else m_Velocity.y = 0;
-}
+} 
 
 void Character::SetPos(const Point2Int& newPos)
 {
-	//Point2Int pos{ newPos.x, newPos.y}
 	m_BottomCenter = newPos;
 	m_HitBox.center = newPos;
 	m_ActualPosX = static_cast<float>(newPos.x);
