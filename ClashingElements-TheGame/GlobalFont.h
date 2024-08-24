@@ -1,5 +1,8 @@
-#pragma once
-#include <SDL_ttf.h> 
+#ifndef GLOBALFONT_H
+#define GLOBALFONT_H
+
+#include "Engine.h"
+
 class GlobalFont
 {
 public:
@@ -10,10 +13,9 @@ public:
         return font;
     }
 
-    static TTF_Font* GetFont() 
+    const Font& GetFont() 
     { 
-        static TTF_Font* font = TTF_OpenFont("8BitFont.otf", 16);
-        return font;
+        return m_Font;
     }
 
     GlobalFont(const GlobalFont& other) = delete;
@@ -23,7 +25,9 @@ public:
 private:
 
     GlobalFont() {}
-
+    Font m_Font{ L"ClashingFont.ttf", 16, false, false, true };
    // static GlobalFont s_Font;
 };
+
+#endif // !GLOBALFONT_H
 

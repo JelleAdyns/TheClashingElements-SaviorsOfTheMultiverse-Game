@@ -1,6 +1,9 @@
-#pragma once
+#ifndef PATHGRAPH_H
+#define PATHGRAPH_H
+
+
 #include <vector>
-#include <utils.h>
+#include <map>
 #include "Tile.h"
 #include "GlobalEnumClasses.h"
 
@@ -17,20 +20,31 @@ public:
 
 	//DEBUG DRAW
 	void Draw() const;
-	void AddTile(int id, int centerX, int centerY, bool isIntersection = false);
-	void AddEdge(int srcTileId, int neighboutId);
 
-	int GetXCenterOfTile(int id) const;
-	int GetYCenterOfTile(int id) const;
+	void AddTile(TileID id, int centerX, int centerY, bool isIntersection = false);
+	void AddEdge(TileID srcTileId, TileID neighboutId);
 
-	int GetTileId(const Point2f& location) const;
-	bool IsCurrTileIntersection(const Point2f& location) const;
+	Point2Int GetCenterOfTile(TileID id) const;
 
-	bool HasNeighbourInDirection(const Direction& dir, const Point2f& playerPos, int& targetLocation) const;
+	TileID GetTileId(int locationX, int locationY) const;
+	TileID GetTileId(const Point2Int& location) const;
+	const Tile& ReadTile(TileID tileId) const;
+	std::vector<TileID> GetNeighbours(TileID tileId) const;
+
+	void SetWalkabilityOfTile(TileID tileId, bool walkable);
+	bool IsTileIntersection(const Point2Int& location) const;
+	bool HasNeighbourInDirection(const Direction& dir, const Point2Int& playerPos, Point2Int& neigbourCenter) const;
+
+	//This guy helped me out a lot!
+	//https://www.youtube.com/watch?v=mZfyt03LDH4&t=1094s
+	std::vector<TileID> CalculatShortestPath(TileID startId, TileID endId) const;
 
 private:
-	std::vector<std::vector<int>> m_AdjacencyList;
+
+	std::vector<std::vector<TileID>> m_AdjacencyList;
 	std::vector<Tile> m_VecTiles;
 
 };
 
+
+#endif // !PATHGRAPH_H

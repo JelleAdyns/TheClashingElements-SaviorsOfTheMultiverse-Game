@@ -1,10 +1,13 @@
-#pragma once
+#ifndef FALLINGBOY_H
+#define FALLINGBOY_H
+
 #include "AnimatedSprite.h"
+#include "Engine.h"
 #include <vector>
 class FallingBoy final : public AnimatedSprite
 {
 public:
-	explicit FallingBoy(const Point2f& bottomCenter,const Rectf& window);
+	explicit FallingBoy(const Point2Int& bottomCenter,const RectInt& window);
 	~FallingBoy();
 
 	FallingBoy(const FallingBoy& other) = delete;
@@ -12,20 +15,21 @@ public:
 	FallingBoy& operator=(const FallingBoy& other) = delete;
 	FallingBoy& operator=(FallingBoy&& other) noexcept = delete;
 
-	void UpdatePos(float elapsedSec);
+	void UpdatePos();
 	virtual void Draw() const override;
 
-	void Reset(float yDist);
+	//void Reset(float yDist);
 
 	const static int m_NrOfBoys;
 private:
 
-	const static Texture* m_pTexture;
+	static std::unique_ptr<Texture> m_pTexture;
 	static int m_InstanceCounter;
 	const static int m_FallingSpeed;
 
-	const Rectf m_Window;
+	const RectInt m_Window;
 
-	std::vector<Point2f> m_VecPositions;
+	std::vector<Point2Int> m_VecPositions;
 };
 
+#endif // !FALLINGBOY_H

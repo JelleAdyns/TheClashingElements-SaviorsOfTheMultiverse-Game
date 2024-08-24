@@ -1,7 +1,6 @@
-#include "pch.h"
 #include "Screen.h"
 
-Screen::Screen(const Rectf& window) :
+Screen::Screen(const RectInt& window) :
 	m_Window{window}
 {
 

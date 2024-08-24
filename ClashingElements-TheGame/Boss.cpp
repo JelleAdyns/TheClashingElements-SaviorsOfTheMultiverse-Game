@@ -1,11 +1,10 @@
-#include "pch.h"
 #include "Boss.h"
 
-const Texture* Boss::m_pTexture{ nullptr };
+std::unique_ptr<Texture> Boss::m_pTexture{ nullptr };
 int Boss::m_InstanceCounter{ 0 };
 int Boss::m_DefaultSpeed{ 0 };
 
-Boss::Boss(const Point2f& bottomCenter, int speed):
+Boss::Boss(const Point2Int& bottomCenter, int speed):
 	Enemy{bottomCenter, 3, 3, 1.f / 8 }
 {
 	m_DefaultSpeed = speed;
@@ -16,9 +15,9 @@ Boss::Boss(const Point2f& bottomCenter, int speed):
 
 	if (m_pTexture == nullptr)
 	{
-		m_pTexture = new Texture{ "Boss.png" };
+		m_pTexture = std::make_unique<Texture>( L"Boss.png" );
 	}
-	AnimatedSprite::SetTexture(m_pTexture);
+	AnimatedSprite::SetTexture(m_pTexture.get());
 }
 
 Boss::~Boss()
@@ -26,7 +25,6 @@ Boss::~Boss()
 	--m_InstanceCounter;
 	if (m_InstanceCounter == 0)
 	{
-		delete m_pTexture;
 		m_pTexture = nullptr;
 	}
 }

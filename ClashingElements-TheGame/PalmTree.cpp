@@ -1,20 +1,19 @@
-#include "pch.h"
 #include "PalmTree.h"
 
-const Texture* PalmTree::m_pTexture{ nullptr };
+std::unique_ptr<Texture> PalmTree::m_pTexture{ nullptr };
 int PalmTree::m_InstanceCounter{ 0 };
 
 
-PalmTree::PalmTree(const Point2f& bottomCenter):
+PalmTree::PalmTree(const Point2Int& bottomCenter):
 	AnimatedSprite{bottomCenter, 3, 3, 1.f/8 }
 {
 	++m_InstanceCounter;
 
 	if (m_pTexture == nullptr)
 	{
-		m_pTexture = new Texture{ "PalmTree.png" };
+		m_pTexture = std::make_unique<Texture>(L"PalmTree.png");
 	}
-	AnimatedSprite::SetTexture(m_pTexture);
+	AnimatedSprite::SetTexture(m_pTexture.get());
 }
 
 PalmTree::~PalmTree()
@@ -22,7 +21,6 @@ PalmTree::~PalmTree()
 	--m_InstanceCounter;
 	if (m_InstanceCounter == 0)
 	{
-		delete m_pTexture;
 		m_pTexture = nullptr;
 	}
 }

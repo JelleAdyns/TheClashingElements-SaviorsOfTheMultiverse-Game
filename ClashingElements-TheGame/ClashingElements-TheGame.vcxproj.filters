@@ -12,10 +12,6 @@
     <Filter Include="Game Files\Sub Classes">
       <UniqueIdentifier>{6126d52f-5ba8-4981-a94f-9beca15ab59a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game Files\Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Game Files\Sub Classes\Sprites">
       <UniqueIdentifier>{f1055fee-cc34-41c1-9f67-a82cb06427a3}</UniqueIdentifier>
     </Filter>
@@ -31,14 +27,12 @@
     <Filter Include="Game Files\Sub Classes\Sprites\Characters\Enemies">
       <UniqueIdentifier>{9075d101-2915-4e99-932c-b9459e1a9ff9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine Files\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
@@ -56,9 +50,6 @@
     </ClCompile>
     <ClCompile Include="Screen.cpp">
       <Filter>Game Files\Sub Classes\Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>Engine Files</Filter>
     </ClCompile>
     <ClCompile Include="PathGraph.cpp">
       <Filter>Game Files\Sub Classes</Filter>
@@ -102,14 +93,35 @@
     <ClCompile Include="Player.cpp">
       <Filter>Game Files\Sub Classes\Sprites\Characters</Filter>
     </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioService.cpp">
+      <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseGame.cpp">
+      <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayer.cpp">
+      <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Structs.cpp">
+      <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>Game Files\Sub Classes\Sprites\Characters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h">
-      <Filter>Game Files</Filter>
-    </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
@@ -127,9 +139,6 @@
     </ClInclude>
     <ClInclude Include="Screen.h">
       <Filter>Game Files\Sub Classes\Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>Engine Files</Filter>
     </ClInclude>
     <ClInclude Include="PathGraph.h">
       <Filter>Game Files\Sub Classes</Filter>
@@ -188,5 +197,54 @@
     <ClInclude Include="Character.h">
       <Filter>Game Files\Sub Classes\Sprites\Characters</Filter>
     </ClInclude>
+    <ClInclude Include="AudioService.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGame.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Defines.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayer.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Structs.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MyOwnEngineExercise.aps" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="MyOwnEngineExercise.ico">
+      <Filter>Engine Files\Resource Files</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>Engine Files\Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MyOwnEngineExercise.rc">
+      <Filter>Engine Files\Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

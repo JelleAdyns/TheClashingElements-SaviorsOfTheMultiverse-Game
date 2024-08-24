@@ -1,45 +1,26 @@
-#include "pch.h"
-#include <ctime>
-#include "Game.h"
-
-
-void StartHeapControl();
-void DumpMemoryLeaks();
-
-int SDL_main(int argv, char** args)
-{
-	srand(static_cast<unsigned int>(time(nullptr)));
-
-	StartHeapControl();
-
-	Game* pGame{ new Game{ Window{ "The Clashing Elements - The Game", 256  ,224} } };
-	pGame->Run();
-	delete pGame;
-
-	DumpMemoryLeaks();
-	return 0;
-}
-
-
-void StartHeapControl()
-{
-#if defined(DEBUG) | defined(_DEBUG)
-	// Notify user if heap is corrupt
-	HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
-
-	// Report detected leaks when the program exits
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
-	// Set a breakpoint on the specified object allocation order number
-	//_CrtSetBreakAlloc( 156 );
+#ifndef NDEBUG
+#if __has_include(<vld.h>)
+#include <vld.h>
 #endif
-}
+#endif // !NDEBUG
 
-void DumpMemoryLeaks()
+#include "Engine.h"
+
+int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
+    _In_opt_ HINSTANCE hPrevInstance,
+    _In_ LPTSTR    lpCmdLine,
+    _In_ int       nCmdShow)
 {
-#if defined(DEBUG) | defined(_DEBUG)
-	_CrtDumpMemoryLeaks();
-#endif
+    // Use HeapSetInformation to specify that the process should terminate if the heap manager detects an error in any heap used by the process.
+    // The return value is ignored, because we want to continue running in the unlikely event that HeapSetInformation fails.
+    HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
+    int result = 0;
+    if (SUCCEEDED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)) && SUCCEEDED(MFStartup(MF_VERSION)))
+    {
+        ENGINE.SetInstance(HINST_THISCOMPONENT);
+        ENGINE.SetResourcePath(L"../../Resources/");
+        result = ENGINE.Run();
+        CoUninitialize();
+    }
+    return result;
 }
-
-

@@ -1,8 +1,12 @@
-#pragma once
+#ifndef CAMERA_H
+#define CAMERA_H
+
+#include "Engine.h"
+
 class Camera
 {
 public:
-	explicit Camera(float width, float height);
+	explicit Camera(int width, int height);
 	~Camera() = default;
 
 	Camera(const Camera& other) = delete;
@@ -10,18 +14,19 @@ public:
 	Camera& operator=(const Camera& other) = delete;
 	Camera& operator=(Camera&& other) noexcept = delete;
 
-	void SetLevelBoundaries(const Rectf& levelBoundaries);
-	void SetWidthHeight(float width, float height);
+	void SetLevelBoundaries(const RectInt& levelBoundaries);
+	void SetWidthHeight(int width, int height);
 	void Transform(float parallax = 1.f) const;
-	void Update(const Rectf& target);
+	void Update(const RectInt& target);
 private:
-	float m_Width;
-	float m_Height;
-	Rectf m_LevelBoundaries;
-	Point2f m_LevelCenter;
-	Point2f m_CurrCamBottomLeft;
+	int m_Width;
+	int m_Height;
+	RectInt m_LevelBoundaries;
+	Point2Int m_LevelCenter;
+	Point2Int m_CurrCamBottomLeft;
 
-	Point2f Track(const Rectf& target) const;
-	void Clamp(Point2f& bottomLeftPos) const;
+	Point2Int Track(const RectInt& target) const;
+	void Clamp(Point2Int& bottomLeftPos) const;
 };
 
+#endif // !CAMERA_H

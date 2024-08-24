@@ -1,11 +1,13 @@
-#pragma once
+#ifndef CHARACTER_H
+#define CHARACTER_H
+
 #include "AnimatedSprite.h"
 #include "PathGraph.h"
 #include "GlobalEnumClasses.h"
 class Character : public AnimatedSprite
 {
 public:
-	explicit Character(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime);
+	explicit Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime, int pixelOffset = 0);
 	virtual ~Character() = default;
 
 	Character(const Character& other) = delete;
@@ -14,11 +16,12 @@ public:
 	Character& operator=(Character&& other) noexcept = delete;
 
 
-	virtual void Update(float elapsedSec) override;
-	virtual void Move(const PathGraph& graph, float elapsedSec) = 0;
-	virtual void SetPos(const Point2f& newPos);
+	virtual void Draw() const override;
+	virtual void Update() override;
+	virtual void Move(const PathGraph& graph) = 0;
+	void SetPos(const Point2Int& newPos);
 
-	Circlef GetHitBox() const;
+	CircleInt GetHitBox() const;
 	bool IsMoving() const;
 
 
@@ -26,15 +29,17 @@ protected:
 	Direction m_Dir;
 	Vector2f m_Velocity;
 
-	int m_TargetXLocation;
-	int m_TargetYLocation;
+	Point2Int m_TargetLocation;
 	bool m_IsMoving;
-	Circlef m_HitBox;
 
-	void UpdatePos(const Vector2f& newVelocity, float elapsedSec);
+	void UpdatePos(const Vector2f& newVelocity);
 	void SetDefaultSpeed(int speed);
 private:
-	Point2f m_Pos;
+	const int m_PixelOffset;
+	float m_ActualPosX;
+	float m_ActualPosY;
 	int m_DefaultSpeed;
+	CircleInt m_HitBox;
 };
 
+#endif // !CHARACTER_H

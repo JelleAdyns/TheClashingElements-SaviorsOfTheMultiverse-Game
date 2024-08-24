@@ -1,11 +1,10 @@
-#include "pch.h"
 #include "Minion.h"
 
-const Texture* Minion::m_pTexture{ nullptr };
+std::unique_ptr<Texture> Minion::m_pTexture{ nullptr };
 int Minion::m_InstanceCounter{0};
 int Minion::m_DefaultSpeed{Tile::Size * 3};
 
-Minion::Minion(const Point2f& bottomCenter) :
+Minion::Minion(const Point2Int& bottomCenter) :
 	Enemy{ bottomCenter, 3, 3, 1.f / 8 }
 {
 	Character::SetDefaultSpeed(m_DefaultSpeed);
@@ -13,9 +12,9 @@ Minion::Minion(const Point2f& bottomCenter) :
 
 	if (m_pTexture == nullptr)
 	{
-		m_pTexture = new Texture{ "Minion.png" };
+		m_pTexture = std::make_unique<Texture>( L"Minion.png" );
 	}
-	AnimatedSprite::SetTexture(m_pTexture);
+	AnimatedSprite::SetTexture(m_pTexture.get());
 }
 
 Minion::~Minion()
@@ -23,7 +22,6 @@ Minion::~Minion()
 	--m_InstanceCounter;
 	if (m_InstanceCounter == 0)
 	{
-		delete m_pTexture;
 		m_pTexture = nullptr;
 	}
 }
