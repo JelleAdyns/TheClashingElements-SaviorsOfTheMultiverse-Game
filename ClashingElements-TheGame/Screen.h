@@ -1,11 +1,14 @@
-#pragma once
-#include <iostream>
-#include <utils.h>
+#ifndef SCREEN_H
+#define SCREEN_H
+
 #include <vector>
+#include "Structs.h"
+#include "Engine.h"
+
 class Screen
 {
 public:
-	explicit Screen(const Rectf& window);
+	explicit Screen(const RectInt& window);
 	virtual ~Screen() = default;
 
 	Screen(const Screen& other) = delete;
@@ -13,9 +16,11 @@ public:
 	Screen& operator=(const Screen& other) = delete;
 	Screen& operator=(Screen&& other) noexcept = delete;
 
-	virtual void Draw() const = 0;
-	virtual void Update(float elapsedSec) = 0;
-	virtual void KeyInput(const SDL_KeyboardEvent& e) = 0;
+	virtual void Draw() const {};
+	virtual void Tick() {};
+	virtual void KeyInput(int virtualKeyCode) {};
 protected:
-	Rectf m_Window;
+	RectInt m_Window;
 };
+
+#endif // !SCREEN_H

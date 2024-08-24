@@ -1,11 +1,12 @@
-#pragma once
-#include <Texture.h>
-#include <utils.h>
+#ifndef ANIMATEDSPRITE_H
+#define ANIMATEDSPRITE_H
+
+#include "Engine.h"
 #include <iostream>
 class AnimatedSprite
 {
 public:
-	explicit AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime, bool updateRows = true);
+	explicit AnimatedSprite(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime, bool updateRows = true);
 	virtual ~AnimatedSprite();
 
 	AnimatedSprite(const AnimatedSprite& other) = delete;
@@ -14,13 +15,13 @@ public:
 	AnimatedSprite& operator=(AnimatedSprite&& other) noexcept = delete;
 
 	virtual void Draw() const;
-	virtual void Update(float elapsedSec);
+	virtual void Update();
 
-	Rectf DestRect() const;
+	RectInt DestRect() const;
 protected:
-	void SetTexture(const Texture* pTexture, const Rectf& textureArea = Rectf{});
+	void SetTexture(const Texture* pTexture, const RectInt& textureArea = RectInt{});
 
-	Point2f m_BottomCenter;
+	Point2Int m_BottomCenter;
 
 	int	m_CurrentCol;
 	int	m_CurrentRow;
@@ -34,10 +35,11 @@ protected:
 
 
 private:
-	Rectf SrcRect() const;
+	RectInt SrcRect() const;
 	const Texture* m_pTexture;
 	const bool m_UpdateRows;
-	Rectf m_TextureArea;
+	RectInt m_TextureArea;
 
 };
 
+#endif // !ANIMATEDSPRITE_H

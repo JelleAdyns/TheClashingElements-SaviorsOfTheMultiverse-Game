@@ -1,66 +1,86 @@
-#include "pch.h"
 #include "Character.h"
 
-Character::Character(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime) :
+Character::Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime, int pixelOffset) :
 	AnimatedSprite{ bottomCenter, nrCols, nrFrames, frameTime, false },
+	m_PixelOffset{ pixelOffset },
 
 	m_Dir{ Direction::Down },
-	m_HitBox{ Circlef{Point2f{bottomCenter}, 6} },
+	m_HitBox{ CircleInt{Point2Int{bottomCenter}, 6} },
 
-	m_Velocity{ Vector2f{} },
-	m_TargetXLocation{},
-	m_TargetYLocation{},
+	m_Velocity{ },
+	m_TargetLocation{},
 
 	m_IsMoving{ false },
 
-	m_Pos{},
 	m_DefaultSpeed{}
 {
 	SetPos(bottomCenter);
 }
 
-void Character::Update(float elapsedSec)
+void Character::Draw() const
 {
-	if (m_TargetXLocation != m_BottomCenter.x && m_IsMoving)
-	{
-		if (m_TargetXLocation < m_BottomCenter.x) m_Velocity.x = float(-m_DefaultSpeed);
-		else m_Velocity.x = float(m_DefaultSpeed);
-
-		UpdatePos(m_Velocity, elapsedSec);
-
-		if (m_BottomCenter.x == m_TargetXLocation) m_IsMoving = false;
-	}
-	else m_Velocity.x = 0;
-
-	if (m_TargetYLocation != m_BottomCenter.y && m_IsMoving)
-	{
-		if (m_TargetYLocation < m_BottomCenter.y) m_Velocity.y = float(-m_DefaultSpeed);
-		else m_Velocity.y = float(m_DefaultSpeed);
-
-		UpdatePos(m_Velocity, elapsedSec);
-
-		if (m_BottomCenter.y == m_TargetYLocation) m_IsMoving = false;
-	}
-	else m_Velocity.y = 0;
+	ENGINE.PushTransform();
+	ENGINE.Translate(0, -m_PixelOffset);
+	AnimatedSprite::Draw();
+	ENGINE.PopTransform();
 }
 
-void Character::SetPos(const Point2f& newPos)
+void Character::Update()
 {
-	//Point2f pos{ newPos.x, newPos.y}
+	
+	if (m_TargetLocation.x != m_BottomCenter.x && m_IsMoving)
+	{
+		bool decreasing{ m_TargetLocation.x < m_BottomCenter.x };
+
+		if (decreasing) m_Velocity.x = float(-m_DefaultSpeed);
+		else m_Velocity.x = float(m_DefaultSpeed);
+
+		UpdatePos(m_Velocity);
+
+		if ((not decreasing and m_BottomCenter.x >= m_TargetLocation.x) or
+			(decreasing and m_BottomCenter.x <= m_TargetLocation.x))
+		{
+			SetPos(Point2Int{ m_TargetLocation.x, m_BottomCenter.y});
+			m_Velocity.x = 0;
+		}
+	}
+
+	if (m_TargetLocation.y != m_BottomCenter.y && m_IsMoving)
+	{
+		bool decreasing{ m_TargetLocation.y < m_BottomCenter.y };
+
+		if (decreasing) m_Velocity.y = float(-m_DefaultSpeed);
+		else m_Velocity.y = float(m_DefaultSpeed);
+
+		UpdatePos(m_Velocity);
+
+		if ((not decreasing and m_BottomCenter.y >= m_TargetLocation.y) or
+			(decreasing and m_BottomCenter.y <= m_TargetLocation.y))
+		{
+			SetPos(Point2Int{ m_BottomCenter.x, m_TargetLocation.y });
+			m_Velocity.y = 0;
+		}
+	}
+
+} 
+
+void Character::SetPos(const Point2Int& newPos)
+{
 	m_BottomCenter = newPos;
 	m_HitBox.center = newPos;
-	m_Pos = newPos;
-	m_TargetXLocation = int(newPos.x);
-	m_TargetYLocation = int(newPos.y);
+	m_ActualPosX = static_cast<float>(newPos.x);
+	m_ActualPosY = static_cast<float>(newPos.y);
+	m_TargetLocation = newPos;
 	m_IsMoving = false;
 }
 
-void Character::UpdatePos(const Vector2f& newVeloctiy, float elapsedSec)
+void Character::UpdatePos(const Vector2f& newVeloctiy)
 {
-	m_Pos.x += newVeloctiy.x * elapsedSec;
-	m_BottomCenter.x = round(m_Pos.x);
-	m_Pos.y += newVeloctiy.y * elapsedSec;
-	m_BottomCenter.y = round(m_Pos.y);
+	m_ActualPosX += newVeloctiy.x * ENGINE.GetDeltaTime();
+	m_BottomCenter.x = static_cast<int>(round(m_ActualPosX));
+	m_ActualPosY += newVeloctiy.y * ENGINE.GetDeltaTime();
+	m_BottomCenter.y = static_cast<int>(round(m_ActualPosY));
+
 	m_HitBox.center = m_BottomCenter;
 }
 
@@ -69,7 +89,7 @@ void Character::SetDefaultSpeed(int speed)
 	m_DefaultSpeed = speed;
 }
 
-Circlef Character::GetHitBox()const
+CircleInt Character::GetHitBox()const
 {
 	return m_HitBox;
 }

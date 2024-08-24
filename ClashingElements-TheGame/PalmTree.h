@@ -1,9 +1,11 @@
-#pragma once
+#ifndef PALMTREE_H
+#define PALMTREE_H
+
 #include "AnimatedSprite.h"
 class PalmTree final: public AnimatedSprite
 {
 public:
-	explicit PalmTree(const Point2f& bottomCenter);
+	explicit PalmTree(const Point2Int& bottomCenter);
 	~PalmTree();
 
 	PalmTree(const PalmTree& other) = delete;
@@ -13,7 +15,9 @@ public:
 
 private:
 
-	const static Texture* m_pTexture;
+	static std::unique_ptr<Texture> m_pTexture;
 	static int m_InstanceCounter;
 };
 
+
+#endif // !PALMTREE_H

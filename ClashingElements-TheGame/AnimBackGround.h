@@ -1,11 +1,13 @@
-#pragma once
+#ifndef ANIMBACKGROUND_H
+#define ANIMBACKGROUND_H
+
 #include "AnimatedSprite.h"
 
 class AnimBackGround final: public AnimatedSprite
 {
 public:
-	explicit AnimBackGround(const std::string& filePath);
-	~AnimBackGround();
+	explicit AnimBackGround(const std::wstring& filePath);
+	~AnimBackGround() = default;
 
 	AnimBackGround(const AnimBackGround& other) = delete;
 	AnimBackGround(AnimBackGround&& other) noexcept = delete;
@@ -13,6 +15,8 @@ public:
 	AnimBackGround& operator=(AnimBackGround&& other) noexcept = delete;
 private:
 	const static int m_NrOfCols;
-	const Texture* m_pTexture;
+	std::unique_ptr<Texture> m_pTexture;
 };
 
+
+#endif // !ANIMBACKGROUND_H

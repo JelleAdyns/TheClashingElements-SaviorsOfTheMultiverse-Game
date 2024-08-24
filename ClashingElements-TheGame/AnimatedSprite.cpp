@@ -1,7 +1,6 @@
-#include "pch.h"
 #include "AnimatedSprite.h"
 
-AnimatedSprite::AnimatedSprite(const Point2f& bottomCenter, int nrCols, int nrFrames, float frameTime, bool updateRows):
+AnimatedSprite::AnimatedSprite(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime, bool updateRows):
 	m_BottomCenter{bottomCenter},
 
 	m_CurrentCol{0},
@@ -27,12 +26,12 @@ AnimatedSprite::~AnimatedSprite()
 
 void AnimatedSprite::Draw() const
 {
-	m_pTexture->Draw(DestRect(), SrcRect());
+	ENGINE.DrawTexture(*m_pTexture, DestRect(), SrcRect());
 }
 
-void AnimatedSprite::Update(float elapsedSec)
+void AnimatedSprite::Update()
 {
-	m_PassedTime += elapsedSec;
+	m_PassedTime += ENGINE.GetDeltaTime();
 	if (m_PassedTime >= m_FrameTime)
 	{
 		if (m_UpdateRows)
@@ -44,26 +43,26 @@ void AnimatedSprite::Update(float elapsedSec)
 	}
 }
 
-void AnimatedSprite::SetTexture(const Texture* texturePtr, const Rectf& textureArea)
+void AnimatedSprite::SetTexture(const Texture* texturePtr, const RectInt& textureArea)
 {
 	m_pTexture = texturePtr;
 	if (textureArea.width == 0 && textureArea.height == 0)
-		m_TextureArea = Rectf{ 0,0, m_pTexture->GetWidth(), m_pTexture->GetHeight() };
+		m_TextureArea = RectInt{ 0,0, static_cast<int>(m_pTexture->GetWidth()), static_cast<int>(m_pTexture->GetHeight()) };
 	else m_TextureArea = textureArea;
 
 }
 
-Rectf AnimatedSprite::DestRect() const
+RectInt AnimatedSprite::DestRect() const
 {
-	return Rectf{ m_BottomCenter.x - SrcRect().width / 2, m_BottomCenter.y, SrcRect().width , SrcRect().height };
+	return RectInt{ m_BottomCenter.x - SrcRect().width / 2, m_BottomCenter.y, SrcRect().width , SrcRect().height };
 }
 
-Rectf AnimatedSprite::SrcRect() const
+RectInt AnimatedSprite::SrcRect() const
 {
-	Rectf srcRect{};
+	RectInt srcRect{};
 	srcRect.width = m_TextureArea.width / m_NrOfCols;
 	srcRect.height = m_TextureArea.height / m_NrOfRows;
 	srcRect.left = m_TextureArea.left + srcRect.width * m_CurrentCol;
-	srcRect.bottom = m_TextureArea.bottom + srcRect.height * (m_CurrentRow + 1);
+	srcRect.bottom = m_TextureArea.bottom + srcRect.height * m_CurrentRow;
 	return srcRect;
 }

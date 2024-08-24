@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "Level.h"
 #include "Player.h"
 #include "Boss.h"
@@ -8,26 +7,26 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <utils.h>
 #include <map>
 #include <algorithm>
 #include <functional>
 #include <numeric>
 
 
-Level::Level(std::shared_ptr<Player> pPlayer, float viewportWidth, float viewportHeight) :
+Level::Level(std::shared_ptr<Player> pPlayer, int viewportWidth, int viewportHeight) :
 	m_VecBackGrounds
-	{ 
-		{ "Mall.png"      , {"BGMall.png"      ,Point2f{0, 300}} },
-		{ "GloirbnPit.png", {"BGGloirbnPit.png",Point2f{0, 300}} }  
+	{
+		{ _T("Mall.png")      , {_T("BGMall.png")      ,Point2Int{0, 300}} },
+		{ _T("GloirbnPit.png"), {_T("GloirbnPit.png"),Point2Int{0, 300}} }
     },
 
 	m_VecMusic
 	{
-		"Sounds/Spaceship.wav",
-		"Sounds/Spaceship.wav"
+		_T("Sounds/Spaceship.wav"),
+		_T("Sounds/Spaceship.wav")
 	},
 
+	m_MaxStages{ 2 },
 	m_StageNumber{ 0 },
 	m_LoopNumber{ 0 },
 	m_Hud{viewportWidth, viewportHeight},
@@ -64,35 +63,43 @@ Level::~Level()
 	//
 	//delete m_pPlayer;
 	//m_pPlayer = nullptr;
-	m_pBackGroundMusic->Stop();
+	//m_pBackGroundMusic->Stop();
 	//delete m_pBackGroundMusic;
 	//m_pBackGroundMusic = nullptr;
 
 }
 
-void Level::Update(float elapsedSec)
+void Level::Tick()
 {
 	if (!m_pVecCollectables.empty())
 	{
-		m_pAnimBackGround->Update(elapsedSec);
+		m_pAnimBackGround->Update();
 
 		for (const auto& pCollectable : m_pVecCollectables)
 		{
-			pCollectable->Update(elapsedSec);
+			pCollectable->Update();
 		}
 		for (const auto& pSprite : m_pVecSprites)
 		{
-			pSprite->Update(elapsedSec);
+			pSprite->Update();
 		}
 		for (const auto& pEnemy : m_pVecEnemies)
 		{
-			pEnemy->Update(elapsedSec);
-			if(!pEnemy->IsMoving()) pEnemy->Move(m_Graph, elapsedSec);
+			pEnemy->Update();
+			if (!pEnemy->IsMoving())
+			{
+				pEnemy->SetTarget(m_pPlayer->GetHitBox().center);
+
+				TileID intersectionId = m_Graph.GetTileId(pEnemy->GetHitBox().center);
+
+				m_Graph.SetWalkabilityOfTile(intersectionId, false);
+				pEnemy->Move(m_Graph);
+				m_Graph.SetWalkabilityOfTile(intersectionId, true);
+			}
 		}
 
-		
-		m_pPlayer->Move(m_Graph, elapsedSec);
-		m_pPlayer->Update(elapsedSec);
+		m_pPlayer->Move(m_Graph);
+		m_pPlayer->Update();
 		if (m_pPlayer->IsMoving()) HitCollectable();
 
 		m_Camera.Update(m_pPlayer->DestRect());
@@ -101,7 +108,7 @@ void Level::Update(float elapsedSec)
 	else
 	{
 		Reset();
-		++m_StageNumber;
+		++m_StageNumber %= m_MaxStages;
 		LoadStage();
 	}
 
@@ -110,66 +117,31 @@ void Level::Update(float elapsedSec)
 
 void Level::Draw() const
 {
+	
+	ENGINE.PushTransform();
+	m_Camera.Transform(m_pBackGround->GetParallaxSpeed());
+	m_pBackGround->Draw();
+	ENGINE.PopTransform();
 
-	//std::vector<AnimatedSprite*> pVecSprites{};
-	//pVecSprites.reserve(m_pVecCollectables.size() + m_pVecEnemies.size() + 1);
-	//pVecSprites.insert(pVecSprites.end(), m_pVecCollectables.cbegin(), m_pVecCollectables.cend());
-	//pVecSprites.insert(pVecSprites.end(), m_pVecEnemies.cbegin(), m_pVecEnemies.cend());
-	//pVecSprites.push_back(m_pPlayer);
-	//std::merge(m_pVecEnemies.begin(), m_pVecEnemies.end(), m_pVecCollectables.begin(), m_pVecCollectables.end(), pVecSprites);
-	//std::sort(pVecSprites.cbegin(), pVecSprites.cend(), std::bind(std::less<float>{}, std::placeholders::_1, std::placeholders::_2))
-	//auto it = std::copy(m_pVecCollectables.cbegin(), m_pVecCollectables.cend(), pVecSprites.begin());
-	//std::copy(m_pVecEnemies.cbegin(), m_pVecEnemies.cend(), it);
-	//pVecSprites.push_back(m_pPlayer);
-	//for (const auto& pCollectable : m_pVecCollectables)
-	//{
-	//	pVecSprites.push_back(pCollectable);
-	//}
-	//for (const auto& pEnemy : m_pVecEnemies)
-	//{
-	//	pVecSprites.push_back(pEnemy);
-	//}
-
-
-	//std::multimap<float,int> YMap{};
-	//for (int i = 0; i < pVecSprites.size(); i++)
-	//{
-	//	YMap.insert(std::make_pair(pVecSprites[i]->DestRect().bottom,i ));
-	//}
-	//
-	//std::vector<int> VecIndexes{};
-	//for (const std::pair<const float, const int>& p : YMap)
-	//{
-	//	VecIndexes.push_back(p.second);
-	//}
-
-	glPushMatrix();
-	{
-		m_Camera.Transform(m_pBackGround->GetParallaxSpeed());
-		m_pBackGround->Draw();
-	}
-	glPopMatrix();
-
-	glPushMatrix();
-	{
-		m_Camera.Transform();
+	
+	ENGINE.PushTransform();
+	m_Camera.Transform();
 		
-		m_pAnimBackGround->Draw();
-		m_Graph.Draw();
-		/*for (int i = int(VecIndexes.size() - 1); i >= 0; --i)
-		{
-			pVecSprites[VecIndexes[i]]->Draw();
-		}*/
-		for (const auto& pSprite : m_pDrawBuffer)
-		{
-			pSprite->Draw();
-		}
-		for (const auto& pSprite : m_pVecSprites)
-		{
-			pSprite->Draw();
-		}
+	m_pAnimBackGround->Draw();
+	m_Graph.Draw();
+	/*for (int i = int(VecIndexes.size() - 1); i >= 0; --i)
+	{
+		pVecSprites[VecIndexes[i]]->Draw();
+	}*/
+	for (const auto& pSprite : m_pDrawBuffer)
+	{
+		pSprite->Draw();
 	}
-	glPopMatrix();
+	for (const auto& pSprite : m_pVecSprites)
+	{
+		pSprite->Draw();
+	}
+	ENGINE.PopTransform();
 
 	m_Hud.Draw();
 }
@@ -191,7 +163,7 @@ void Level::SetUpDrawBuffer()
 
 void Level::HitCollectable()
 {
-	std::cout << "collect" << std::endl;
+	OutputDebugString(_T("Collect"));
 	//m_pVecCollectables.erase(std::remove_if(m_pVecCollectables.begin(), m_pVecCollectables.end(), std::bind( &Level::Test , this, std::placeholders::_1)),
 	//	m_pVecCollectables.end());
 
@@ -233,80 +205,79 @@ void Level::LoadStage()
 	m_pAnimBackGround = std::make_unique<AnimBackGround>(m_VecBackGrounds[m_StageNumber].first);
 	m_Camera.SetLevelBoundaries(m_pAnimBackGround->DestRect());
 	m_pBackGround = std::make_unique < BackGround >( m_VecBackGrounds[m_StageNumber].second.second, m_VecBackGrounds[m_StageNumber].second.first ,0.8f );
-	m_pBackGroundMusic = std::make_unique < SoundStream >( m_VecMusic[m_StageNumber]);
 	//m_pBackGroundMusic->Play(true);
 	
 
-	std::ifstream inputFile{"StagePattern.txt"};
+	tifstream inputFile{ ENGINE.GetResourcePath() + L"StagePattern.txt" };
 
-	std::string info{};
+	tstring info{};
 
-	std::stringstream stageTest{};
-	while (getline(inputFile, info, '/'))
+	tstringstream stageTest{};
+	while (getline(inputFile, info, _T('/')))
 	{
-		if (info.find("Stage " + std::to_string(m_StageNumber)) != std::string::npos)
+		if (info.find(_T("Stage " + to_tstring(m_StageNumber))) != tstring::npos)
 		{
-			info.erase(0, info.find(std::to_string(m_StageNumber) + '\n'));
+			info.erase(0, info.find(to_tstring(m_StageNumber) + _T('\n')));
 			stageTest << info;
 		}
 	}
 
-	int currTileId{};
+	TileID currTileId{};
 	while (getline(stageTest, info))
 	{
-		std::string rowString{};
-		std::stringstream infoStream{info};
-		getline(infoStream, rowString, '\"');
+		tstring rowString{};
+		tstringstream infoStream{info};
+		getline(infoStream, rowString, _T('\"'));
 		int row{ std::stoi(rowString) };
 		int col{};
 
 		getline(infoStream, rowString);
 
-		const std::string possibleSymbols{ ".,PTBM" };
+		const tstring possibleSymbols{ _T(".,PTBM") };
 
-		while (rowString.find_first_of(possibleSymbols,col) != std::string::npos)
+		while (rowString.find_first_of(possibleSymbols,col) != tstring::npos)
 		{
 		
 			col = int(rowString.find_first_of(possibleSymbols, col));
 
-			Point2f center
+			Point2Int center
 			{ 
-				float(round(Tile::Size / 2 + Tile::Size * col)), 
-				float(round(Tile::Size / 2 + Tile::Size * row))
+				Tile::Size / 2 + Tile::Size * col, 
+				Tile::Size / 2 + Tile::Size * row
 			};
 
 			bool isIntersection{};
 
 			switch (rowString[col])
 			{
-			case 'T':
+			case _T('T'):
 				m_pVecSprites.push_back(std::make_unique<PalmTree>( center ));
 				break;
-			case 'P':
+			case _T('P'):
 
 				m_pPlayer->SetPos(center);
 
-			case 'B':
+			case _T('B'):
 
-				if (rowString[col] != 'P') m_pVecEnemies.push_back(std::make_shared<Boss>( center, Player::m_DefaultSpeed ));
+				if (rowString[col] != _T('P')) m_pVecEnemies.push_back(std::make_shared<Boss>( center, Player::m_DefaultSpeed ));
 
-			case 'M':
+			case _T('M'):
 
-				if (rowString[col] != 'P' && rowString[col] != 'B') m_pVecEnemies.push_back(std::make_shared<Minion>(center));
+				//if (rowString[col] != _T('P') && rowString[col] != _T('B')) m_pVecEnemies.push_back(std::make_shared<Minion>(center));
 
-			case ',':
+			case _T(','):
 
 				isIntersection = true;
 
-			case '.':
+			case _T('.'):
 
-				m_Graph.AddTile(currTileId, int(round(center.x)), int(round(center.y)), isIntersection);
-				if(rowString[col] != 'P') m_pVecCollectables.push_back(std::make_shared<Collectable>(center));
+				m_Graph.AddTile(currTileId, center.x, center.y, isIntersection);
+				if(rowString[col] != _T('P')) m_pVecCollectables.push_back(std::make_shared<Collectable>(center));
 
-				int previousColTileId{ m_Graph.GetTileId(Point2f{ center.x - Tile::Size, center.y }) };
+				TileID previousColTileId{ m_Graph.GetTileId(Point2Int{ center.x - Tile::Size, center.y }) };
 				if(previousColTileId >= 0) m_Graph.AddEdge(currTileId, previousColTileId);
 				
-				int previousRowTileId{ m_Graph.GetTileId(Point2f{ center.x, center.y + Tile::Size }) };
+				TileID previousRowTileId{ m_Graph.GetTileId(Point2Int{ center.x, center.y + Tile::Size }) };
 				if(previousRowTileId >= 0) m_Graph.AddEdge(currTileId, previousRowTileId);
 
 				++currTileId;

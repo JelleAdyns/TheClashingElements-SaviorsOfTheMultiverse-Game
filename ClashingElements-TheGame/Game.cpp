@@ -1,77 +1,37 @@
-#include "pch.h"
 #include "Game.h"
 #include "SkinScreen.h"
 #include "StartScreen.h"
-#include <utils.h>
-#include <iostream>
 
-
-int BaseGame::m_Scale{4};
-
-Game::Game( const Window& window ) 
-	:BaseGame{ window }
+Game::Game()
 {
-
-	Initialize();
+	
+}
+Game::~Game()
+{
 
 }
-
-Game::~Game( )
+void Game::Initialize()
 {
-	Cleanup( );
+	BaseGame::Initialize();
 
-}
+	ENGINE.SetTitle(_T("The Clashing Elements - The Game"));
+	ENGINE.SetWindowScale(3.f);
+	ENGINE.SetWindowDimensions(256,224);
 
-void Game::Initialize( )
-{
-	m_pScreen = std::make_unique<StartScreen>( "Space.png", GetViewPort(),
+	m_pScreen = std::make_unique<StartScreen>(L"Space.png", ENGINE.GetWindowRect(),
 		[&]()
 		{
-			m_GameState = GameState::SelectingSkin;
-			m_pScreen.reset(new SkinScreen{ "Space.png", GetViewPort(),  []() {} });
+			/*m_GameState = GameState::SelectingSkin;
+			m_pScreen.reset(new SkinScreen{ L"Space.png", ENGINE.GetWindowSize(),  []() {} });*/
 		},
-		[](){}
+		[]() {}
 	);
 	m_pLevel = nullptr;
+	wesley = std::make_unique<Texture>(L"Wesley.png");
 }
-
-void Game::Cleanup( )
+void Game::Draw() const
 {
 	
-	//delete m_pScreen;
-	//m_pScreen = nullptr;
-	//if (m_pLevel != nullptr)
-	//{
-	//	delete m_pLevel;
-	//	m_pLevel = nullptr;
-	//}
-}
-
-void Game::Update( float elapsedSec )
-{
-	switch (m_GameState)
-	{
-	case GameState::Start:
-	case GameState::ShowingHighScores:
-	case GameState::SelectingSkin:
-		m_pScreen->Update(elapsedSec);
-		break;
-	case GameState::Playing:
-		m_pLevel->Update(elapsedSec);
-		break;
-	case GameState::GameOver:
-		break;
-	default:
-		break;
-	}
-
-	
-}
-
-void Game::Draw( ) const
-{
-	utils::DrawLine(Point2f{ 0,0 }, Point2f{ GetViewPort().width - 1, 200 });
-	ClearBackground();
 	switch (m_GameState)
 	{
 	case GameState::Start:
@@ -80,48 +40,77 @@ void Game::Draw( ) const
 		m_pScreen->Draw();
 		break;
 	case GameState::Playing:
-		glPushMatrix();
+
+		ENGINE.PushTransform();
 		if (m_DebugScale)
 		{
-			glTranslatef(GetViewPort().width /2  , GetViewPort().height /2 , 0);
-			glScalef( m_DScale ,  m_DScale, 0);
-			glTranslatef(-(GetViewPort().width  /2) , -(GetViewPort().height / 2) , 0);
+			ENGINE.Scale(m_DScale, ENGINE.GetWindowRect().width / 2, ENGINE.GetWindowRect().height / 2);
 		}
 		m_pLevel->Draw();
-		glPopMatrix();
+		ENGINE.PopTransform();
 		break;
 	case GameState::GameOver:
 		break;
 	}
-	
-	
-}
 
-void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
+	//ENGINE.DrawTexture(*wesley, RectInt{ 50,50,12,27*2 }, RectInt{ 0,27,12,27 });
+	//ENGINE.DrawTexture(*wesley, RectInt{ 50,50,96,200 });
+	//ENGINE.DrawTexture(*wesley);
+}
+void Game::Tick()
 {
 	switch (m_GameState)
 	{
 	case GameState::Start:
-		m_pScreen->KeyInput(e);
-		switch (e.keysym.sym)
+	case GameState::ShowingHighScores:
+	case GameState::SelectingSkin:
+		m_pScreen->Tick();
+		break;
+	case GameState::Playing:
+		m_pLevel->Tick();
+		break;
+	case GameState::GameOver:
+		break;
+	default:
+		break;
+	}
+
+}
+void Game::KeyDown(int virtualKeycode)
+{
+	// Numbers and letters from '0' to '9' and 'A' to 'Z' are represented by their ASCII values
+	// For example: if(virtualKeycode == 'B')
+	// BE CAREFULL! Don't use lower caps, because those have different ASCII values
+	//
+	// Other keys are checked with their virtual Keycode defines
+	// For example: if(virtualKeycode == VK_MENU)
+	// VK_MENU represents the 'Alt' key
+	//
+	// Click here for more information: https://learn.microsoft.com/en-us/windows/win32/learnwin32/keyboard-input
+
+	switch (m_GameState)
+	{
+	case GameState::Start:
+		m_pScreen->KeyInput(virtualKeycode);
+		switch (virtualKeycode)
 		{
-		case SDLK_SPACE:
-			//m_pScreen.reset(new SkinScreen{ "Space.png", GetViewPort() });
-			////m_pScreen = new SkinScreen{ "Space.png", GetViewPort() };
-			//m_GameState = GameState::SelectingSkin;
+		case VK_SPACE:
+			m_pScreen = std::make_unique<SkinScreen>( L"Space.png", ENGINE.GetWindowRect(), [] (){} );
+			//m_pScreen = new SkinScreen{ "Space.png", ENGINE.GetWindowSize() };
+			m_GameState = GameState::SelectingSkin;
 			break;
 		}
 		break;
-		
+
 		break;
 	case GameState::ShowingHighScores:
 		break;
 	case GameState::SelectingSkin:
-		m_pScreen->KeyInput(e);
-		switch (e.keysym.sym)
+		m_pScreen->KeyInput(virtualKeycode);
+		switch (virtualKeycode)
 		{
-		case SDLK_SPACE:
-			m_pLevel = std::make_unique<Level>(static_cast<SkinScreen*>(m_pScreen.get())->GetPlayer(), GetViewPort().width, GetViewPort().height);
+		case VK_SPACE:
+			m_pLevel = std::make_unique<Level>(static_cast<SkinScreen*>(m_pScreen.get())->GetPlayer(), ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height);
 			m_pScreen.reset();
 			//delete m_pScreen;
 			//m_pScreen = nullptr;
@@ -130,9 +119,9 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		}
 		break;
 	case GameState::Playing:
-		switch (e.keysym.sym)
+		switch (virtualKeycode)
 		{
-		case SDLK_s:
+		case 'S':
 			m_DebugScale = !m_DebugScale;
 			break;
 		}
@@ -140,71 +129,35 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 	case GameState::GameOver:
 		break;
 	}
-	
-	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
 }
+void Game::KeyUp(int virtualKeycode)
+{
+	// Numbers and letters from '0' to '9' and 'A' to 'Z' are represented by their ASCII values
+	// For example: if(virtualKeycode == 'B')
+	// BE CAREFULL! Don't use lower caps, because those have different ASCII values
+	//
+	// Other keys are checked with their virtual Keycode defines
+	// For example: if(virtualKeycode == VK_MENU)
+	// VK_MENU represents the 'Alt' key
+	//
+	// Click here for more information: https://learn.microsoft.com/en-us/windows/win32/learnwin32/keyboard-input
 
-void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
+}
+void Game::MouseDown(bool isLeft, int x, int y)
+{
+
+}
+void Game::MouseUp(bool isLeft, int x, int y)
 {
 	
-	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
-	//switch ( e.keysym.sym )
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "`Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
 }
-
-void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
+void Game::MouseMove(int x, int y, int keyDown)
 {
-	//std::cout << "MOUSEMOTION event: " << e.x << ", " << e.y << std::endl;
+	//See this link to check which keys could be represented in the keyDown parameter
+	//https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-mousemove
 }
-
-void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
+void Game::MouseWheelTurn(int x, int y, int turnDistance, int keyDown)
 {
-	//std::cout << "MOUSEBUTTONDOWN event: ";
-	//switch ( e.button )
-	//{
-	//case SDL_BUTTON_LEFT:
-	//	std::cout << " left button " << std::endl;
-	//	break;
-	//case SDL_BUTTON_RIGHT:
-	//	std::cout << " right button " << std::endl;
-	//	break;
-	//case SDL_BUTTON_MIDDLE:
-	//	std::cout << " middle button " << std::endl;
-	//	break;
-	//}
-	
-}
-
-void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
-{
-	//std::cout << "MOUSEBUTTONUP event: ";
-	//switch ( e.button )
-	//{
-	//case SDL_BUTTON_LEFT:
-	//	std::cout << " left button " << std::endl;
-	//	break;
-	//case SDL_BUTTON_RIGHT:
-	//	std::cout << " right button " << std::endl;
-	//	break;
-	//case SDL_BUTTON_MIDDLE:
-	//	std::cout << " middle button " << std::endl;
-	//	break;
-	//}
-}
-
-void Game::ClearBackground( ) const
-{
-	glClearColor( 0.0f, 0.0f, 0.f, 1.0f );
-	glClear( GL_COLOR_BUFFER_BIT );
+	//See this link to check which keys could be represented in the keyDown parameter and what the turnDistance is for
+	//https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-mousewheel
 }

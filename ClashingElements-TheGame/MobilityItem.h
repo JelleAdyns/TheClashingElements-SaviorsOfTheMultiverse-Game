@@ -1,7 +1,10 @@
-#pragma once
+#ifndef MOBILITYITEM_H
+#define MOBILITYITEM_H
+
+
 #include "Player.h"
 #include "Enemy.h"
-#include <utils.h>
+
 class MobilityItem
 {
 public:
@@ -25,3 +28,5 @@ public:
 	}
 };
 
+
+#endif // !MOBILITYITEM_H
