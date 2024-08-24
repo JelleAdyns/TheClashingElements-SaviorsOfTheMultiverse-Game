@@ -13,10 +13,9 @@ public:
         return font;
     }
 
-    static const Font& GetFont() 
+    const Font& GetFont() 
     { 
-        static std::unique_ptr<Font> font = std::make_unique<Font>(L"8BitFont.otf", 16, false, false, true);
-        return *font;
+        return m_Font;
     }
 
     GlobalFont(const GlobalFont& other) = delete;
@@ -26,7 +25,7 @@ public:
 private:
 
     GlobalFont() {}
-
+    Font m_Font{ L"ClashingFont.ttf", 16, false, false, true };
    // static GlobalFont s_Font;
 };
 
