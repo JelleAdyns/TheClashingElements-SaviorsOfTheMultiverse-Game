@@ -49,57 +49,57 @@ void Player::Move(const PathGraph& graph)
 	{
 		if (ENGINE.IsKeyPressed(VK_LEFT) && !ENGINE.IsKeyPressed(VK_RIGHT))
 		{
-			int targetX{};
-			if (graph.HasNeighbourInDirection(Direction::Left, m_BottomCenter, targetX))
+			Point2Int newTarget{};
+			if (graph.HasNeighbourInDirection(Direction::Left, m_BottomCenter, newTarget))
 			{
 				if (m_TargetLocation.y == m_BottomCenter.y)
 				{
 					m_Dir = Direction::Left;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetLocation.x = targetX;
+					m_TargetLocation.x = newTarget.x;
 				}
 			}
 		}
 		if (ENGINE.IsKeyPressed(VK_RIGHT) && !ENGINE.IsKeyPressed(VK_LEFT))
 		{
-			int targetX{};
-			if (graph.HasNeighbourInDirection(Direction::Right, m_BottomCenter, targetX))
+			Point2Int newTarget{};
+			if (graph.HasNeighbourInDirection(Direction::Right, m_BottomCenter, newTarget))
 			{
 				if (m_TargetLocation.y == m_BottomCenter.y)
 				{
 					m_Dir = Direction::Right;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetLocation.x = targetX;
+					m_TargetLocation.x = newTarget.x;
 				}
 			}
 		}
 		if (ENGINE.IsKeyPressed(VK_DOWN) && !ENGINE.IsKeyPressed(VK_UP))
 		{
-			int targetY{};
-			if (graph.HasNeighbourInDirection(Direction::Down, m_BottomCenter, targetY))
+			Point2Int newTarget{};
+			if (graph.HasNeighbourInDirection(Direction::Down, m_BottomCenter, newTarget))
 			{
 				if (m_TargetLocation.x == m_BottomCenter.x)
 				{
 					m_Dir = Direction::Down;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetLocation.y = targetY;
+					m_TargetLocation.y = newTarget.y;
 				}
 			}
 		}
 		if (ENGINE.IsKeyPressed(VK_UP) && !ENGINE.IsKeyPressed(VK_DOWN))
 		{
-			int targetY{};
-			if (graph.HasNeighbourInDirection(Direction::Up, m_BottomCenter, targetY))
+			Point2Int newTarget{};
+			if (graph.HasNeighbourInDirection(Direction::Up, m_BottomCenter, newTarget))
 			{
 				if (m_TargetLocation.x == m_BottomCenter.x)
 				{
 					m_Dir = Direction::Up;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetLocation.y = targetY;
+					m_TargetLocation.y = newTarget.y;
 				}
 			}
 		}

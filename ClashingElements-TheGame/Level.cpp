@@ -26,6 +26,7 @@ Level::Level(std::shared_ptr<Player> pPlayer, int viewportWidth, int viewportHei
 		_T("Sounds/Spaceship.wav")
 	},
 
+	m_MaxStages{ 2 },
 	m_StageNumber{ 0 },
 	m_LoopNumber{ 0 },
 	m_Hud{viewportWidth, viewportHeight},
@@ -85,7 +86,16 @@ void Level::Tick()
 		for (const auto& pEnemy : m_pVecEnemies)
 		{
 			pEnemy->Update();
-			if (!pEnemy->IsMoving()) pEnemy->Move(m_Graph);
+			if (!pEnemy->IsMoving())
+			{
+				pEnemy->SetTarget(m_pPlayer->GetHitBox().center);
+
+				TileID intersectionId = m_Graph.GetTileId(pEnemy->GetHitBox().center);
+
+				m_Graph.SetWalkabilityOfTile(intersectionId, false);
+				pEnemy->Move(m_Graph);
+				m_Graph.SetWalkabilityOfTile(intersectionId, true);
+			}
 		}
 
 		m_pPlayer->Move(m_Graph);
@@ -98,7 +108,7 @@ void Level::Tick()
 	else
 	{
 		Reset();
-		++m_StageNumber;
+		++m_StageNumber %= m_MaxStages;
 		LoadStage();
 	}
 
@@ -212,7 +222,7 @@ void Level::LoadStage()
 		}
 	}
 
-	int currTileId{};
+	TileID currTileId{};
 	while (getline(stageTest, info))
 	{
 		tstring rowString{};
@@ -261,13 +271,13 @@ void Level::LoadStage()
 
 			case _T('.'):
 
-				m_Graph.AddTile(currTileId, int(round(center.x)), int(round(center.y)), isIntersection);
+				m_Graph.AddTile(currTileId, center.x, center.y, isIntersection);
 				if(rowString[col] != _T('P')) m_pVecCollectables.push_back(std::make_shared<Collectable>(center));
 
-				int previousColTileId{ m_Graph.GetTileId(Point2Int{ center.x - Tile::Size, center.y }) };
+				TileID previousColTileId{ m_Graph.GetTileId(Point2Int{ center.x - Tile::Size, center.y }) };
 				if(previousColTileId >= 0) m_Graph.AddEdge(currTileId, previousColTileId);
 				
-				int previousRowTileId{ m_Graph.GetTileId(Point2Int{ center.x, center.y + Tile::Size }) };
+				TileID previousRowTileId{ m_Graph.GetTileId(Point2Int{ center.x, center.y + Tile::Size }) };
 				if(previousRowTileId >= 0) m_Graph.AddEdge(currTileId, previousRowTileId);
 
 				++currTileId;

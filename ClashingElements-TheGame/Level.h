@@ -34,7 +34,8 @@ private:
 	const std::vector<std::pair<tstring, std::pair<tstring, Point2Int>>> m_VecBackGrounds;
 	const std::vector<tstring> m_VecMusic;
 
-	int m_StageNumber;
+	uint8_t m_MaxStages;
+	uint8_t m_StageNumber;
 	int m_LoopNumber;
 
 	HUD m_Hud;

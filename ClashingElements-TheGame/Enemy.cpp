@@ -1,82 +1,119 @@
 #include "Enemy.h"
+#include <algorithm>
 
 Enemy::Enemy(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime) :
 	Character{bottomCenter, nrCols,nrFrames,frameTime},
-	m_SmartnessLevel{0}
+	m_SmartnessLevel{100}
 {
 
 }
 
 void Enemy::Draw() const
 {
-	Character::Draw();
-
-	int halfTile = Tile::Size / 2;
-	ENGINE.SetColor(RGB(0, 255, 0));
+	
+	ENGINE.SetColor(RGB(0, 255, 0), .2f);
 	for (auto& center : m_Path)
 	{
 		ENGINE.FillRectangle(center.x - Tile::Size / 2, center.y - Tile::Size / 2, Tile::Size, Tile::Size);
 	}
+	Character::Draw();
 }
 
 void Enemy::Move(const PathGraph& graph)
 {
 	OutputDebugString((_T("Target:") + to_tstring(m_TargetLocation.x) + _T(',') + to_tstring(m_TargetLocation.y) + _T(" | Pos:") + to_tstring(m_BottomCenter.x) + _T(',') + to_tstring(m_BottomCenter.y) + _T('\n')).c_str());
 
-	if (graph.IsCurrTileIntersection(m_BottomCenter))
+	if (graph.IsTileIntersection(m_BottomCenter))
 	{
 		OutputDebugString(_T("Intersection\n"));
-		m_DirMap.clear();
-		int target{};
-		if (graph.HasNeighbourInDirection(Direction::Left, m_BottomCenter, target))
-		{
-			m_DirMap.push_back(std::make_pair(Direction::Left, target));
-		}
-		if (graph.HasNeighbourInDirection(Direction::Right, m_BottomCenter, target))
-		{
-			m_DirMap.push_back(std::make_pair(Direction::Right, target));
-		}
-		if (graph.HasNeighbourInDirection(Direction::Up, m_BottomCenter, target))
-		{
-			m_DirMap.push_back(std::make_pair(Direction::Up, target));
-		}
-		if (graph.HasNeighbourInDirection(Direction::Down, m_BottomCenter, target))
-		{
-			m_DirMap.push_back(std::make_pair(Direction::Down, target));
-		}
+		
+		FillDirectionMap(graph);
 
+		CalculatePathsInAllDirections(graph);
 
-		int index{rand() % int(m_DirMap.size())};
+		SortDirectionMap();
 
-		m_Dir = m_DirMap[index].first;
-		m_Path.clear();
-		auto path = graph.CalculatShortestPath(m_Dir, m_BottomCenter, Point2Int{72,664});
-		m_Path.reserve(path.size());
-		for (auto& tileId : path)
-		{
-			m_Path.push_back(Point2Int{ graph.GetXCenterOfTile(tileId), graph.GetYCenterOfTile(tileId) });
-		}
-		}
+		bool choseShortestPath{ (rand() % m_MaxSmartnessLevel) < m_SmartnessLevel };
+		int index{0};
 
+		if (m_DirMap.size() > 1 and !choseShortestPath) 
+			index = rand() % (m_DirMap.size() - 1) + 1;
 
-		int index{rand() % int(m_DirMap.size())};
-		const auto& [direction, targetCoord] = m_DirMap[index];
+		const auto& [direction, nrOfTilesToTarget, nextTargetPos] = m_DirMap[index];
 
 		m_Dir = direction;
-		if (m_Dir == Direction::Down || m_Dir == Direction::Up) m_TargetLocation.y = targetCoord;
-		else m_TargetLocation.x = targetCoord;
+		m_TargetLocation = nextTargetPos;
 
 	}
 	else 
 	{
-		int target{};
+		Point2Int target{};
 		if (graph.HasNeighbourInDirection(m_Dir, m_BottomCenter, target))
 		{
-			if (m_Dir == Direction::Down || m_Dir == Direction::Up) m_TargetLocation.y = target;
-			else m_TargetLocation.x = target;
+			m_TargetLocation = target;
 		}
 
 	}
 	m_IsMoving = true;
 
+}
+
+void Enemy::SetTarget(const Point2Int& playerTarget)
+{
+	m_LastKnownPlayerPos = playerTarget;
+}
+
+void Enemy::FillDirectionMap(const PathGraph& graph)
+{
+	m_DirMap.clear();
+	Point2Int neighbourCenter{};
+	if (graph.HasNeighbourInDirection(Direction::Left, m_BottomCenter, neighbourCenter))
+	{
+		m_DirMap.push_back(std::make_tuple(Direction::Left, 0, neighbourCenter));
+	}
+	if (graph.HasNeighbourInDirection(Direction::Right, m_BottomCenter, neighbourCenter))
+	{
+		m_DirMap.push_back(std::make_tuple(Direction::Right, 0, neighbourCenter));
+	}
+	if (graph.HasNeighbourInDirection(Direction::Up, m_BottomCenter, neighbourCenter))
+	{
+		m_DirMap.push_back(std::make_tuple(Direction::Up, 0, neighbourCenter));
+	}
+	if (graph.HasNeighbourInDirection(Direction::Down, m_BottomCenter, neighbourCenter))
+	{
+		m_DirMap.push_back(std::make_tuple(Direction::Down, 0, neighbourCenter));
+	}
+}
+
+void Enemy::CalculatePathsInAllDirections(const PathGraph& graph)
+{
+	m_Path.clear();
+	for (auto& [direction, nrOfTilesToTarget, nextTilePos] : m_DirMap)
+	{
+		TileID startID{ graph.GetTileId(nextTilePos) };
+
+		auto path = graph.CalculatShortestPath(startID, graph.GetTileId(m_LastKnownPlayerPos));
+		nrOfTilesToTarget = static_cast<int>(path.size());
+
+		m_Path.reserve(path.size() * 4);
+		for (auto& tileId : path)
+		{
+			m_Path.push_back(graph.GetCenterOfTile(tileId));
+		}
+	}
+}
+
+void Enemy::SortDirectionMap()
+{
+	std::sort(m_DirMap.begin(), m_DirMap.end(), [](const std::tuple<Direction, int, Point2Int>& tuple1, const std::tuple<Direction, int, Point2Int>& tuple2)
+		{
+			const auto& [direction1, nrOfTiles1, nextPos1] = tuple1;
+			const auto& [direction2, nrOfTiles2, nextPos2] = tuple2;
+			return nrOfTiles1 < nrOfTiles2 and (nrOfTiles1 > 0);
+		});
+	std::partition(m_DirMap.begin(), m_DirMap.end(), [](const std::tuple<Direction, int, Point2Int>& tuple1)
+		{
+			const auto& [direction1, nrOfTiles1, nextPos1] = tuple1;
+			return nrOfTiles1 > 0;
+		});
 }

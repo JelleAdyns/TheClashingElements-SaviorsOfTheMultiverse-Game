@@ -14,7 +14,6 @@ public:
 	HUD& operator=(const HUD& other) = delete;
 	HUD& operator=(HUD&& other) noexcept = delete;
 
-	void Update();
 	void Draw() const;
 
 	void SetNrCollectables(int nrOfCollectables);

@@ -20,43 +20,28 @@ public:
 
 	//DEBUG DRAW
 	void Draw() const;
-	void AddTile(int id, int centerX, int centerY, bool isIntersection = false);
-	void AddEdge(int srcTileId, int neighboutId);
 
-	int GetXCenterOfTile(int id) const;
-	int GetYCenterOfTile(int id) const;
+	void AddTile(TileID id, int centerX, int centerY, bool isIntersection = false);
+	void AddEdge(TileID srcTileId, TileID neighboutId);
 
-	int GetTileId(const Point2Int& location) const;
-	bool IsCurrTileIntersection(const Point2Int& location) const;
+	Point2Int GetCenterOfTile(TileID id) const;
 
-	bool HasNeighbourInDirection(const Direction& dir, const Point2Int& playerPos, int& targetLocation) const;
+	TileID GetTileId(int locationX, int locationY) const;
+	TileID GetTileId(const Point2Int& location) const;
+	const Tile& ReadTile(TileID tileId) const;
+	std::vector<TileID> GetNeighbours(TileID tileId) const;
+
+	void SetWalkabilityOfTile(TileID tileId, bool walkable);
+	bool IsTileIntersection(const Point2Int& location) const;
+	bool HasNeighbourInDirection(const Direction& dir, const Point2Int& playerPos, Point2Int& neigbourCenter) const;
 
 	//This guy helped me out a lot!
 	//https://www.youtube.com/watch?v=mZfyt03LDH4&t=1094s
-	std::vector<int> CalculatShortestPath(const Direction& dir, const Point2Int& intersectionPos, const Point2Int& endPos) const;
+	std::vector<TileID> CalculatShortestPath(TileID startId, TileID endId) const;
 
 private:
 
-	struct Node
-	{
-		int gCost{};
-		int hCost{};
-		int tileId{};
-		int parentId{};
-
-		int fCost() const { return gCost + hCost; }
-
-		static int CalculateCost(const Point2Int& A, const Point2Int& B)
-		{
-			int x = std::abs(A.x - B.x) / Tile::Size;
-			int y = std::abs(A.y - B.y) / Tile::Size;
-			return x + y;
-		}
-	};
-
-	std::vector<int> RetracePath(const std::map<int, Node>& closedNodes, int startId, int endId) const;
-
-	std::vector<std::vector<int>> m_AdjacencyList;
+	std::vector<std::vector<TileID>> m_AdjacencyList;
 	std::vector<Tile> m_VecTiles;
 
 };
