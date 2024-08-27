@@ -7,7 +7,7 @@
 class FallingBoy final : public AnimatedSprite
 {
 public:
-	explicit FallingBoy(const Point2Int& bottomCenter,const RectInt& window);
+	explicit FallingBoy(const Point2Int& bottomCenter);
 	~FallingBoy();
 
 	FallingBoy(const FallingBoy& other) = delete;
@@ -27,9 +27,7 @@ private:
 	static int m_InstanceCounter;
 	const static int m_FallingSpeed;
 
-	const RectInt m_Window;
-
-	std::vector<Point2Int> m_VecPositions;
+	std::vector<Vector2f> m_VecPositions;
 };
 
 #endif // !FALLINGBOY_H
