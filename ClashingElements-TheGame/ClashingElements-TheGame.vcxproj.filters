@@ -33,9 +33,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Level.cpp">
-      <Filter>Game Files\Sub Classes</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Game Files\Sub Classes</Filter>
     </ClCompile>
@@ -46,9 +43,6 @@
       <Filter>Game Files\Sub Classes\Sprites</Filter>
     </ClCompile>
     <ClCompile Include="StartScreen.cpp">
-      <Filter>Game Files\Sub Classes\Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Screen.cpp">
       <Filter>Game Files\Sub Classes\Screens</Filter>
     </ClCompile>
     <ClCompile Include="PathGraph.cpp">
@@ -120,11 +114,11 @@
     <ClCompile Include="Character.cpp">
       <Filter>Game Files\Sub Classes\Sprites\Characters</Filter>
     </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Game Files\Sub Classes\Screens</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Level.h">
-      <Filter>Game Files\Sub Classes</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Game Files\Sub Classes</Filter>
     </ClInclude>
@@ -229,6 +223,12 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Game Files\Sub Classes\Screens</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
