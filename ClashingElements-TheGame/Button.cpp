@@ -1,29 +1,21 @@
 #include "Button.h"
 
 
-Button::Button(const tstring& text, const Point2Int& center, std::function<void()> toExecute, bool isSelected):
-	m_IsSelected{isSelected},
-	m_Center{center},
-	m_FuncToExecute{toExecute},
+Button::Button(const tstring& text, const Point2Int& center, std::unique_ptr<Command>&& toExecute, bool isSelected) :
+ 	m_IsSelected{ isSelected },
+	m_Center{ center },
+	m_FuncToExecute{ std::move(toExecute) },
 	m_Border{},
 	m_Text{ text }
 	//m_NextGameState{nextGameState}
 {
 	int borderDistance{ 5 };
-	m_Border = RectInt{ center.x - 200/2 - borderDistance,
-										  center.y - 16/2 - borderDistance,
+	m_Border = RectInt{ center.x - 200 / 2 - borderDistance,
+										  center.y - 16 / 2 - borderDistance,
 										  200 + 2 * borderDistance,
 										  16 + 2 * borderDistance };
-	
-}
-//Button::Button(const Texture* texture, const Point2Int& center, std::function<void()> toExecute, bool isSelected = false):
-//	m_IsSelected{ isSelected },
-//	m_Center{ center },
-//	m_FuncToExecute{ toExecute }
-//{
-//	m_pText = texture;
-//}
 
+}
 
 void Button::Draw() const
 {

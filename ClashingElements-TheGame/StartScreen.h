@@ -5,13 +5,14 @@
 #include "BackGround.h"
 #include "FallingBoy.h"
 #include "Button.h"
+#include "Commands.h"
 
 
 class StartScreen final: public Screen
 {
 public:
-	explicit StartScreen(const std::wstring& backGroundFilePath, const RectInt& window,
-		std::function<void()> startButton, std::function<void()> highscoreButton);
+	explicit StartScreen(const std::wstring& backGroundFilePath,
+		std::unique_ptr<Command>&& startButton, std::unique_ptr<Command>&& highscoreButton);
 	~StartScreen() = default;
 
 	StartScreen(const StartScreen& other) = delete;

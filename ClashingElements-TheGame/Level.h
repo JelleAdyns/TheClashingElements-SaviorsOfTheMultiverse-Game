@@ -10,25 +10,27 @@
 #include "PathGraph.h"
 #include "Camera.h"
 #include "HUD.h"
+#include "Screen.h"
+#include "Enemy.h"
 
 
 class AnimatedSprite;
 class Player;
-class Enemy;
 
-class Level final
+class Level final : public Screen
 {
 public:
-	explicit Level(std::shared_ptr<Player> pCharacter, int viewportWidth, int viewportHeight);
-	~Level();
+	explicit Level(std::shared_ptr<Player> pCharacter);
+	~Level() = default;
 
 	Level(const Level& other) = delete;
 	Level(Level&& other) noexcept = delete;
 	Level& operator=(const Level& other) = delete;
 	Level& operator=(Level&& other) noexcept = delete;
 
-	void Tick();
-	void Draw() const;
+	virtual void Tick() override;
+	virtual void Draw() const override;
+	virtual void KeyInput(int virtualKeyCode) override;
 
 private:
 	const std::vector<std::pair<tstring, std::pair<tstring, Point2Int>>> m_VecBackGrounds;
@@ -44,11 +46,11 @@ private:
 	std::unique_ptr < AnimBackGround > m_pAnimBackGround;
 	std::unique_ptr < BackGround > m_pBackGround;
 
-	std::vector< std::shared_ptr<Collectable> > m_pVecCollectables;
-	std::vector< std::unique_ptr<AnimatedSprite> > m_pVecSprites;
-	std::vector< std::shared_ptr<Enemy> > m_pVecEnemies;
+	std::vector< std::unique_ptr < Collectable > > m_pVecCollectables;
+	std::vector< std::unique_ptr < AnimatedSprite > > m_pVecSprites;
+	std::vector< std::unique_ptr < Enemy > > m_pVecEnemies;
 
-	std::vector< std::shared_ptr<AnimatedSprite> > m_pDrawBuffer;
+	std::vector< AnimatedSprite* > m_pDrawBuffer;
 
 	std::shared_ptr<Player> m_pPlayer;
 

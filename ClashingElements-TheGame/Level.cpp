@@ -13,7 +13,7 @@
 #include <numeric>
 
 
-Level::Level(std::shared_ptr<Player> pPlayer, int viewportWidth, int viewportHeight) :
+Level::Level(std::shared_ptr<Player> pPlayer) :
 	m_VecBackGrounds
 	{
 		{ _T("Mall.png")      , {_T("BGMall.png")      ,Point2Int{0, 300}} },
@@ -29,44 +29,12 @@ Level::Level(std::shared_ptr<Player> pPlayer, int viewportWidth, int viewportHei
 	m_MaxStages{ 2 },
 	m_StageNumber{ 0 },
 	m_LoopNumber{ 0 },
-	m_Hud{viewportWidth, viewportHeight},
-	m_Camera{viewportWidth, viewportHeight - HUD::GetHudHeight()}
+	m_Hud{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height },
+	m_Camera{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height - HUD::GetHudHeight()}
 {
 	m_pPlayer = pPlayer;
 	m_pPlayer->Play();
 	LoadStage();
-}
-
-Level::~Level()
-{
-
-	//delete m_pAnimBackGround;
-	//m_pAnimBackGround = nullptr;
-	//delete m_pBackGround;
-	//m_pBackGround = nullptr;
-
-	//for (auto& pCollectable : m_pVecCollectables)
-	//{
-	//	delete pCollectable;
-	//	pCollectable = nullptr;
-	//}
-	//for (auto& pSprite : m_pVecSprites)
-	//{
-	//	delete pSprite;
-	//	pSprite = nullptr;
-	//}
-	//for (auto& pEnemy : m_pVecEnemies)
-	//{
-	//	delete pEnemy;
-	//	pEnemy = nullptr;
-	//}
-	//
-	//delete m_pPlayer;
-	//m_pPlayer = nullptr;
-	//m_pBackGroundMusic->Stop();
-	//delete m_pBackGroundMusic;
-	//m_pBackGroundMusic = nullptr;
-
 }
 
 void Level::Tick()
@@ -103,6 +71,7 @@ void Level::Tick()
 		if (m_pPlayer->IsMoving()) HitCollectable();
 
 		m_Camera.Update(m_pPlayer->DestRect());
+
 		SetUpDrawBuffer();
 	}
 	else
@@ -125,14 +94,12 @@ void Level::Draw() const
 
 	
 	ENGINE.PushTransform();
+
 	m_Camera.Transform();
 		
 	m_pAnimBackGround->Draw();
 	m_Graph.Draw();
-	/*for (int i = int(VecIndexes.size() - 1); i >= 0; --i)
-	{
-		pVecSprites[VecIndexes[i]]->Draw();
-	}*/
+
 	for (const auto& pSprite : m_pDrawBuffer)
 	{
 		pSprite->Draw();
@@ -141,9 +108,14 @@ void Level::Draw() const
 	{
 		pSprite->Draw();
 	}
+
 	ENGINE.PopTransform();
 
 	m_Hud.Draw();
+}
+
+void Level::KeyInput(int virtualKeyCode)
+{
 }
 
 void Level::SetUpDrawBuffer()
@@ -151,11 +123,15 @@ void Level::SetUpDrawBuffer()
 	m_pDrawBuffer.clear();
 	m_pDrawBuffer.reserve(m_pVecCollectables.size() + m_pVecEnemies.size() + 1);
 
-	m_pDrawBuffer.insert(m_pDrawBuffer.end(), m_pVecCollectables.cbegin(), m_pVecCollectables.cend());
-	m_pDrawBuffer.insert(m_pDrawBuffer.end(), m_pVecEnemies.cbegin(), m_pVecEnemies.cend());
-	m_pDrawBuffer.push_back(m_pPlayer);
+	for (const auto& pCollcetable : m_pVecCollectables) 
+		m_pDrawBuffer.push_back(pCollcetable.get());
 
-	std::sort(m_pDrawBuffer.begin(), m_pDrawBuffer.end(), [](const std::shared_ptr<AnimatedSprite>& sprite1, const std::shared_ptr<AnimatedSprite>& sprite2)
+	for (const auto& pEnemy : m_pVecEnemies) 
+		m_pDrawBuffer.push_back(pEnemy.get());
+
+	m_pDrawBuffer.push_back(m_pPlayer.get());
+
+	std::sort(m_pDrawBuffer.begin(), m_pDrawBuffer.end(), [](const AnimatedSprite* sprite1, const AnimatedSprite* sprite2)
 		{
 			return sprite1->DestRect().bottom > sprite2->DestRect().bottom;
 		});
@@ -164,38 +140,15 @@ void Level::SetUpDrawBuffer()
 void Level::HitCollectable()
 {
 	OutputDebugString(_T("Collect"));
-	//m_pVecCollectables.erase(std::remove_if(m_pVecCollectables.begin(), m_pVecCollectables.end(), std::bind( &Level::Test , this, std::placeholders::_1)),
-	//	m_pVecCollectables.end());
 
-	m_pVecCollectables.erase(std::remove_if(m_pVecCollectables.begin(), m_pVecCollectables.end(), [&](const std::shared_ptr<Collectable>& collectable)
+	m_pVecCollectables.erase(std::remove_if(m_pVecCollectables.begin(), m_pVecCollectables.end(), [&](const std::unique_ptr<Collectable>& collectable)
 			{
 				return utils::IsOverlapping(m_pPlayer->GetHitBox(), collectable->GetHitBox());
 			}),
 		m_pVecCollectables.end());
 
-	//for (int i = 0; i < m_pVecCollectables.size(); i++)
-	//{
-	//	if (utils::IsOverlapping(m_pPlayer->GetHitBox(), m_pVecCollectables[i]->GetHitBox()))
-	//	{
-	//		/*if (m_StageNumber == 0)
-	//		{
-	//			for (int i = 0; i < m_pVecCollectables.size(); i++)
-	//			{
-	//				delete m_pVecCollectables[i];
-	//				m_pVecCollectables[i] = nullptr;
-	//			}
-	//			m_pVecCollectables.clear();
-	//		}
-	//		else if (m_StageNumber == 1)
-	//		{
-	//		}*/
-	//			delete m_pVecCollectables[i];
-	//			m_pVecCollectables[i] = m_pVecCollectables[m_pVecCollectables.size() - 1];
-	//			m_pVecCollectables.pop_back();
-	//		
-	//	}
-	//}	
-				m_Hud.SetNrCollectables(int(m_pVecCollectables.size()));
+
+	m_Hud.SetNrCollectables(int(m_pVecCollectables.size()));
 
 }
 
@@ -259,11 +212,11 @@ void Level::LoadStage()
 
 			case _T('B'):
 
-				if (rowString[col] != _T('P')) m_pVecEnemies.push_back(std::make_shared<Boss>( center, Player::m_DefaultSpeed ));
+				if (rowString[col] != _T('P')) m_pVecEnemies.push_back(std::make_unique<Boss>( center, Player::m_DefaultSpeed ));
 
 			case _T('M'):
 
-				//if (rowString[col] != _T('P') && rowString[col] != _T('B')) m_pVecEnemies.push_back(std::make_shared<Minion>(center));
+				//if (rowString[col] != _T('P') && rowString[col] != _T('B')) m_pVecEnemies.push_back(std::make_unique<Minion>(center));
 
 			case _T(','):
 
@@ -272,7 +225,7 @@ void Level::LoadStage()
 			case _T('.'):
 
 				m_Graph.AddTile(currTileId, center.x, center.y, isIntersection);
-				if(rowString[col] != _T('P')) m_pVecCollectables.push_back(std::make_shared<Collectable>(center));
+				if(rowString[col] != _T('P')) m_pVecCollectables.push_back(std::make_unique<Collectable>(center));
 
 				TileID previousColTileId{ m_Graph.GetTileId(Point2Int{ center.x - Tile::Size, center.y }) };
 				if(previousColTileId >= 0) m_Graph.AddEdge(currTileId, previousColTileId);

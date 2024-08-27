@@ -26,17 +26,19 @@ public:
     virtual void MouseUp(bool isLeft, int x, int y) override;
     virtual void MouseMove(int x, int y, int keyDown) override;
     virtual void MouseWheelTurn(int x, int y, int turnDistance, int keyDown) override;
+
+    // FUNCTIONS
+    void LoadScreen(GameState newGameState);
+
 private:
     // VARIABLES
 
     GameState m_GameState{ GameState::Start };
-    std::unique_ptr<Level> m_pLevel;
-    std::unique_ptr<Screen> m_pScreen;
+    std::unique_ptr<Screen> m_pScreen{ nullptr };
 
     bool m_DebugScale{ false };
-    float m_DScale{ 0.25f };
 
-    std::unique_ptr<Texture> wesley{nullptr};
+    // FUNCTIONS
 };
 
 #endif // !GAME_H

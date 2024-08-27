@@ -4,6 +4,8 @@
 #include "Screen.h"
 #include "GlobalEnumClasses.h"
 #include "BackGround.h"
+#include "Commands.h"
+#include "Structs.h"
 #include <functional>
 
 
@@ -12,8 +14,8 @@ class Button;
 class SkinScreen final : public Screen
 {
 public:
-	explicit SkinScreen(const std::wstring& backGroundFilePath, const RectInt& window, std::function<void()> nextEvent);
-	~SkinScreen();
+	explicit SkinScreen(const std::wstring& backGroundFilePath, Game& game, GameState nextState);
+	~SkinScreen() = default;
 
 	SkinScreen(const SkinScreen& other) = delete;
 	SkinScreen(SkinScreen&& other) noexcept = delete;

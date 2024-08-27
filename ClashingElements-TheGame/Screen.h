@@ -8,7 +8,7 @@
 class Screen
 {
 public:
-	explicit Screen(const RectInt& window);
+	Screen() = default;
 	virtual ~Screen() = default;
 
 	Screen(const Screen& other) = delete;
@@ -16,11 +16,9 @@ public:
 	Screen& operator=(const Screen& other) = delete;
 	Screen& operator=(Screen&& other) noexcept = delete;
 
-	virtual void Draw() const {};
-	virtual void Tick() {};
-	virtual void KeyInput(int virtualKeyCode) {};
-protected:
-	RectInt m_Window;
+	virtual void Draw() const = 0;
+	virtual void Tick() = 0;
+	virtual void KeyInput(int virtualKeyCode) = 0;
 };
 
 #endif // !SCREEN_H

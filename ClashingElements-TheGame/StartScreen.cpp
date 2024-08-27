@@ -1,18 +1,19 @@
 #include "StartScreen.h"
 
 
-StartScreen::StartScreen(const std::wstring& backGroundFilePath, const RectInt& window, 
-	std::function<void()> startButton, std::function<void()> highscoreButton) :
-	Screen{ window },
+StartScreen::StartScreen(const std::wstring& backGroundFilePath, 
+	std::unique_ptr<Command>&& startButton, std::unique_ptr<Command>&& highscoreButton) :
+	Screen{ },
 	m_BackGround{ backGroundFilePath },
 	m_YTranslation{ 0 },
-	m_DistanceBetweenBoys{ window.height / (FallingBoy::m_NrOfBoys / 2 - 1) },
+	m_DistanceBetweenBoys{ ENGINE.GetWindowRect().height / (FallingBoy::m_NrOfBoys / 2 - 1)},
 	m_BackGroundSpeed{ 10 },
 	m_SelectedButtonIndex{0},
-	m_FallingBoys{ Point2Int{}, window }
+	m_FallingBoys{ Point2Int{} }
 {
-	m_pVecButtons.push_back(std::make_unique<Button>(_T("Start"), Point2Int{window.width / 2,window.height / 3},startButton, true));
-	m_pVecButtons.push_back(std::make_unique<Button>(_T("High Scores"), Point2Int{window.width / 2,window.height / 3 - 15}, highscoreButton ));
+	const auto& window = ENGINE.GetWindowRect();
+	m_pVecButtons.push_back(std::make_unique<Button>(_T("Start"), Point2Int{window.width / 2,window.height / 3}, std::move(startButton), true));
+	m_pVecButtons.push_back(std::make_unique<Button>(_T("High Scores"), Point2Int{window.width / 2,window.height / 3 - 15}, std::move(highscoreButton) ));
 }
 
 void StartScreen::Draw() const
@@ -20,7 +21,7 @@ void StartScreen::Draw() const
 	ENGINE.PushTransform();
 	ENGINE.Translate(0, static_cast<int>(std::round(m_YTranslation)));
 	m_BackGround.Draw();
-	ENGINE.Translate(0, -m_Window.height);
+	ENGINE.Translate(0, -ENGINE.GetWindowRect().height);
 	m_BackGround.Draw();
 	ENGINE.PopTransform();
 
@@ -36,7 +37,7 @@ void StartScreen::Draw() const
 void StartScreen::Tick()
 {
 	m_YTranslation += m_BackGroundSpeed * ENGINE.GetDeltaTime();
-	if (m_YTranslation >= m_Window.height) m_YTranslation = 0;
+	if (m_YTranslation >= ENGINE.GetWindowRect().height) m_YTranslation = 0;
 
 	m_FallingBoys.UpdatePos();
 	//for (auto& pBoy : m_FallingBoys)
@@ -61,7 +62,7 @@ void StartScreen::KeyInput(int virtualKeyCode)
 		m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();
 		break;
 	case VK_SPACE:
-		m_pVecButtons[m_SelectedButtonIndex]->ExecuteFunction();
+		m_pVecButtons[m_SelectedButtonIndex]->ExecuteCommand();
 		break;
 	}
 }

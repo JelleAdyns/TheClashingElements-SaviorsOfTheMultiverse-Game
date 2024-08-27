@@ -17,17 +17,10 @@ void Game::Initialize()
 	ENGINE.SetTitle(_T("The Clashing Elements - The Game"));
 	ENGINE.SetWindowScale(3.f);
 	ENGINE.SetWindowDimensions(256,224);
+	ENGINE.SetFrameRate(60);
 
-	m_pScreen = std::make_unique<StartScreen>(L"Space.png", ENGINE.GetWindowRect(),
-		[&]()
-		{
-			/*m_GameState = GameState::SelectingSkin;
-			m_pScreen.reset(new SkinScreen{ L"Space.png", ENGINE.GetWindowSize(),  []() {} });*/
-		},
-		[]() {}
-	);
-	m_pLevel = nullptr;
-	wesley = std::make_unique<Texture>(L"Wesley.png");
+	LoadScreen(GameState::Start);
+
 }
 void Game::Draw() const
 {
@@ -41,21 +34,29 @@ void Game::Draw() const
 		break;
 	case GameState::Playing:
 
+#ifdef _DEBUG
+
+
 		ENGINE.PushTransform();
 		if (m_DebugScale)
 		{
-			ENGINE.Scale(m_DScale, ENGINE.GetWindowRect().width / 2, ENGINE.GetWindowRect().height / 2);
+			ENGINE.Scale(0.25f, ENGINE.GetWindowRect().width / 2, ENGINE.GetWindowRect().height / 2);
 		}
-		m_pLevel->Draw();
+		m_pScreen->Draw();
+
 		ENGINE.PopTransform();
+
+#else
+
+		m_pScreen->Draw();
+
+#endif // _DEBUG
+
 		break;
 	case GameState::GameOver:
 		break;
 	}
 
-	//ENGINE.DrawTexture(*wesley, RectInt{ 50,50,12,27*2 }, RectInt{ 0,27,12,27 });
-	//ENGINE.DrawTexture(*wesley, RectInt{ 50,50,96,200 });
-	//ENGINE.DrawTexture(*wesley);
 }
 void Game::Tick()
 {
@@ -67,7 +68,7 @@ void Game::Tick()
 		m_pScreen->Tick();
 		break;
 	case GameState::Playing:
-		m_pLevel->Tick();
+		m_pScreen->Tick();
 		break;
 	case GameState::GameOver:
 		break;
@@ -88,37 +89,12 @@ void Game::KeyDown(int virtualKeycode)
 	//
 	// Click here for more information: https://learn.microsoft.com/en-us/windows/win32/learnwin32/keyboard-input
 
+		m_pScreen->KeyInput(virtualKeycode);
 	switch (m_GameState)
 	{
-	case GameState::Start:
-		m_pScreen->KeyInput(virtualKeycode);
-		switch (virtualKeycode)
-		{
-		case VK_SPACE:
-			m_pScreen = std::make_unique<SkinScreen>( L"Space.png", ENGINE.GetWindowRect(), [] (){} );
-			//m_pScreen = new SkinScreen{ "Space.png", ENGINE.GetWindowSize() };
-			m_GameState = GameState::SelectingSkin;
-			break;
-		}
-		break;
 
-		break;
-	case GameState::ShowingHighScores:
-		break;
-	case GameState::SelectingSkin:
-		m_pScreen->KeyInput(virtualKeycode);
-		switch (virtualKeycode)
-		{
-		case VK_SPACE:
-			m_pLevel = std::make_unique<Level>(static_cast<SkinScreen*>(m_pScreen.get())->GetPlayer(), ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height);
-			m_pScreen.reset();
-			//delete m_pScreen;
-			//m_pScreen = nullptr;
-			m_GameState = GameState::Playing;
-			break;
-		}
-		break;
 	case GameState::Playing:
+
 		switch (virtualKeycode)
 		{
 		case 'S':
@@ -126,8 +102,7 @@ void Game::KeyDown(int virtualKeycode)
 			break;
 		}
 		break;
-	case GameState::GameOver:
-		break;
+
 	}
 }
 void Game::KeyUp(int virtualKeycode)
@@ -160,4 +135,43 @@ void Game::MouseWheelTurn(int x, int y, int turnDistance, int keyDown)
 {
 	//See this link to check which keys could be represented in the keyDown parameter and what the turnDistance is for
 	//https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-mousewheel
+}
+
+
+
+void Game::LoadScreen(GameState newGameState)
+{
+	switch (newGameState)
+	{
+	case GameState::Start:
+
+		m_pScreen = std::make_unique<StartScreen>(
+			L"Space.png",
+			std::make_unique<LoadScreenCommand>(*this, GameState::SelectingSkin),
+			std::make_unique<LoadScreenCommand>(*this, GameState::ShowingHighScores)
+		);
+		m_GameState = GameState::Start;
+
+		break;
+
+	case GameState::ShowingHighScores:
+		break;
+
+	case GameState::SelectingSkin:
+
+		m_pScreen = std::make_unique<SkinScreen>(L"Space.png", *this, GameState::Playing);
+		m_GameState = GameState::SelectingSkin;
+
+		break;
+
+	case GameState::Playing:
+
+		m_pScreen = std::make_unique<Level>(static_cast<SkinScreen*>(m_pScreen.get())->GetPlayer());
+		m_GameState = GameState::Playing;
+
+		break;
+
+	case GameState::GameOver:
+		break;
+	}
 }
