@@ -25,7 +25,6 @@ private:
 	Point2Int m_LevelCenter;
 	Point2Int m_CurrCamBottomLeft;
 
-	Point2Int Track(const RectInt& target) const;
 	void Clamp(Point2Int& bottomLeftPos) const;
 };
 

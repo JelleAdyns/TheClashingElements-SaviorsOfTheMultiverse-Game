@@ -36,10 +36,6 @@ void Camera::Update(const RectInt& target)
 	Clamp(m_CurrCamBottomLeft);
 }
 
-Point2Int Camera::Track(const RectInt& target) const
-{
-	return Point2Int{ target.left + target.width / 2, target.bottom + target.height / 2 };
-}
 void Camera::Clamp(Point2Int& bottomLeftPos) const
 {
 	bottomLeftPos.x = std::max<int>(bottomLeftPos.x , m_LevelBoundaries.left);
