@@ -4,7 +4,7 @@
 Button::Button(const tstring& text, const Point2Int& center, std::unique_ptr<Command>&& toExecute, bool isSelected) :
  	m_IsSelected{ isSelected },
 	m_Center{ center },
-	m_FuncToExecute{ std::move(toExecute) },
+	m_CommandToExecute{ std::move(toExecute) },
 	m_Border{},
 	m_Text{ text }
 	//m_NextGameState{nextGameState}

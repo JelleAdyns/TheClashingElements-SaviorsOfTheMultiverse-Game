@@ -21,7 +21,7 @@ public:
 	void Draw() const;
 	void ToggleSelection();
 
-	void ExecuteCommand() { m_FuncToExecute->Execute(); }
+	void ExecuteCommand() { m_CommandToExecute->Execute(); }
 	
 private:
 	bool m_IsSelected;
@@ -30,6 +30,6 @@ private:
 
 	const tstring m_Text;
 	RectInt m_Border;
-	std::unique_ptr<Command> m_FuncToExecute;
+	std::unique_ptr<Command> m_CommandToExecute;
 };
 

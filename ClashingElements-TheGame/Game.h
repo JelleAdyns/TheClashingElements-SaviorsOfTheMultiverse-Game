@@ -28,7 +28,7 @@ public:
     virtual void MouseWheelTurn(int x, int y, int turnDistance, int keyDown) override;
 
     // FUNCTIONS
-    void LoadScreen(GameState newGameState);
+    void SetScreen(GameState newGameState);
 
 private:
     // VARIABLES
@@ -36,9 +36,11 @@ private:
     GameState m_GameState{ GameState::Start };
     std::unique_ptr<Screen> m_pScreen{ nullptr };
 
+    bool m_UpdateScreen{ false };
     bool m_DebugScale{ false };
 
     // FUNCTIONS
+    void LoadScreen();
 };
 
 #endif // !GAME_H

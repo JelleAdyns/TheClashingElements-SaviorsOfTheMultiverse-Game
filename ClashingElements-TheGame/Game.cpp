@@ -19,7 +19,8 @@ void Game::Initialize()
 	ENGINE.SetWindowDimensions(256,224);
 	ENGINE.SetFrameRate(60);
 
-	LoadScreen(GameState::Start);
+	SetScreen(GameState::Start);
+	LoadScreen();
 
 }
 void Game::Draw() const
@@ -60,22 +61,8 @@ void Game::Draw() const
 }
 void Game::Tick()
 {
-	switch (m_GameState)
-	{
-	case GameState::Start:
-	case GameState::ShowingHighScores:
-	case GameState::SelectingSkin:
+	if (m_UpdateScreen) LoadScreen();
 		m_pScreen->Tick();
-		break;
-	case GameState::Playing:
-		m_pScreen->Tick();
-		break;
-	case GameState::GameOver:
-		break;
-	default:
-		break;
-	}
-
 }
 void Game::KeyDown(int virtualKeycode)
 {
@@ -139,9 +126,15 @@ void Game::MouseWheelTurn(int x, int y, int turnDistance, int keyDown)
 
 
 
-void Game::LoadScreen(GameState newGameState)
+void Game::SetScreen(GameState newGameState)
 {
-	switch (newGameState)
+	m_GameState = newGameState;
+	m_UpdateScreen = true;
+}
+
+void Game::LoadScreen()
+{
+	switch (m_GameState)
 	{
 	case GameState::Start:
 
@@ -174,4 +167,6 @@ void Game::LoadScreen(GameState newGameState)
 	case GameState::GameOver:
 		break;
 	}
+
+	m_UpdateScreen = false;
 }

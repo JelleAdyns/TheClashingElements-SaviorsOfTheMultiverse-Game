@@ -34,7 +34,7 @@ public:
 	LoadScreenCommand& operator=(LoadScreenCommand&& other) noexcept = delete;
 
 
-	virtual void Execute() override { m_Game.LoadScreen(m_NewGameState); }
+	virtual void Execute() override { m_Game.SetScreen(m_NewGameState); }
 
 private:
 	const GameState m_NewGameState;
