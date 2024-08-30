@@ -32,9 +32,13 @@ Level::Level(std::shared_ptr<Player> pPlayer) :
 	m_Hud{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height },
 	m_Camera{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height - HUD::GetHudHeight()}
 {
+	m_PickedUp = std::make_unique<Subject<int>>();
+	m_PickedUp->AddObserver(&m_Hud);
+
 	m_pPlayer = pPlayer;
 	m_pPlayer->Play();
 	LoadStage();
+
 }
 
 void Level::Tick()
@@ -143,7 +147,12 @@ void Level::HitCollectable()
 
 	m_pVecCollectables.erase(std::remove_if(m_pVecCollectables.begin(), m_pVecCollectables.end(), [&](const std::unique_ptr<Collectable>& collectable)
 			{
-				return utils::IsOverlapping(m_pPlayer->GetHitBox(), collectable->GetHitBox());
+				if (utils::IsOverlapping(m_pPlayer->GetHitBox(), collectable->GetHitBox()))
+				{
+					m_PickedUp->NotifyObservers(100);
+					return true;
+				}
+				return false;
 			}),
 		m_pVecCollectables.end());
 

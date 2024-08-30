@@ -1,9 +1,9 @@
 #ifndef HUD_H
 #define HUD_H
 
-#include "Collectable.h"
+#include "Engine.h"
 
-class HUD
+class HUD final : public Observer<int>
 {
 public:
 	 HUD(int windowWidth, int windowHeight);
@@ -16,19 +16,22 @@ public:
 
 	void Draw() const;
 
-	void SetNrCollectables(int nrOfCollectables);
-
+	virtual void Notify(int score) override;
+	virtual void OnSubjectDestroy() override;
 	static int GetHudHeight();
 
 private:
 
 	const static int m_HudHeight;
 
-	const RectInt m_HudArea;
+	tstring m_YourScore;
+	tstring m_HighScore;
 
-	COLORREF m_TextColor{ RGB(255,0,255) };
+	const RectInt m_HudArea;
+	int m_CurrentScore{0};
+
+	COLORREF m_TextColor{ RGB(255,255,255) };
 	tstring m_pTextCollectables{  };
-	const Collectable m_pCollectable;
 
 };
 

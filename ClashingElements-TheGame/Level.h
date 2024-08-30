@@ -56,6 +56,8 @@ private:
 
 	PathGraph m_Graph;
 
+	std::unique_ptr<Subject<int>> m_PickedUp;
+
 	void HitCollectable();
 	void LoadStage();
 	void Reset();
