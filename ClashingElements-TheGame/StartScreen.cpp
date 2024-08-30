@@ -13,7 +13,14 @@ StartScreen::StartScreen(const std::wstring& backGroundFilePath,
 {
 	const auto& window = ENGINE.GetWindowRect();
 	m_pVecButtons.push_back(std::make_unique<Button>(_T("Start"), Point2Int{window.width / 2,window.height / 3}, std::move(startButton), true));
+	m_pVecButtons.back()->SetColor(RGB(255, 255, 255));
+	m_pVecButtons.back()->SetWidth(100);
+	m_pVecButtons.back()->SetHeight(8);
+
 	m_pVecButtons.push_back(std::make_unique<Button>(_T("High Scores"), Point2Int{window.width / 2,window.height / 3 - 15}, std::move(highscoreButton) ));
+	m_pVecButtons.back()->SetColor(RGB(255, 255, 255));
+	m_pVecButtons.back()->SetWidth(100);
+	m_pVecButtons.back()->SetHeight(8);
 }
 
 void StartScreen::Draw() const
@@ -27,6 +34,11 @@ void StartScreen::Draw() const
 
 	m_FallingBoys.Draw();
 
+	auto& font = globalFont::GetFont();
+
+	font.SetTextFormat(8, false, false);
+	font.SetHorizontalAllignment(Font::HorAllignment::Center);
+	font.SetVerticalAllignment(Font::VertAllignment::Center);
 
 	for (auto& button : m_pVecButtons)
 	{
@@ -40,12 +52,6 @@ void StartScreen::Tick()
 	if (m_YTranslation >= ENGINE.GetWindowRect().height) m_YTranslation = 0;
 
 	m_FallingBoys.UpdatePos();
-	//for (auto& pBoy : m_FallingBoys)
-	//{
-	//	if (pBoy->DestRect().left<m_Window.height && pBoy->DestRect().left + pBoy->DestRect().height > m_Window.bottom) pBoy->Update(elapsedSec);
-	//	pBoy->UpdatePos(elapsedSec);
-	//	if (pBoy->DestRect().bottom > m_Window.height) pBoy->Reset(m_DistanceBetweenBoys);
-	//}
 }
 void StartScreen::KeyInput(int virtualKeyCode)
 {

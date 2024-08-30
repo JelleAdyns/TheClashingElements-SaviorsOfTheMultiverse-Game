@@ -20,15 +20,21 @@ public:
 
 	void Draw() const;
 	void ToggleSelection();
+	void SetColor(COLORREF color);
+	void SetWidth(int width);
+	void SetHeight(int height);
 
 	void ExecuteCommand() { m_CommandToExecute->Execute(); }
 	
 private:
+	static const int m_BorderDistance{ 3 };
+
 	bool m_IsSelected;
 	const Point2Int m_Center;
-	//const GameState m_NextGameState;
 
 	const tstring m_Text;
+
+	COLORREF m_TextColor;
 	RectInt m_Border;
 	std::unique_ptr<Command> m_CommandToExecute;
 };
