@@ -2,20 +2,27 @@
 #include <algorithm>
 
 Enemy::Enemy(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime) :
-	Character{bottomCenter, nrCols,nrFrames,frameTime},
-	m_SmartnessLevel{100}
+	Character{bottomCenter, nrCols,nrFrames,frameTime, 1},
+	m_SmartnessLevel{50}
 {
 
 }
 
 void Enemy::Draw() const
 {
-	
-	ENGINE.SetColor(RGB(0, 255, 0), .2f);
-	for (auto& center : m_Path)
+#ifdef _DEBUG
+
+	if (ENGINE.IsKeyPressed('Z'))
 	{
-		ENGINE.FillRectangle(center.x - Tile::Size / 2, center.y - Tile::Size / 2, Tile::Size, Tile::Size);
+		ENGINE.SetColor(RGB(0, 255, 0), .2f);
+		for (auto& center : m_Path)
+		{
+			ENGINE.FillRectangle(center.x - Tile::Size / 2, center.y - Tile::Size / 2, Tile::Size, Tile::Size);
+		}
 	}
+
+#endif // _DEBUG
+
 	Character::Draw();
 }
 
@@ -44,6 +51,7 @@ void Enemy::Move(const PathGraph& graph)
 		m_Dir = direction;
 		m_TargetLocation = nextTargetPos;
 
+		m_CurrentRow = int(m_Dir);
 	}
 	else 
 	{

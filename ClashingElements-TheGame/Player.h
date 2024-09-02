@@ -17,7 +17,6 @@ public:
 	virtual void Move(const PathGraph& graph) override;
 	//virtual void InteractWithMobilityItem(const MobilityItem& mobilityItem) override;
 
-	void ResetFrames();
 	void Play();
 
 	static int m_DefaultSpeed;

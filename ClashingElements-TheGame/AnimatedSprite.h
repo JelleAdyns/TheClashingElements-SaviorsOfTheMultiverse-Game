@@ -18,6 +18,7 @@ public:
 	virtual void Update();
 
 	RectInt DestRect() const;
+	void ResetFrames();
 protected:
 	void SetTexture(const Texture* pTexture, const RectInt& textureArea = RectInt{});
 

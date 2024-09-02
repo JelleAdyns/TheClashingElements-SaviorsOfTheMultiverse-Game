@@ -57,6 +57,12 @@ RectInt AnimatedSprite::DestRect() const
 	return RectInt{ m_BottomCenter.x - SrcRect().width / 2, m_BottomCenter.y, SrcRect().width , SrcRect().height };
 }
 
+void AnimatedSprite::ResetFrames()
+{
+	m_CurrentCol = 0;
+	m_PassedTime = 0.f;
+}
+
 RectInt AnimatedSprite::SrcRect() const
 {
 	RectInt srcRect{};

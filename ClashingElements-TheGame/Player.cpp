@@ -21,26 +21,25 @@ Player::Player(const Skin& skin):
 }
 void Player::Update()
 {
-
-	m_PassedTime += ENGINE.GetDeltaTime();
-	if (m_PassedTime >= m_FrameTime)
+	switch (m_State)
 	{
-		if (m_State == PlayerState::Playing)
-		{
-			if (m_IsMoving) ++m_CurrentCol %= m_NrOfCols;
-			else ResetFrames();
-		}
-		else
+	case Player::PlayerState::ChoosingSkin:
+
+		m_PassedTime += ENGINE.GetDeltaTime();
+		if (m_PassedTime >= m_FrameTime)
 		{
 			++m_CurrentCol %= m_NrOfCols;
+			m_PassedTime = 0.f;
 		}
 
-		m_PassedTime = 0.f;
-	}
+		break;
 
-	if (m_State == PlayerState::Playing)
-	{
+	case Player::PlayerState::Playing:
+
 		Character::Update();
+		if (not m_IsMoving) ResetFrames();
+
+		break;
 	}
 }
 void Player::Move(const PathGraph& graph)
@@ -57,7 +56,7 @@ void Player::Move(const PathGraph& graph)
 					m_Dir = Direction::Left;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetLocation.x = newTarget.x;
+					m_TargetLocation = newTarget;
 				}
 			}
 		}
@@ -71,7 +70,7 @@ void Player::Move(const PathGraph& graph)
 					m_Dir = Direction::Right;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetLocation.x = newTarget.x;
+					m_TargetLocation = newTarget;
 				}
 			}
 		}
@@ -85,7 +84,7 @@ void Player::Move(const PathGraph& graph)
 					m_Dir = Direction::Down;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetLocation.y = newTarget.y;
+					m_TargetLocation = newTarget;
 				}
 			}
 		}
@@ -99,16 +98,13 @@ void Player::Move(const PathGraph& graph)
 					m_Dir = Direction::Up;
 					m_CurrentRow = int(m_Dir);
 					m_IsMoving = true;
-					m_TargetLocation.y = newTarget.y;
+					m_TargetLocation = newTarget;
 				}
 			}
 		}
 	}
 }
-void Player::ResetFrames()
-{
-	m_CurrentCol = 0;
-}
+
 void Player::Play()
 {
 	m_State = PlayerState::Playing;

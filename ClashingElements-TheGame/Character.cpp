@@ -61,7 +61,8 @@ void Character::Update()
 			m_Velocity.y = 0;
 		}
 	}
-
+	
+	AnimatedSprite::Update();
 } 
 
 void Character::SetPos(const Point2Int& newPos)
