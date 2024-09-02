@@ -5,7 +5,7 @@ int Boss::m_InstanceCounter{ 0 };
 int Boss::m_DefaultSpeed{ 0 };
 
 Boss::Boss(const Point2Int& bottomCenter, int speed):
-	Enemy{bottomCenter,8, 32,  1.f / 20 }
+	Enemy{bottomCenter,8, 32,  1.f / 15 }
 {
 	m_DefaultSpeed = speed;
 

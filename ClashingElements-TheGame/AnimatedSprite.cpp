@@ -39,7 +39,7 @@ void AnimatedSprite::Update()
 			if (m_CurrentCol == m_NrOfCols - 1) ++m_CurrentRow %= m_NrOfRows;
 		}
 		++m_CurrentCol %= m_NrOfCols;
-		m_PassedTime = 0.f;
+		m_PassedTime -= m_FrameTime;
 	}
 }
 

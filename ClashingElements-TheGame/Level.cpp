@@ -225,7 +225,7 @@ void Level::LoadStage()
 
 			case _T('M'):
 
-				//if (rowString[col] != _T('P') && rowString[col] != _T('B')) m_pVecEnemies.push_back(std::make_unique<Minion>(center));
+				if (rowString[col] != _T('P') && rowString[col] != _T('B')) m_pVecEnemies.push_back(std::make_unique<Minion>(center));
 
 			case _T(','):
 

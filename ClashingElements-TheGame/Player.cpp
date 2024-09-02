@@ -3,7 +3,7 @@
 int	Player::m_DefaultSpeed{ Tile::Size * 4 };
 
 Player::Player(const Skin& skin):
-	Character{ Point2Int{}, 8, 32, 1.f / 20, 1 },
+	Character{ Point2Int{}, 8, 32, 1.f / 15, 1 },
 	m_State{ PlayerState::ChoosingSkin },
 	m_pTexture{nullptr}
 {

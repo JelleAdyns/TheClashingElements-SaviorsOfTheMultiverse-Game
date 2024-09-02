@@ -5,7 +5,7 @@ int Minion::m_InstanceCounter{0};
 int Minion::m_DefaultSpeed{Tile::Size * 3};
 
 Minion::Minion(const Point2Int& bottomCenter) :
-	Enemy{ bottomCenter, 3, 3, 1.f / 8 }
+	Enemy{ bottomCenter, 3, 12, 1.f / 8 }
 {
 	Character::SetDefaultSpeed(m_DefaultSpeed);
 	++m_InstanceCounter;
