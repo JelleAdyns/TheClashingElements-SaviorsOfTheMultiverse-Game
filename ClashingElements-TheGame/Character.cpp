@@ -19,6 +19,12 @@ Character::Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, fl
 
 void Character::Draw() const
 {
+#ifdef _DEBUG
+
+	ENGINE.DrawCircle(m_HitBox);
+
+#endif // _DEBUG
+
 	ENGINE.PushTransform();
 	ENGINE.Translate(0, -m_PixelOffset);
 	AnimatedSprite::Draw();

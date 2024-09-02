@@ -4,27 +4,30 @@
 
 void PathGraph::Draw() const
 {
+#ifdef _DEBUG
 
 	ENGINE.SetColor(RGB(255, 255, 255));
 	for (const Tile& tile : m_VecTiles)
 	{
 		ENGINE.DrawRectangle(tile.Area);
 	}
-	
+
 	for (const std::vector<TileID>& vector : m_AdjacencyList)
 	{
 		std::vector<Point2Int> points{};
 		for (const TileID id : vector)
 		{
-			points.push_back( GetCenterOfTile(id) );
+			points.push_back(GetCenterOfTile(id));
 		}
 		for (size_t i = 1; i < points.size(); i++)
 		{
 			ENGINE.DrawLine(points.at(i - 1), points.at(i));
 		}
-		ENGINE.DrawLine(points.at(points.size()-1), points.at(0));
+		ENGINE.DrawLine(points.at(points.size() - 1), points.at(0));
 
 	}
+
+#endif // _DEBUG
 }
 void PathGraph::AddTile(TileID id, int centerX, int centerY, bool isIntersection)
 {
