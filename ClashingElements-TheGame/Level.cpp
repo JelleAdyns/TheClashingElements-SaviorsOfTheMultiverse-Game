@@ -13,7 +13,7 @@
 #include <numeric>
 
 
-Level::Level(std::shared_ptr<Player> pPlayer) :
+Level::Level(Skin playerSkin) :
 	m_VecBackGrounds
 	{
 		{ _T("Mall.png")      , {_T("BGMall.png")      ,Point2Int{0, 300}} },
@@ -29,13 +29,13 @@ Level::Level(std::shared_ptr<Player> pPlayer) :
 	m_MaxStages{ 2 },
 	m_StageNumber{ 0 },
 	m_LoopNumber{ 0 },
-	m_Hud{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height },
+	m_Hud{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height, playerSkin },
 	m_Camera{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height - HUD::GetHudHeight()}
 {
 	m_PickedUp = std::make_unique<Subject<int>>();
 	m_PickedUp->AddObserver(&m_Hud);
 
-	m_pPlayer = pPlayer;
+	m_pPlayer = std::make_unique<Player>(playerSkin, &m_Hud);
 	m_pPlayer->Play();
 	LoadStage();
 
@@ -68,6 +68,10 @@ void Level::Tick()
 				pEnemy->Move(m_Graph);
 				m_Graph.SetWalkabilityOfTile(intersectionId, true);
 			}
+			if (utils::IsOverlapping(pEnemy->GetHitBox(), m_pPlayer->GetHitBox()))
+			{
+				m_pPlayer->TakeDamage();
+		}
 		}
 
 		m_pPlayer->Move(m_Graph);

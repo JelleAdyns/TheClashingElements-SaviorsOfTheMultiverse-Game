@@ -2,11 +2,12 @@
 #define HUD_H
 
 #include "Engine.h"
+#include "Player.h"
 
-class HUD final : public Observer<int>
+class HUD final : public Observer<int>, public Observer<Player*>
 {
 public:
-	 HUD(int windowWidth, int windowHeight);
+	 HUD(int windowWidth, int windowHeight, Skin skin);
 	~HUD() = default;
 
 	HUD(const HUD& other) = delete;
@@ -16,19 +17,24 @@ public:
 
 	void Draw() const;
 
+	virtual void Notify(Player* player) override;
 	virtual void Notify(int score) override;
 	virtual void OnSubjectDestroy() override;
+
 	static int GetHudHeight();
 
 private:
 
 	const static int m_HudHeight;
 
-	tstring m_YourScore;
-	tstring m_HighScore;
+	tstring m_YourScore{};
+	tstring m_HighScore{};
 
 	const RectInt m_HudArea;
+	int m_Lives{3};
 	int m_CurrentScore{0};
+	std::unique_ptr<Texture> m_pLivesTexture;
+	const RectInt m_LivesSrcRect{};
 
 	COLORREF m_TextColor{ RGB(255,255,255) };
 	tstring m_pTextCollectables{  };

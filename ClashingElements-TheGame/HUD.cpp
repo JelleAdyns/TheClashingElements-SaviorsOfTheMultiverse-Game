@@ -6,8 +6,24 @@
 const int HUD::m_HudHeight{ 40 };
 
 
-HUD::HUD(int windowWidth, int windowHeight) :
-	m_HudArea{ 0, windowHeight - m_HudHeight, windowWidth, m_HudHeight }
+HUD::HUD(int windowWidth, int windowHeight, Skin skin) :
+	m_HudArea{ 0, windowHeight - m_HudHeight, windowWidth, m_HudHeight },
+	m_pLivesTexture{std::make_unique<Texture>(L"Lives.png")},
+	m_LivesSrcRect{ 
+		[&]() {
+
+			switch (skin)
+			{
+			case Skin::Finn:
+				return RectInt{0,0, 8, 8};
+				break;
+			case Skin::Wesley:
+				return RectInt{ 8,0,8,8 };
+				break;
+			}
+			return RectInt{};
+		}()
+	}
 {
 	tstringstream yourStream{};
 	yourStream << _T("Your Score\n") << std::setfill(_T('0')) << std::setw(6) << _T('0');
@@ -41,6 +57,16 @@ void HUD::Draw() const
 
 	ENGINE.DrawString(m_HighScore.c_str(), font, highPos, width, height);
 
+	for (int i = 0; i < m_Lives; i++)
+	{
+		ENGINE.DrawTexture(*m_pLivesTexture, RectInt{ 12 + ((8 + 2) * i), ENGINE.GetWindowRect().height - (m_HudHeight - 6), 8,8}, m_LivesSrcRect);
+	}
+
+}
+
+void HUD::Notify(Player* player)
+{
+	--m_Lives;
 }
 
 void HUD::Notify(int score)

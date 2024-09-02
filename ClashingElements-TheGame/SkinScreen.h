@@ -26,13 +26,14 @@ public:
 	virtual void Tick() override;
 	virtual void KeyInput(int virtualKeyCode) override;
 
-	std::shared_ptr<Player> GetPlayer() const;
+	Skin GetPlayer() const;
 
 private:
 
 	BackGround m_BackGround;
 
-	std::vector<std::shared_ptr<Player>> m_pVecSkins;
+	std::vector<std::unique_ptr<Player>> m_pVecSkinSprites;
+	std::vector<Skin> m_pVecSkins;
 	std::vector<std::unique_ptr<Button>> m_pVecSkinButtons;
 	int m_IndexCurrSkin;
 	

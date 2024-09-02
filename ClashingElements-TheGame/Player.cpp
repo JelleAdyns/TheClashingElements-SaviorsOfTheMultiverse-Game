@@ -1,11 +1,13 @@
 #include "Player.h"
+#include "HUD.h"
 
 int	Player::m_DefaultSpeed{ Tile::Size * 4 };
 
-Player::Player(const Skin& skin):
+Player::Player(Skin skin, HUD* hudObserver) :
 	Character{ Point2Int{}, 8, 32, 1.f / 15, 1 },
 	m_State{ PlayerState::ChoosingSkin },
-	m_pTexture{nullptr}
+	m_pTexture{ nullptr },
+	m_pTookDamage{std::make_unique<Subject<Player*>>()}
 {
 	Character::SetDefaultSpeed(m_DefaultSpeed);
 	switch (skin)
@@ -18,6 +20,8 @@ Player::Player(const Skin& skin):
 		break;
 	}
 	AnimatedSprite::SetTexture(m_pTexture.get());
+
+	if(hudObserver) m_pTookDamage->AddObserver(hudObserver);
 }
 void Player::Update()
 {
@@ -38,10 +42,16 @@ void Player::Update()
 
 		Character::Update();
 		if (not m_IsMoving) ResetFrames();
+		if (m_IsInvincible) UpdateInvincibility();
 
 		break;
 	}
 }
+void Player::Draw() const
+{
+	if(m_NeedsToDraw) Character::Draw();
+}
+
 void Player::Move(const PathGraph& graph)
 {
 	if (m_State == PlayerState::Playing)
@@ -109,7 +119,33 @@ void Player::Play()
 {
 	m_State = PlayerState::Playing;
 }
-//void Player::InteractWithMobilityItem(const MobilityItem& mobilityItem)
-//{
-//
-//}
+void Player::TakeDamage()
+{
+	if(not m_IsInvincible)
+	{
+		m_pTookDamage->NotifyObservers(this);
+		m_IsInvincible = true;
+		m_NeedsToDraw = false;
+	}
+}
+
+void Player::UpdateInvincibility()
+{
+	auto dt = ENGINE.GetDeltaTime();
+
+ 	m_DrawTimer += dt;
+	if (m_DrawTimer >= m_DrawTimeSteps)
+	{
+		m_NeedsToDraw = !m_NeedsToDraw;
+		m_DrawTimer -= m_DrawTimeSteps;
+	}
+
+	m_InvincibleTimer += dt;
+	if (m_InvincibleTimer >= m_MaxInvincibleTime)
+	{
+		m_IsInvincible = false;
+		m_InvincibleTimer = 0.f;
+		m_DrawTimer = 0.f;
+		m_NeedsToDraw = true;
+	}
+}

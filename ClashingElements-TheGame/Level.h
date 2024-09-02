@@ -20,7 +20,7 @@ class Player;
 class Level final : public Screen
 {
 public:
-	explicit Level(std::shared_ptr<Player> pCharacter);
+	explicit Level(Skin playerSkin);
 	~Level() = default;
 
 	Level(const Level& other) = delete;
