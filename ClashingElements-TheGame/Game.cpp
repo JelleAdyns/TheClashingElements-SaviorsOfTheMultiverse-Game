@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "SkinScreen.h"
 #include "StartScreen.h"
+#include "HighScoreHandling.h"
 
 Game::Game()
 {
@@ -16,11 +17,15 @@ void Game::Initialize()
 
 	ENGINE.SetTitle(_T("The Clashing Elements - The Game"));
 	ENGINE.SetWindowScale(3.f);
-	ENGINE.SetWindowDimensions(256,224);
+	ENGINE.SetWindowDimensions(256,256);
 	ENGINE.SetFrameRate(60);
 
 	SetScreen(GameState::Start);
 	LoadScreen();
+
+	globalFont::InitFont();
+
+	//highScoreHandling::WriteHighScores(_T("BOB"), 20);
 
 }
 void Game::Draw() const

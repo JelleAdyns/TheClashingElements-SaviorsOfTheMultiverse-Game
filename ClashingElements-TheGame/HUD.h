@@ -25,6 +25,8 @@ public:
 
 private:
 
+	void AddScore(int points);
+
 	const static int m_HudHeight;
 
 	tstring m_YourScore{};
@@ -33,6 +35,9 @@ private:
 	const RectInt m_HudArea;
 	int m_Lives{3};
 	int m_CurrentScore{0};
+	int m_CurrentHighScore{0};
+	bool m_NewHighScoreReached{false};
+
 	std::unique_ptr<Texture> m_pLivesTexture;
 	const RectInt m_LivesSrcRect{};
 

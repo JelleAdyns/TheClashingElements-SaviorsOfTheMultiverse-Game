@@ -117,6 +117,12 @@
     <ClCompile Include="Level.cpp">
       <Filter>Game Files\Sub Classes\Screens</Filter>
     </ClCompile>
+    <ClCompile Include="GlobalFont.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HighScoreHandling.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -229,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Game Files\Sub Classes\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScoreHandling.h">
+      <Filter>Game Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
