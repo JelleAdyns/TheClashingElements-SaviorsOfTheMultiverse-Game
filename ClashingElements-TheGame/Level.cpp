@@ -32,6 +32,8 @@ Level::Level(Skin playerSkin) :
 	m_Hud{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height, playerSkin },
 	m_Camera{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height - HUD::GetHudHeight()}
 {
+	AudioLocator::GetAudioService().AddSound(L"Sounds/Spaceship.wav", static_cast<SoundID>(SoundEvent::Spaceship));
+
 	m_PickedUp = std::make_unique<Subject<int>>();
 	m_PickedUp->AddObserver(&m_Hud);
 
@@ -71,7 +73,7 @@ void Level::Tick()
 			if (utils::IsOverlapping(pEnemy->GetHitBox(), m_pPlayer->GetHitBox()))
 			{
 				m_pPlayer->TakeDamage();
-		}
+			}
 		}
 
 		m_pPlayer->Move(m_Graph);
@@ -124,6 +126,11 @@ void Level::Draw() const
 
 void Level::KeyInput(int virtualKeyCode)
 {
+	if (virtualKeyCode == VK_SPACE)
+	{
+		AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Spaceship), true);
+
+	}
 }
 
 void Level::SetUpDrawBuffer()
@@ -160,9 +167,6 @@ void Level::HitCollectable()
 			}),
 		m_pVecCollectables.end());
 
-
-	m_Hud.SetNrCollectables(int(m_pVecCollectables.size()));
-
 }
 
 void Level::LoadStage()
@@ -171,7 +175,8 @@ void Level::LoadStage()
 	m_pAnimBackGround = std::make_unique<AnimBackGround>(m_VecBackGrounds[m_StageNumber].first);
 	m_Camera.SetLevelBoundaries(m_pAnimBackGround->DestRect());
 	m_pBackGround = std::make_unique < BackGround >( m_VecBackGrounds[m_StageNumber].second.second, m_VecBackGrounds[m_StageNumber].second.first ,0.8f );
-	//m_pBackGroundMusic->Play(true);
+	
+	//AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Spaceship), true);
 	
 
 	tifstream inputFile{ ENGINE.GetResourcePath() + L"StagePattern.txt" };
@@ -256,7 +261,6 @@ void Level::LoadStage()
 			++col;
 		}
 	}
-	m_Hud.SetNrCollectables(int(m_pVecCollectables.size()));
 
 	m_pDrawBuffer.clear();
 	m_pDrawBuffer.reserve(m_pVecCollectables.size() + m_pVecEnemies.size() + 1);

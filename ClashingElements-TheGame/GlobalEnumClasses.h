@@ -1,6 +1,7 @@
 #ifndef GLOBALENUMCLASSES_H
 #define GLOBALENUMCLASSES_H
 
+#include "Audio.h"
 
 enum class Skin
 {
@@ -23,6 +24,11 @@ enum class GameState
 	SelectingSkin,
 	Playing,
 	GameOver
+};
+
+enum class SoundEvent : SoundID
+{
+	Spaceship
 };
 
 #endif // !GLOBALENUMCLASSES_H

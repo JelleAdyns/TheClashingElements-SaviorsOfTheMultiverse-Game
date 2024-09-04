@@ -20,8 +20,13 @@ void Game::Initialize()
 	ENGINE.SetWindowDimensions(256,256);
 	ENGINE.SetFrameRate(60);
 
-	SetScreen(GameState::Start);
 	LoadScreen();
+
+#ifdef _DEBUG
+	AudioLocator::RegisterAudioService(std::make_unique<LogAudio>(std::make_unique<Audio>()));
+#else
+	AudioLocator::RegisterAudioService(std::make_unique<Audio>());
+#endif // _DEBUG
 
 	globalFont::InitFont();
 
@@ -67,7 +72,7 @@ void Game::Draw() const
 void Game::Tick()
 {
 	if (m_UpdateScreen) LoadScreen();
-		m_pScreen->Tick();
+	m_pScreen->Tick();
 }
 void Game::KeyDown(int virtualKeycode)
 {
