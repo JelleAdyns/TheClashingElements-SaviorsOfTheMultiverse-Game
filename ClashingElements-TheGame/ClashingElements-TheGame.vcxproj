@@ -178,6 +178,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GlobalFont.cpp" />
     <ClCompile Include="HighScoreHandling.cpp" />
+    <ClCompile Include="HighScoreScreen.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="GlobalFont.h" />
     <ClInclude Include="GlobalEnumClasses.h" />
     <ClInclude Include="HighScoreHandling.h" />
+    <ClInclude Include="HighScoreScreen.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Minion.h" />

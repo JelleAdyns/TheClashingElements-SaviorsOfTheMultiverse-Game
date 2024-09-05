@@ -123,6 +123,9 @@
     <ClCompile Include="HighScoreHandling.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
+    <ClCompile Include="HighScoreScreen.cpp">
+      <Filter>Game Files\Sub Classes\Screens</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -238,6 +241,9 @@
     </ClInclude>
     <ClInclude Include="HighScoreHandling.h">
       <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScoreScreen.h">
+      <Filter>Game Files\Sub Classes\Screens</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

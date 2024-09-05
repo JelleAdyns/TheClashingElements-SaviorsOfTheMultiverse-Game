@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "SkinScreen.h"
 #include "StartScreen.h"
+#include "HighScoreScreen.h"
 #include "HighScoreHandling.h"
 
 Game::Game()
@@ -153,24 +154,24 @@ void Game::LoadScreen()
 			std::make_unique<LoadScreenCommand>(*this, GameState::SelectingSkin),
 			std::make_unique<LoadScreenCommand>(*this, GameState::ShowingHighScores)
 		);
-		m_GameState = GameState::Start;
 
 		break;
 
 	case GameState::ShowingHighScores:
+
+		m_pScreen = std::make_unique<HighScoreScreen>();
+
 		break;
 
 	case GameState::SelectingSkin:
 
 		m_pScreen = std::make_unique<SkinScreen>(L"Space.png", *this, GameState::Playing);
-		m_GameState = GameState::SelectingSkin;
 
 		break;
 
 	case GameState::Playing:
 
 		m_pScreen = std::make_unique<Level>(static_cast<SkinScreen*>(m_pScreen.get())->GetPlayer());
-		m_GameState = GameState::Playing;
 
 		break;
 
