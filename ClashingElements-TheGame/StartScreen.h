@@ -11,8 +11,7 @@
 class StartScreen final: public Screen
 {
 public:
-	explicit StartScreen(const std::wstring& backGroundFilePath,
-		std::unique_ptr<Command>&& startButton, std::unique_ptr<Command>&& highscoreButton);
+	explicit StartScreen(std::unique_ptr<Command>&& startButton, std::unique_ptr<Command>&& highscoreButton);
 	~StartScreen() = default;
 
 	StartScreen(const StartScreen& other) = delete;

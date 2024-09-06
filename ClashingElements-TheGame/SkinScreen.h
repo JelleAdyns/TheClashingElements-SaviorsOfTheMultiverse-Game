@@ -14,7 +14,7 @@ class Button;
 class SkinScreen final : public Screen
 {
 public:
-	explicit SkinScreen(const std::wstring& backGroundFilePath, Game& game, GameState nextState);
+	explicit SkinScreen(Game& game, GameState nextState);
 	~SkinScreen() = default;
 
 	SkinScreen(const SkinScreen& other) = delete;

@@ -3,9 +3,9 @@
 #include "Button.h"
 
 
-SkinScreen::SkinScreen( const std::wstring& backGroundFilePath, Game& game, GameState nextState) :
+SkinScreen::SkinScreen(Game& game, GameState nextState) :
 	Screen{},
-	m_BackGround{ backGroundFilePath },
+	m_BackGround{ L"Space.png" },
 	m_IndexCurrSkin{ 0 }
 {
 	m_pVecSkinSprites.push_back(std::make_unique<Player>(Skin::Finn) );
@@ -26,9 +26,9 @@ SkinScreen::SkinScreen( const std::wstring& backGroundFilePath, Game& game, Game
 	m_pVecSkinButtons.push_back(std::make_unique<Button>(_T("Finn"), positions[0], std::make_unique<LoadScreenCommand>(game, nextState)));
 	m_pVecSkinButtons.push_back(std::make_unique<Button>(_T("Wesley"), positions[1], std::make_unique<LoadScreenCommand>(game, nextState)));	
 	
-
-	int rectWidth{40};
-	int rectHeight{50};
+	k
+	static int rectWidth{40};
+	static int rectHeight{50};
 	m_SelectionRect = RectInt{ m_pVecSkinSprites[m_IndexCurrSkin]->GetHitBox().center.x - rectWidth / 2, m_pVecSkinSprites[m_IndexCurrSkin]->DestRect().bottom - 10, rectWidth,rectHeight };
 }
 

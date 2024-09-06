@@ -150,7 +150,6 @@ void Game::LoadScreen()
 	case GameState::Start:
 
 		m_pScreen = std::make_unique<StartScreen>(
-			L"Space.png",
 			std::make_unique<LoadScreenCommand>(*this, GameState::SelectingSkin),
 			std::make_unique<LoadScreenCommand>(*this, GameState::ShowingHighScores)
 		);
@@ -165,7 +164,7 @@ void Game::LoadScreen()
 
 	case GameState::SelectingSkin:
 
-		m_pScreen = std::make_unique<SkinScreen>(L"Space.png", *this, GameState::Playing);
+		m_pScreen = std::make_unique<SkinScreen>(*this, GameState::Playing);
 
 		break;
 
