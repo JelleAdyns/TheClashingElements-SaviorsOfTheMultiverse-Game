@@ -26,7 +26,6 @@ SkinScreen::SkinScreen(Game& game, GameState nextState) :
 	m_pVecSkinButtons.push_back(std::make_unique<Button>(_T("Finn"), positions[0], std::make_unique<LoadScreenCommand>(game, nextState)));
 	m_pVecSkinButtons.push_back(std::make_unique<Button>(_T("Wesley"), positions[1], std::make_unique<LoadScreenCommand>(game, nextState)));	
 	
-	k
 	static int rectWidth{40};
 	static int rectHeight{50};
 	m_SelectionRect = RectInt{ m_pVecSkinSprites[m_IndexCurrSkin]->GetHitBox().center.x - rectWidth / 2, m_pVecSkinSprites[m_IndexCurrSkin]->DestRect().bottom - 10, rectWidth,rectHeight };
