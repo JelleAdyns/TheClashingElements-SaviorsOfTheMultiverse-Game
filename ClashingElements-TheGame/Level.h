@@ -32,6 +32,11 @@ public:
 	virtual void Draw() const override;
 	virtual void KeyInput(int virtualKeyCode) override;
 
+	virtual void OnEnter() override {};
+	virtual void OnExit() override{};
+	virtual void OnSuspend() override{};
+	virtual void OnResume() override{};
+
 private:
 	const std::vector<std::pair<tstring, std::pair<tstring, Point2Int>>> m_VecBackGrounds;
 	const std::vector<tstring> m_VecMusic;

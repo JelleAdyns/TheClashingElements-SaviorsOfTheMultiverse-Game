@@ -2,10 +2,10 @@
 #include "GlobalFont.h"
 
 
-HighScoreScreen::HighScoreScreen(Game& game, GameState nextState):
+HighScoreScreen::HighScoreScreen(Game& game):
 	Screen{},
 	m_BackGround{L"Space.png"},
-	m_pLoadStartScreenCommand{std::make_unique<LoadScreenCommand>(game, nextState)}
+	m_pLoadStartScreenCommand{std::make_unique<PopScreenCommand>(game)}
 {
 	highScoreHandling::LoadHighScores(m_VecHighScoreList);
 }

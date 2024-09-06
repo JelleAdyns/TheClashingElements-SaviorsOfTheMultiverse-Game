@@ -41,5 +41,46 @@ private:
 	Game& m_Game;
 };
 
+class PushScreenCommand final : public Command
+{
+public:
+	PushScreenCommand(Game& game, GameState newGameState) :
+		Command{},
+		m_NewGameState{ newGameState },
+		m_Game{ game }
+	{}
+
+	PushScreenCommand(const PushScreenCommand& other) = delete;
+	PushScreenCommand(PushScreenCommand&& other) noexcept = delete;
+	PushScreenCommand& operator=(const PushScreenCommand& other) = delete;
+	PushScreenCommand& operator=(PushScreenCommand&& other) noexcept = delete;
+
+
+	virtual void Execute() override { m_Game.PushScreen(m_NewGameState); }
+
+private:
+	const GameState m_NewGameState;
+	Game& m_Game;
+};
+
+class PopScreenCommand final : public Command
+{
+public:
+	PopScreenCommand(Game& game) :
+		Command{},
+		m_Game{ game }
+	{}
+
+	PopScreenCommand(const PopScreenCommand& other) = delete;
+	PopScreenCommand(PopScreenCommand&& other) noexcept = delete;
+	PopScreenCommand& operator=(const PopScreenCommand& other) = delete;
+	PopScreenCommand& operator=(PopScreenCommand&& other) noexcept = delete;
+
+
+	virtual void Execute() override { m_Game.PopScreen(); }
+
+private:
+	Game& m_Game;
+};
 #endif // !COMMANDS_H
 

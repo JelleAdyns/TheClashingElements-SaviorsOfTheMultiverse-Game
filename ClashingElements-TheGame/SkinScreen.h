@@ -26,14 +26,18 @@ public:
 	virtual void Tick() override;
 	virtual void KeyInput(int virtualKeyCode) override;
 
+	virtual void OnEnter() override {};
+	virtual void OnExit() override{};
+	virtual void OnSuspend() override{};
+	virtual void OnResume() override{};
+
 	Skin GetPlayer() const;
 
 private:
 
 	BackGround m_BackGround;
 
-	std::vector<std::unique_ptr<Player>> m_pVecSkinSprites;
-	std::vector<Skin> m_pVecSkins;
+	std::map<Skin, std::unique_ptr<Player>> m_pVecSkins;
 	std::unique_ptr<Command> m_pLoadLevelCommand;
 	
 	int m_IndexCurrSkin;

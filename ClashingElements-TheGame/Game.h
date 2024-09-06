@@ -29,18 +29,21 @@ public:
 
     // FUNCTIONS
     void SetScreen(GameState newGameState);
+    void PushScreen(GameState newGameState);
+    void PopScreen();
+    void LoadScreen();
 
 private:
     // VARIABLES
 
     GameState m_GameState{ GameState::Start };
-    std::unique_ptr<Screen> m_pScreen{ nullptr };
+    std::vector<std::unique_ptr<Screen>> m_pScreenStack{};
 
     bool m_UpdateScreen{ false };
     bool m_DebugScale{ false };
 
     // FUNCTIONS
-    void LoadScreen();
+    void DrawScreens() const;
 };
 
 #endif // !GAME_H

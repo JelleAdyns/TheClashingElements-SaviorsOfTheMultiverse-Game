@@ -10,7 +10,7 @@
 class HighScoreScreen final : public Screen
 {
 public:
-	explicit HighScoreScreen(Game& game, GameState nextState);
+	explicit HighScoreScreen(Game& game);
 	~HighScoreScreen() = default;
 
 	HighScoreScreen(const HighScoreScreen& other) = delete;
@@ -21,6 +21,11 @@ public:
 	virtual void Draw() const override;
 	virtual void Tick() override;
 	virtual void KeyInput(int virtualKey) override;
+
+	virtual void OnEnter() override {};
+	virtual void OnExit() override{};
+	virtual void OnSuspend() override{};
+	virtual void OnResume() override{};
 
 private:
 	BackGround m_BackGround;
