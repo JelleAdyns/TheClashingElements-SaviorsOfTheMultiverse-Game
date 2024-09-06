@@ -6,7 +6,8 @@
 SkinScreen::SkinScreen(Game& game, GameState nextState) :
 	Screen{},
 	m_BackGround{ L"Space.png" },
-	m_IndexCurrSkin{ 0 }
+	m_IndexCurrSkin{ 0 },
+	m_pLoadLevelCommand{std::make_unique<LoadScreenCommand>(game, nextState)}
 {
 	m_pVecSkinSprites.push_back(std::make_unique<Player>(Skin::Finn) );
 	m_pVecSkinSprites.push_back(std::make_unique<Player>(Skin::Wesley));
@@ -21,10 +22,7 @@ SkinScreen::SkinScreen(Game& game, GameState nextState) :
 	{
 		positions.at(i) = Point2Int{windowRect.width / (static_cast<int>(m_pVecSkins.size()) + 1) * (i + 1), windowRect.height / 2};
 		m_pVecSkinSprites.at(i)->SetPos(positions.at(i));
-	}
-
-	m_pVecSkinButtons.push_back(std::make_unique<Button>(_T("Finn"), positions[0], std::make_unique<LoadScreenCommand>(game, nextState)));
-	m_pVecSkinButtons.push_back(std::make_unique<Button>(_T("Wesley"), positions[1], std::make_unique<LoadScreenCommand>(game, nextState)));	
+	}	
 	
 	static int rectWidth{40};
 	static int rectHeight{50};
@@ -60,7 +58,7 @@ void SkinScreen::KeyInput(int virtualKeyCode)
 		m_SelectionRect.left = m_pVecSkinSprites[m_IndexCurrSkin]->GetHitBox().center.x - m_SelectionRect.width / 2;
 		break;
 	case VK_SPACE:
-		m_pVecSkinButtons[m_IndexCurrSkin]->ExecuteCommand();
+		m_pLoadLevelCommand->Execute();
 	}
 }
 Skin SkinScreen::GetPlayer() const

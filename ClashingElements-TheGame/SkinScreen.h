@@ -34,7 +34,8 @@ private:
 
 	std::vector<std::unique_ptr<Player>> m_pVecSkinSprites;
 	std::vector<Skin> m_pVecSkins;
-	std::vector<std::unique_ptr<Button>> m_pVecSkinButtons;
+	std::unique_ptr<Command> m_pLoadLevelCommand;
+	
 	int m_IndexCurrSkin;
 	
 	RectInt m_SelectionRect;
