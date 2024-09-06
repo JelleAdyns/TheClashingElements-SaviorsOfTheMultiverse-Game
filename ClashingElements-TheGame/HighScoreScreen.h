@@ -5,11 +5,12 @@
 #include "BackGround.h"
 #include "HighScoreHandling.h"
 #include <vector>
+#include "Commands.h"
 
 class HighScoreScreen final : public Screen
 {
 public:
-	explicit HighScoreScreen();
+	explicit HighScoreScreen(Game& game, GameState nextState);
 	~HighScoreScreen() = default;
 
 	HighScoreScreen(const HighScoreScreen& other) = delete;
@@ -25,6 +26,7 @@ private:
 	BackGround m_BackGround;
 
 	std::vector<highScoreHandling::PlayerScore> m_VecHighScoreList;
+	std::unique_ptr<Command> m_pLoadStartScreenCommand;
 };
 
 

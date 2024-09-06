@@ -158,7 +158,7 @@ void Game::LoadScreen()
 
 	case GameState::ShowingHighScores:
 
-		m_pScreen = std::make_unique<HighScoreScreen>();
+		m_pScreen = std::make_unique<HighScoreScreen>(*this, GameState::Start);
 
 		break;
 

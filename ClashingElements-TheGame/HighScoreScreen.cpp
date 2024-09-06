@@ -1,9 +1,11 @@
 #include "HighScoreScreen.h"
 #include "GlobalFont.h"
 
-HighScoreScreen::HighScoreScreen():
+
+HighScoreScreen::HighScoreScreen(Game& game, GameState nextState):
 	Screen{},
-	m_BackGround{L"Space.png"}
+	m_BackGround{L"Space.png"},
+	m_pLoadStartScreenCommand{std::make_unique<LoadScreenCommand>(game, nextState)}
 {
 	highScoreHandling::LoadHighScores(m_VecHighScoreList);
 }
@@ -47,4 +49,10 @@ void HighScoreScreen::Tick()
 
 void HighScoreScreen::KeyInput(int virtualKey)
 {
+	switch (virtualKey)
+	{
+	case VK_SPACE:
+		m_pLoadStartScreenCommand->Execute();
+		break;
+	}
 }
