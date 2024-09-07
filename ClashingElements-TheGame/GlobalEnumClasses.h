@@ -23,6 +23,7 @@ enum class GameState
 	ShowingHighScores,
 	SelectingSkin,
 	Playing,
+	Welcome,
 	GameOver
 };
 

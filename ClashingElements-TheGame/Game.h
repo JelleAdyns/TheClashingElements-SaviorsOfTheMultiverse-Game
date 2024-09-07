@@ -2,7 +2,6 @@
 #define GAME_H
 
 #include "Engine.h"
-#include "Level.h"
 #include "GlobalEnumClasses.h"
 #include "Screen.h"
 #include "queue"
@@ -45,7 +44,7 @@ private:
     GameState m_GameState{ GameState::Start };
     std::vector<std::pair<GameState,std::unique_ptr<Screen>>> m_pScreenStack{};
 
-    std::queue<ScreenOperation> m_ScreenEventQueue{};
+    std::queue<std::pair<GameState,ScreenOperation>> m_ScreenEventQueue{};
 
     bool m_UpdateScreen{ false };
     bool m_DebugScale{ false };

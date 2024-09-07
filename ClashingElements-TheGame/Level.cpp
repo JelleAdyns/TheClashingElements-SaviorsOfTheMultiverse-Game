@@ -11,12 +11,13 @@
 #include <algorithm>
 #include <functional>
 #include <numeric>
+#include "Commands.h"
 
 
-Level::Level(Skin playerSkin) :
+Level::Level(Game& game, Skin playerSkin) :
 	m_VecBackGrounds
 	{
-		{ _T("Mall.png")      , {_T("BGMall.png")      ,Point2Int{0, 300}} },
+		{ _T("Mall.png")      , {_T("BGMall.png")    ,Point2Int{0, 300}} },
 		{ _T("GloirbnPit.png"), {_T("GloirbnPit.png"),Point2Int{0, 300}} }
     },
 
@@ -30,12 +31,14 @@ Level::Level(Skin playerSkin) :
 	m_StageNumber{ 0 },
 	m_LoopNumber{ 0 },
 	m_Hud{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height, playerSkin },
-	m_Camera{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height - HUD::GetHudHeight()}
+	m_Camera{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height - HUD::GetHudHeight()},
+	m_pPushCommand{nullptr},
+	m_GameReference{game}
 {
 	AudioLocator::GetAudioService().AddSound(L"Sounds/Spaceship.wav", static_cast<SoundID>(SoundEvent::Spaceship));
 
-	m_PickedUp = std::make_unique<Subject<int>>();
-	m_PickedUp->AddObserver(&m_Hud);
+	m_pPickedUp = std::make_unique<Subject<int>>();
+	m_pPickedUp->AddObserver(&m_Hud);
 
 	m_pPlayer = std::make_unique<Player>(playerSkin, &m_Hud);
 	m_pPlayer->Play();
@@ -91,6 +94,12 @@ void Level::Tick()
 		LoadStage();
 	}
 
+
+	if (m_pPushCommand)
+	{
+		m_pPushCommand->Execute();
+		m_pPushCommand = nullptr;
+	}
 	
 }
 
@@ -133,6 +142,11 @@ void Level::KeyInput(int virtualKeyCode)
 	}
 }
 
+void Level::OnEnter()
+{
+	m_pPushCommand = std::make_unique<PushScreenCommand>( m_GameReference, GameState::Welcome );
+}
+
 void Level::SetUpDrawBuffer()
 {
 	m_pDrawBuffer.clear();
@@ -160,7 +174,7 @@ void Level::HitCollectable()
 			{
 				if (utils::IsOverlapping(m_pPlayer->GetHitBox(), collectable->GetHitBox()))
 				{
-					m_PickedUp->NotifyObservers(100);
+					m_pPickedUp->NotifyObservers(100);
 					return true;
 				}
 				return false;

@@ -191,6 +191,7 @@
     <ClCompile Include="StartScreen.cpp" />
     <ClCompile Include="Structs.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="WelcomeScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedSprite.h" />
@@ -232,6 +233,7 @@
     <ClInclude Include="Structs.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="WelcomeScreen.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MyOwnEngineExercise.aps" />

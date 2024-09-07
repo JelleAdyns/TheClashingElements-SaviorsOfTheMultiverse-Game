@@ -12,6 +12,8 @@
 #include "HUD.h"
 #include "Screen.h"
 #include "Enemy.h"
+#include "Commands.h"
+#include "Game.h"
 
 
 class AnimatedSprite;
@@ -20,7 +22,7 @@ class Player;
 class Level final : public Screen
 {
 public:
-	explicit Level(Skin playerSkin);
+	explicit Level(Game& game, Skin playerSkin);
 	~Level() = default;
 
 	Level(const Level& other) = delete;
@@ -32,7 +34,7 @@ public:
 	virtual void Draw() const override;
 	virtual void KeyInput(int virtualKeyCode) override;
 
-	virtual void OnEnter() override {};
+	virtual void OnEnter() override;
 	virtual void OnExit() override{};
 	virtual void OnSuspend() override{};
 	virtual void OnResume() override{};
@@ -61,7 +63,11 @@ private:
 
 	PathGraph m_Graph;
 
-	std::unique_ptr<Subject<int>> m_PickedUp;
+	std::unique_ptr<Subject<int>> m_pPickedUp;
+
+	std::unique_ptr<PushScreenCommand> m_pPushCommand;
+
+	Game& m_GameReference;
 
 	void HitCollectable();
 	void LoadStage();

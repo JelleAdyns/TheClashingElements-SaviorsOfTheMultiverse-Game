@@ -3,6 +3,8 @@
 #include "StartScreen.h"
 #include "HighScoreScreen.h"
 #include "HighScoreHandling.h"
+#include "WelcomeScreen.h"
+#include "Level.h"
 
 Game::Game()
 {
@@ -141,7 +143,7 @@ void Game::SetScreen(GameState newGameState)
 
 void Game::AddOperationToQueue(ScreenOperation screenOper)
 {
-	m_ScreenEventQueue.push(screenOper);
+	m_ScreenEventQueue.emplace(m_GameState, screenOper);
 	m_UpdateScreen = true;
 }
 
@@ -181,10 +183,14 @@ void Game::LoadScreen()
 
 	case GameState::Playing:
 
-		m_pScreenStack.emplace_back(m_GameState, std::make_unique<Level>(skinForLevel));
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<Level>(*this, skinForLevel));
 
 		break;
+	case GameState::Welcome:
 
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<WelcomeScreen>(*this));
+
+		break;
 	case GameState::GameOver:
 		break;
 	}
@@ -221,10 +227,14 @@ void Game::PushScreen()
 
 	case GameState::Playing:
 
-		m_pScreenStack.emplace_back(m_GameState, std::make_unique<Level>(static_cast<SkinScreen*>(m_pScreenStack.back().second.get())->GetPlayer()));
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<Level>(*this, static_cast<SkinScreen*>(m_pScreenStack.back().second.get())->GetPlayer()));
 
 		break;
+	case GameState::Welcome:
 
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<WelcomeScreen>(*this));
+
+		break;
 	case GameState::GameOver:
 		break;
 	}
@@ -254,15 +264,17 @@ void Game::HandleEventQueue()
 {
 	while (not m_ScreenEventQueue.empty())
 	{
-		auto screenOperation = m_ScreenEventQueue.front();
+		auto [gameState,screenOperation] = m_ScreenEventQueue.front();
 		m_ScreenEventQueue.pop();
 
 		switch (screenOperation)
 		{
 		case Game::ScreenOperation::Set:
+			m_GameState = gameState;
 			LoadScreen();
 			break;
 		case Game::ScreenOperation::Push:
+			m_GameState = gameState;
 			PushScreen();
 			break;
 		case Game::ScreenOperation::Pop:
