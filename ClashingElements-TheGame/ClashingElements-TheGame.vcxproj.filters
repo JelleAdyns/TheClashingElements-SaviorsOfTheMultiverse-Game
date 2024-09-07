@@ -129,6 +129,9 @@
     <ClCompile Include="WelcomeScreen.cpp">
       <Filter>Game Files\Sub Classes\Screens</Filter>
     </ClCompile>
+    <ClCompile Include="PauseScreen.cpp">
+      <Filter>Game Files\Sub Classes\Screens</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -249,6 +252,9 @@
       <Filter>Game Files\Sub Classes\Screens</Filter>
     </ClInclude>
     <ClInclude Include="WelcomeScreen.h">
+      <Filter>Game Files\Sub Classes\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseScreen.h">
       <Filter>Game Files\Sub Classes\Screens</Filter>
     </ClInclude>
   </ItemGroup>

@@ -91,6 +91,8 @@ void HUD::AddScore(int points)
 {
 	m_CurrentScore += points;
 
+	if (m_CurrentScore < 0) m_CurrentScore = 0;
+
 	tstringstream yourStream{};
 	yourStream << _T("Your Score\n") << std::setfill(_T('0')) << std::setw(6) << to_tstring(m_CurrentScore);
 	m_YourScore = yourStream.str();

@@ -44,6 +44,11 @@ Level::Level(Game& game, Skin playerSkin) :
 	m_pPlayer->Play();
 	LoadStage();
 
+	m_Camera.Update(m_pPlayer->DestRect());
+
+	m_pPushCommand = std::make_unique<PushScreenCommand>(m_GameReference, GameState::Welcome);
+	m_pPushCommand->Execute();
+	m_pPushCommand = nullptr;
 }
 
 void Level::Tick()
@@ -140,11 +145,16 @@ void Level::KeyInput(int virtualKeyCode)
 		AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Spaceship), true);
 
 	}
+	if (virtualKeyCode == VK_ESCAPE)
+	{
+		m_pPushCommand = std::make_unique<PushScreenCommand>(m_GameReference, GameState::Pause);
+
+	}
 }
 
 void Level::OnEnter()
 {
-	m_pPushCommand = std::make_unique<PushScreenCommand>( m_GameReference, GameState::Welcome );
+	
 }
 
 void Level::SetUpDrawBuffer()

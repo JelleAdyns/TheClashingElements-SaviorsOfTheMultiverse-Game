@@ -4,6 +4,7 @@
 #include "HighScoreScreen.h"
 #include "HighScoreHandling.h"
 #include "WelcomeScreen.h"
+#include "PauseScreen.h"
 #include "Level.h"
 
 Game::Game()
@@ -191,6 +192,11 @@ void Game::LoadScreen()
 		m_pScreenStack.emplace_back(m_GameState, std::make_unique<WelcomeScreen>(*this));
 
 		break;
+	case GameState::Pause:
+
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<PauseScreen>(*this));
+
+		break;
 	case GameState::GameOver:
 		break;
 	}
@@ -233,6 +239,11 @@ void Game::PushScreen()
 	case GameState::Welcome:
 
 		m_pScreenStack.emplace_back(m_GameState, std::make_unique<WelcomeScreen>(*this));
+
+		break;
+	case GameState::Pause:
+
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<PauseScreen>(*this));
 
 		break;
 	case GameState::GameOver:

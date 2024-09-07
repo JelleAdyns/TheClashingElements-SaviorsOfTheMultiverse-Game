@@ -11,7 +11,8 @@ WelcomeScreen::WelcomeScreen(Game& game):
 void WelcomeScreen::Draw() const
 {
 	const auto& wndwRect = ENGINE.GetWindowRect();
-	const int margin = 50;
+	constexpr int margin = 50;
+	constexpr int textMargin = 5;
 	const RectInt destRect{ margin, margin, wndwRect.width - margin * 2, wndwRect.height - margin * 2 };
 
 	ENGINE.SetColor(RGB(0, 0, 0), 0.3f);
@@ -28,12 +29,12 @@ void WelcomeScreen::Draw() const
 	ENGINE.DrawRectangle(destRect);
 	ENGINE.SetColor(RGB(255, 255, 255));
 	ENGINE.DrawString(
-		_T("Glarfius has taken over!\n\nTry to collect as many items as you can while avoiding Glarfius and his Gloobtroopers.\n\nPress ESC while playing to view the controls.\nPress SPACE to start.\n\nGood luck!"),
+		_T("Glarfius has taken over!\n\nTry to collect as many items as you can while avoiding Glarfius and his Gloobtroopers.\n\nPress ESC while playing to view the controls.\n\nPress SPACE to start.\n\nGood luck!"),
 		font,
-		destRect.left + 5,
-		destRect.bottom + 5,
-		destRect.width - 10,
-		destRect.height - 10);
+		destRect.left + textMargin,
+		destRect.bottom + textMargin,
+		destRect.width - textMargin*2,
+		destRect.height - textMargin*2);
 }
 
 void WelcomeScreen::Tick()

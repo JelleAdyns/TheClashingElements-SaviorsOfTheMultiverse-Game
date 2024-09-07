@@ -24,6 +24,7 @@ enum class GameState
 	SelectingSkin,
 	Playing,
 	Welcome,
+	Pause,
 	GameOver
 };
 

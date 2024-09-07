@@ -186,6 +186,7 @@
     <ClCompile Include="Minion.cpp" />
     <ClCompile Include="PalmTree.cpp" />
     <ClCompile Include="PathGraph.cpp" />
+    <ClCompile Include="PauseScreen.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SkinScreen.cpp" />
     <ClCompile Include="StartScreen.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="PalmTree.h" />
     <ClInclude Include="PathGraph.h" />
+    <ClInclude Include="PauseScreen.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Screen.h" />
