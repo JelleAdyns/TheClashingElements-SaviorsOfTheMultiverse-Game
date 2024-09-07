@@ -69,8 +69,8 @@ void Game::Draw() const
 }
 void Game::Tick()
 {
-	if (m_UpdateScreen) LoadScreen();
-	m_pScreenStack.back()->Tick();
+	if (m_UpdateScreen) HandleEventQueue();
+	m_pScreenStack.back().second->Tick();
 }
 void Game::KeyDown(int virtualKeycode)
 {
@@ -84,7 +84,7 @@ void Game::KeyDown(int virtualKeycode)
 	//
 	// Click here for more information: https://learn.microsoft.com/en-us/windows/win32/learnwin32/keyboard-input
 
-	m_pScreenStack.back()->KeyInput(virtualKeycode);
+	m_pScreenStack.back().second->KeyInput(virtualKeycode);
 	switch (m_GameState)
 	{
 
@@ -137,17 +137,22 @@ void Game::MouseWheelTurn(int x, int y, int turnDistance, int keyDown)
 void Game::SetScreen(GameState newGameState)
 {
 	m_GameState = newGameState;
+}
+
+void Game::AddOperationToQueue(ScreenOperation screenOper)
+{
+	m_ScreenEventQueue.push(screenOper);
 	m_UpdateScreen = true;
 }
 
 void Game::LoadScreen()
 {
 	Skin skinForLevel{};
-	if (m_GameState == GameState::Playing) skinForLevel = static_cast<SkinScreen*>(m_pScreenStack.back().get())->GetPlayer();
+	if (m_GameState == GameState::Playing) skinForLevel = static_cast<SkinScreen*>(m_pScreenStack.back().second.get())->GetPlayer();
 
 	for (int i{ static_cast<int>(m_pScreenStack.size() - 1) }; i >= 0; --i)
 	{
-		m_pScreenStack.at(i)->OnExit();
+		m_pScreenStack.at(i).second->OnExit();
 	}
 	m_pScreenStack.clear();
 
@@ -155,7 +160,7 @@ void Game::LoadScreen()
 	{
 	case GameState::Start:
 
-		m_pScreenStack.emplace_back(std::make_unique<StartScreen>(
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<StartScreen>(
 			std::make_unique<LoadScreenCommand>(*this, GameState::SelectingSkin),
 			std::make_unique<PushScreenCommand>(*this, GameState::ShowingHighScores)
 		));
@@ -164,19 +169,19 @@ void Game::LoadScreen()
 
 	case GameState::ShowingHighScores:
 
-		m_pScreenStack.emplace_back(std::make_unique<HighScoreScreen>(*this));
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<HighScoreScreen>(*this));
 
 		break;
 
 	case GameState::SelectingSkin:
 
-		m_pScreenStack.emplace_back(std::make_unique<SkinScreen>(*this, GameState::Playing));
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<SkinScreen>(*this, GameState::Playing));
 
 		break;
 
 	case GameState::Playing:
 
-		m_pScreenStack.emplace_back(std::make_unique<Level>(skinForLevel));
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<Level>(skinForLevel));
 
 		break;
 
@@ -184,19 +189,18 @@ void Game::LoadScreen()
 		break;
 	}
 
-	m_pScreenStack.back()->OnEnter();
+	m_pScreenStack.back().second->OnEnter();
 
 	m_UpdateScreen = false;
 }
-void Game::PushScreen(GameState newScreen)
+void Game::PushScreen()
 {
-	m_GameState = newScreen;
-	m_pScreenStack.back()->OnSuspend();
+	m_pScreenStack.back().second->OnSuspend();
 	switch (m_GameState)
 	{
 	case GameState::Start:
 
-		m_pScreenStack.emplace_back(std::make_unique<StartScreen>(
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<StartScreen>(
 			std::make_unique<LoadScreenCommand>(*this, GameState::SelectingSkin),
 			std::make_unique<PushScreenCommand>(*this, GameState::ShowingHighScores)
 		));
@@ -205,19 +209,19 @@ void Game::PushScreen(GameState newScreen)
 
 	case GameState::ShowingHighScores:
 
-		m_pScreenStack.emplace_back(std::make_unique<HighScoreScreen>(*this));
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<HighScoreScreen>(*this));
 
 		break;
 
 	case GameState::SelectingSkin:
 
-		m_pScreenStack.emplace_back(std::make_unique<SkinScreen>(*this, GameState::Playing));
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<SkinScreen>(*this, GameState::Playing));
 
 		break;
 
 	case GameState::Playing:
 
-		m_pScreenStack.emplace_back(std::make_unique<Level>(static_cast<SkinScreen*>(m_pScreenStack.back().get())->GetPlayer()));
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<Level>(static_cast<SkinScreen*>(m_pScreenStack.back().second.get())->GetPlayer()));
 
 		break;
 
@@ -225,25 +229,47 @@ void Game::PushScreen(GameState newScreen)
 		break;
 	}
 
-	m_pScreenStack.back()->OnEnter();
+	m_pScreenStack.back().second->OnEnter();
 
-	m_UpdateScreen = false;
 }
 
 void Game::PopScreen()
 {
-	m_pScreenStack.back()->OnExit();
+	m_pScreenStack.back().second->OnExit();
 
 	m_pScreenStack.pop_back();
 
-	m_pScreenStack.back()->OnResume();
-
-	m_UpdateScreen = false;
+	m_pScreenStack.back().second->OnResume();
+	m_GameState = m_pScreenStack.back().first;
 }
 void Game::DrawScreens() const
 {
-	for (const auto& pScreen : m_pScreenStack)
+	for (const auto& [gameState, pScreen] : m_pScreenStack)
 	{
 		pScreen->Draw();
 	}
+}
+
+void Game::HandleEventQueue()
+{
+	while (not m_ScreenEventQueue.empty())
+	{
+		auto screenOperation = m_ScreenEventQueue.front();
+		m_ScreenEventQueue.pop();
+
+		switch (screenOperation)
+		{
+		case Game::ScreenOperation::Set:
+			LoadScreen();
+			break;
+		case Game::ScreenOperation::Push:
+			PushScreen();
+			break;
+		case Game::ScreenOperation::Pop:
+			PopScreen();
+			break;
+		}
+	}
+
+	m_UpdateScreen = false;
 }

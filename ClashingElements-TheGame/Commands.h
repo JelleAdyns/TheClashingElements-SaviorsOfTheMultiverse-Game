@@ -34,7 +34,11 @@ public:
 	LoadScreenCommand& operator=(LoadScreenCommand&& other) noexcept = delete;
 
 
-	virtual void Execute() override { m_Game.SetScreen(m_NewGameState); }
+	virtual void Execute() override
+	{
+		m_Game.SetScreen(m_NewGameState);
+		m_Game.AddOperationToQueue(Game::ScreenOperation::Set); 
+	}
 
 private:
 	const GameState m_NewGameState;
@@ -56,7 +60,11 @@ public:
 	PushScreenCommand& operator=(PushScreenCommand&& other) noexcept = delete;
 
 
-	virtual void Execute() override { m_Game.PushScreen(m_NewGameState); }
+	virtual void Execute() override
+	{
+		m_Game.SetScreen(m_NewGameState);
+		m_Game.AddOperationToQueue(Game::ScreenOperation::Push);
+	}
 
 private:
 	const GameState m_NewGameState;
@@ -77,7 +85,10 @@ public:
 	PopScreenCommand& operator=(PopScreenCommand&& other) noexcept = delete;
 
 
-	virtual void Execute() override { m_Game.PopScreen(); }
+	virtual void Execute() override
+	{
+		m_Game.AddOperationToQueue(Game::ScreenOperation::Pop);
+	}
 
 private:
 	Game& m_Game;

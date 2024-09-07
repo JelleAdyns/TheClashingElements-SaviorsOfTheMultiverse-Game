@@ -5,6 +5,7 @@
 #include "Level.h"
 #include "GlobalEnumClasses.h"
 #include "Screen.h"
+#include "queue"
 
 class Game final: public BaseGame
 {
@@ -26,24 +27,35 @@ public:
     virtual void MouseUp(bool isLeft, int x, int y) override;
     virtual void MouseMove(int x, int y, int keyDown) override;
     virtual void MouseWheelTurn(int x, int y, int turnDistance, int keyDown) override;
+    
+    enum class ScreenOperation
+    {
+        Set,
+        Push,
+        Pop
+    };
 
     // FUNCTIONS
     void SetScreen(GameState newGameState);
-    void PushScreen(GameState newGameState);
-    void PopScreen();
-    void LoadScreen();
+    void AddOperationToQueue(ScreenOperation screenOper);
 
 private:
     // VARIABLES
-
+    
     GameState m_GameState{ GameState::Start };
-    std::vector<std::unique_ptr<Screen>> m_pScreenStack{};
+    std::vector<std::pair<GameState,std::unique_ptr<Screen>>> m_pScreenStack{};
+
+    std::queue<ScreenOperation> m_ScreenEventQueue{};
 
     bool m_UpdateScreen{ false };
     bool m_DebugScale{ false };
 
     // FUNCTIONS
     void DrawScreens() const;
+    void LoadScreen();
+    void PushScreen();
+    void PopScreen();
+    void HandleEventQueue();
 };
 
 #endif // !GAME_H
