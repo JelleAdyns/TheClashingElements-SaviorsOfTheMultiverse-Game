@@ -176,6 +176,7 @@
     <ClCompile Include="Escalator.cpp" />
     <ClCompile Include="FallingBoy.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameOverScreen.cpp" />
     <ClCompile Include="GlobalFont.cpp" />
     <ClCompile Include="HighScoreHandling.cpp" />
     <ClCompile Include="HighScoreScreen.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="FallingBoy.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameOverScreen.h" />
     <ClInclude Include="GlobalFont.h" />
     <ClInclude Include="GlobalEnumClasses.h" />
     <ClInclude Include="HighScoreHandling.h" />

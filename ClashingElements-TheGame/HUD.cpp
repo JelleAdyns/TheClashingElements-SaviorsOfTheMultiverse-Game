@@ -2,6 +2,7 @@
 #include "GlobalFont.h"
 #include "Collectable.h"
 #include "HighScoreHandling.h"
+#include "Level.h"
 #include <sstream>
 
 const int HUD::m_HudHeight{ 40 };
@@ -9,6 +10,7 @@ const int HUD::m_HudHeight{ 40 };
 
 HUD::HUD(int windowWidth, int windowHeight, Skin skin) :
 	m_HudArea{ 0, windowHeight - m_HudHeight, windowWidth, m_HudHeight },
+	m_pDied{std::make_unique<Subject<Counters>>()},
 	m_pLivesTexture{std::make_unique<Texture>(L"Lives.png")},
 	m_LivesSrcRect{ 
 		[&]() {
@@ -70,12 +72,19 @@ void HUD::Draw() const
 void HUD::Notify(Player* player)
 {
 	--m_Lives;
-	AddScore(-100);
+	AddScore(Counters::scorePerLifeLost);
+	++m_Counters.nrOfLivesLost;
+
+	if (m_Lives < 0)
+	{
+		m_pDied->NotifyObservers(m_Counters);
+	}
 }
 
 void HUD::Notify(int score)
 {
-	AddScore(score);
+	AddScore(Counters::scorePerCollectable);
+	++m_Counters.nrOfCollectables;
 }
 
 void HUD::OnSubjectDestroy()
@@ -87,11 +96,23 @@ int HUD::GetHudHeight()
 	return m_HudHeight;
 }
 
+void HUD::AddObserver(Level* levelObserver)
+{
+	m_pDied->AddObserver(levelObserver);
+}
+
+HUD::Counters HUD::GetCounters() const
+{
+	return m_Counters;
+}
+
 void HUD::AddScore(int points)
 {
 	m_CurrentScore += points;
 
 	if (m_CurrentScore < 0) m_CurrentScore = 0;
+
+	m_Counters.totalScore = m_CurrentScore;
 
 	tstringstream yourStream{};
 	yourStream << _T("Your Score\n") << std::setfill(_T('0')) << std::setw(6) << to_tstring(m_CurrentScore);

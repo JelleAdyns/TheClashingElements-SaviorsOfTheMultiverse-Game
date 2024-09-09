@@ -19,7 +19,7 @@
 class AnimatedSprite;
 class Player;
 
-class Level final : public Screen
+class Level final : public Screen, public Observer<HUD::Counters>
 {
 public:
 	explicit Level(Game& game, Skin playerSkin);
@@ -38,6 +38,11 @@ public:
 	virtual void OnExit() override{};
 	virtual void OnSuspend() override{};
 	virtual void OnResume() override{};
+
+	virtual void Notify(HUD::Counters counters) override;
+	virtual void OnSubjectDestroy() override;
+
+	HUD::Counters GetCounters() const;
 
 private:
 	const std::vector<std::pair<tstring, std::pair<tstring, Point2Int>>> m_VecBackGrounds;

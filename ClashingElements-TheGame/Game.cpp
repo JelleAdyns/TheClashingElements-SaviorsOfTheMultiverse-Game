@@ -5,6 +5,7 @@
 #include "HighScoreHandling.h"
 #include "WelcomeScreen.h"
 #include "PauseScreen.h"
+#include "GameOverScreen.h"
 #include "Level.h"
 
 Game::Game()
@@ -152,6 +153,8 @@ void Game::LoadScreen()
 {
 	Skin skinForLevel{};
 	if (m_GameState == GameState::Playing) skinForLevel = static_cast<SkinScreen*>(m_pScreenStack.back().second.get())->GetPlayer();
+	HUD::Counters countersForGameOver{};
+	if (m_GameState == GameState::GameOver) countersForGameOver= static_cast<Level*>(m_pScreenStack.back().second.get())->GetCounters();
 
 	for (int i{ static_cast<int>(m_pScreenStack.size() - 1) }; i >= 0; --i)
 	{
@@ -198,6 +201,9 @@ void Game::LoadScreen()
 
 		break;
 	case GameState::GameOver:
+
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<GameOverScreen>(*this, countersForGameOver));
+
 		break;
 	}
 
@@ -247,6 +253,9 @@ void Game::PushScreen()
 
 		break;
 	case GameState::GameOver:
+
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<GameOverScreen>(*this, static_cast<Level*>(m_pScreenStack.back().second.get())->GetCounters()));
+
 		break;
 	}
 
@@ -275,7 +284,7 @@ void Game::HandleEventQueue()
 {
 	while (not m_ScreenEventQueue.empty())
 	{
-		auto [gameState,screenOperation] = m_ScreenEventQueue.front();
+ 		auto [gameState,screenOperation] = m_ScreenEventQueue.front();
 		m_ScreenEventQueue.pop();
 
 		switch (screenOperation)
