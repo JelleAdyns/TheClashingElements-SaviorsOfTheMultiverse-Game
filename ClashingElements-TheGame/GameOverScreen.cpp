@@ -82,8 +82,6 @@ void GameOverScreen::Tick()
 		if (time >= maxTime)
 		{
 			++m_TextIndex;
-			//if (m_TextIndex >= static_cast<int>(m_VecScoreDisplays.size())) m_TextIndex = static_cast<int>(m_VecScoreDisplays.size()) - 1;
-
 			time = 0.f;
 		}
 	}
@@ -94,7 +92,8 @@ void GameOverScreen::KeyInput(int virtualKeyCode)
 	switch (virtualKeyCode)
 	{
 	case VK_SPACE:
-		if (m_TextIndex < static_cast<int>(m_VecScoreDisplays.size()) - 1) m_TextIndex = static_cast<int>(m_VecScoreDisplays.size()) - 1;
+		if (m_TextIndex < static_cast<int>(m_VecScoreDisplays.size()) - 1) 
+			m_TextIndex = static_cast<int>(m_VecScoreDisplays.size()) - 1;
 		else m_pLoadScreen->Execute();
 		break;
 	}

@@ -30,6 +30,7 @@ Level::Level(Game& game, Skin playerSkin) :
 	m_MaxStages{ 2 },
 	m_StageNumber{ 0 },
 	m_LoopNumber{ 0 },
+	m_StageCompleted{false},
 	m_Hud{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height, playerSkin },
 	m_Camera{ ENGINE.GetWindowRect().width, ENGINE.GetWindowRect().height - HUD::GetHudHeight()},
 	m_pPushCommand{nullptr},
@@ -53,7 +54,7 @@ Level::Level(Game& game, Skin playerSkin) :
 
 void Level::Tick()
 {
-	if (!m_pVecCollectables.empty())
+	if (not m_StageCompleted)
 	{
 		m_pAnimBackGround->Update();
 
@@ -90,13 +91,20 @@ void Level::Tick()
 
 		m_Camera.Update(m_pPlayer->DestRect());
 
+		m_Hud.Tick();
+
 		SetUpDrawBuffer();
 	}
 	else
 	{
-		Reset();
-		++m_StageNumber %= m_MaxStages;
-		LoadStage();
+		if (m_Hud.FinishedCountSeconds())
+		{
+			Reset();
+			m_Hud.Reset();
+
+			++m_StageNumber %= m_MaxStages;
+			LoadStage();
+		}
 	}
 
 
@@ -205,6 +213,7 @@ void Level::HitCollectable()
 			}),
 		m_pVecCollectables.end());
 
+	if (m_pVecCollectables.empty()) m_StageCompleted = true;
 }
 
 void Level::LoadStage()
@@ -282,7 +291,7 @@ void Level::LoadStage()
 
 				m_Graph.AddTile(currTileId, center.x, center.y, isIntersection);
 				if(rowString[col] != _T('P')) m_pVecCollectables.push_back(std::make_unique<Collectable>(center));
-
+				
 				TileID previousColTileId{ m_Graph.GetTileId(Point2Int{ center.x - Tile::Size, center.y }) };
 				if(previousColTileId >= 0) m_Graph.AddEdge(currTileId, previousColTileId);
 				
@@ -302,24 +311,13 @@ void Level::LoadStage()
 
 	m_pDrawBuffer.clear();
 	m_pDrawBuffer.reserve(m_pVecCollectables.size() + m_pVecEnemies.size() + 1);
+
+	m_StageCompleted = false;
 }
 
 
 void Level::Reset()
 {
-	//delete m_pAnimBackGround;
-	//delete m_pBackGround;
-
-	//for (auto& pSprite : m_pVecSprites)
-	//{
-	//	delete pSprite;
-	//}
 	m_pVecSprites.clear();
-	//for (auto& pEnemy : m_pVecEnemies)
-	//{
-	//	delete pEnemy;
-	//}
 	m_pVecEnemies.clear();
-
-	//delete m_pBackGroundMusic;
 }

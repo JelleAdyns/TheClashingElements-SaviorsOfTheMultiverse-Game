@@ -17,6 +17,7 @@ public:
 	HUD& operator=(HUD&& other) noexcept = delete;
 
 	void Draw() const;
+	void Tick();
 
 	virtual void Notify(Player* player) override;
 	virtual void Notify(int score) override;
@@ -24,6 +25,10 @@ public:
 
 	static int GetHudHeight();
 	void AddObserver(Level* levelObserver);
+
+	bool FinishedCountSeconds();
+
+	void Reset();
 
 	struct Counters
 	{
@@ -33,10 +38,10 @@ public:
 		int nrOfLivesLost{};
 		int totalScore{};
 
-		static inline int scorePerCollectable = 100;
-		static inline int scorePerSecond = 10;
-		static inline int scorePerEnemyKilled = 200;
-		static inline int scorePerLifeLost = -100;
+		constexpr static int scorePerCollectable = 10;
+		constexpr static int scorePerSecond = 100;
+		constexpr static int scorePerEnemyKilled = 200;
+		constexpr static int scorePerLifeLost = -100;
 	};
 
 	Counters GetCounters() const;
@@ -46,14 +51,19 @@ private:
 
 	const static int m_HudHeight;
 
+	const RectInt m_HudArea;
+
 	tstring m_YourScore{};
 	tstring m_HighScore{};
 
-	const RectInt m_HudArea;
-	int m_Lives{0};
 	int m_CurrentScore{0};
 	int m_CurrentHighScore{0};
-	bool m_NewHighScoreReached{false};
+
+	constexpr static int m_StartLives{ 3};
+	int m_Lives{3};
+
+	constexpr static int m_StartSeconds{ 200 };
+	int m_SecondsLeft{ m_StartSeconds};
 
 	Counters m_Counters{};
 
@@ -61,10 +71,6 @@ private:
 
 	std::unique_ptr<Texture> m_pLivesTexture;
 	const RectInt m_LivesSrcRect{};
-
-	COLORREF m_TextColor{ RGB(255,255,255) };
-	tstring m_pTextCollectables{  };
-
 };
 
 

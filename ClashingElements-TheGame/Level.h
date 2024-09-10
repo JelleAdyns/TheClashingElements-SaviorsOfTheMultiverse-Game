@@ -52,6 +52,8 @@ private:
 	uint8_t m_StageNumber;
 	int m_LoopNumber;
 
+	bool m_StageCompleted;
+
 	HUD m_Hud;
 	Camera m_Camera;
 

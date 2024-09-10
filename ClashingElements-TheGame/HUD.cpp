@@ -49,14 +49,15 @@ void HUD::Draw() const
 	font.SetHorizontalAllignment(Font::HorAllignment::Center);
 	font.SetVerticalAllignment(Font::VertAllignment::Top);
 
+	const auto& wndwRect{ ENGINE.GetWindowRect() };
 	int width{ 100 };
 	int height{ font.GetFontSize() * 2 + 1};
-	int top{ ENGINE.GetWindowRect().height - 6 };
+	int top{ wndwRect.height - 6 };
 
-	Point2Int yourPos{ ENGINE.GetWindowRect().width / 3 - width / 2, top - height};
-	Point2Int highPos{ ENGINE.GetWindowRect().width / 3 * 2 - width / 2, top - height };
+	Point2Int yourPos{ wndwRect.width / 3 - width / 2, top - height};
+	Point2Int highPos{ wndwRect.width / 3 * 2 - width / 2, top - height };
 
-	ENGINE.SetColor(m_TextColor);
+	ENGINE.SetColor(RGB(255,255,255));
 
 	ENGINE.DrawString(m_YourScore.c_str(), font, yourPos, width, height);
 
@@ -64,9 +65,25 @@ void HUD::Draw() const
 
 	for (int i = 0; i < m_Lives; i++)
 	{
-		ENGINE.DrawTexture(*m_pLivesTexture, RectInt{ 12 + ((8 + 2) * i), ENGINE.GetWindowRect().height - (m_HudHeight - 6), 8,8}, m_LivesSrcRect);
+		ENGINE.DrawTexture(*m_pLivesTexture, RectInt{ 12 + ((8 + 2) * i), wndwRect.height - (m_HudHeight - 6), 8,8}, m_LivesSrcRect);
 	}
 	
+	ENGINE.DrawString((tstringstream{} << std::setfill(_T('0')) << std::setw(4) << m_SecondsLeft).str(), font, wndwRect.width / 2 - width / 2, m_HudArea.bottom + 6, width);
+}
+
+void HUD::Tick()
+{
+	static float time{};
+	time += ENGINE.GetDeltaTime();
+	if (time > 1.f)
+	{
+		--m_SecondsLeft;
+		time -= 1.f;
+	}
+	if (m_SecondsLeft == 0)
+	{
+		m_pDied->NotifyObservers(m_Counters);
+	}
 }
 
 void HUD::Notify(Player* player)
@@ -99,6 +116,26 @@ int HUD::GetHudHeight()
 void HUD::AddObserver(Level* levelObserver)
 {
 	m_pDied->AddObserver(levelObserver);
+}
+
+bool HUD::FinishedCountSeconds()
+{
+	static float time{};
+	time += ENGINE.GetDeltaTime();
+	if (time > 0.05f)
+	{
+		--m_SecondsLeft;
+		++m_Counters.nrOfSecondsLeft;
+		AddScore(Counters::scorePerSecond);
+		time -= 0.05f;
+	}
+	return m_SecondsLeft == 0;
+}
+
+void HUD::Reset()
+{
+	m_Lives = m_StartLives;
+	m_SecondsLeft = m_StartSeconds;
 }
 
 HUD::Counters HUD::GetCounters() const
