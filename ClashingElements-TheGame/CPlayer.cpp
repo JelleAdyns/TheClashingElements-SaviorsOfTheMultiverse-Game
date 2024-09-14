@@ -34,11 +34,11 @@ HRESULT CreatePlaybackTopology(IMFMediaSource* pSource,
 
 //  Static class method to create the CPlayer object.
 
-HRESULT CPlayer::CreateInstance(HWND hAudio, HWND hEvent, CPlayer** ppPlayer)          
+HRESULT CPlayer::CreateInstance(HWND hAudio, CPlayer** ppPlayer)          
 {
     if (ppPlayer == NULL) return E_POINTER;
 
-    CPlayer* pPlayer = new (std::nothrow) CPlayer(hAudio, hEvent);
+    CPlayer* pPlayer = new (std::nothrow) CPlayer(hAudio);
     if (pPlayer == NULL) return E_OUTOFMEMORY;
 
     HRESULT hr = pPlayer->Initialize();
@@ -60,13 +60,12 @@ HRESULT CPlayer::Initialize()
     return hr;
 }
 
-CPlayer::CPlayer(HWND hAudio, HWND hEvent) :
+CPlayer::CPlayer(HWND hAudio) :
     m_nRefCount(1),
     m_Repeat(false),
     m_pSession(NULL),
     m_pSource(NULL),
     m_hwndAudio(hAudio),
-    m_hwndEvent(hEvent),
     m_state(PlayerState::Closed),
     m_hCloseEvent(NULL)
 {
@@ -179,12 +178,17 @@ HRESULT CPlayer::Pause()
 // Stop playback.
 HRESULT CPlayer::Stop()
 {
-    if (m_state != PlayerState::Started && m_state != PlayerState::Paused) return MF_E_INVALIDREQUEST;
+    if (m_state != PlayerState::Started && m_state != PlayerState::Paused && m_state != PlayerState::Stopped) return MF_E_INVALIDREQUEST;
     
     if (m_pSession == NULL) return E_UNEXPECTED;
 
-    HRESULT hr = m_pSession->Stop();
-    if (SUCCEEDED(hr)) m_state = PlayerState::Stopped;
+    m_Repeat = false;
+    HRESULT hr = S_OK;
+    if (m_state != PlayerState::Stopped)
+    {
+        hr = m_pSession->Stop();
+        if (SUCCEEDED(hr)) m_state = PlayerState::Stopped;
+    }
 
     return hr;
 }
@@ -202,8 +206,15 @@ HRESULT CPlayer::Invoke(IMFAsyncResult* pResult)
     // Get the event type. 
     if(SUCCEEDED(hr)) hr = pEvent->GetType(&meType);
 
+    // Check the application state. 
+
+    // If a call to IMFMediaSession::Close is pending, it means the 
+    // application is waiting on the m_hCloseEvent event and
+    // the application's message loop is blocked. 
+
+    // Otherwise, post a private window message to the application. 
     if (SUCCEEDED(hr))
-    {
+    { 
         if (meType == MESessionClosed)
         {
             // The session was closed. The application is waiting on the m_hCloseEvent event handle. 
@@ -214,26 +225,36 @@ HRESULT CPlayer::Invoke(IMFAsyncResult* pResult)
             // For all other events, get the next event in the queue.
             hr = m_pSession->BeginGetEvent(this, NULL);
         }
-    }
 
-    // Check the application state. 
-
-    // If a call to IMFMediaSession::Close is pending, it means the 
-    // application is waiting on the m_hCloseEvent event and
-    // the application's message loop is blocked. 
-
-    // Otherwise, post a private window message to the application. 
-
-    if (SUCCEEDED(hr))
-    {
-        if (m_state != PlayerState::Closing)
+        if (SUCCEEDED(hr) and m_state != PlayerState::Closing)
         {
-            // Leave a reference count on the event.
-            pEvent->AddRef();
+            switch (meType)
+            {
+            case MESessionTopologyStatus:
+                hr = OnTopologyStatus(pEvent);
+                break;
 
-            PostMessage(m_hwndEvent, CPlayer::WM_APP_PLAYER_EVENT,
-                (WPARAM)pEvent, (LPARAM)meType);
+            case MEEndOfPresentation:
+                hr = OnPresentationEnded(pEvent);
+                break;
+
+            case MESessionEnded:
+                if (m_Repeat) hr = Play(true);
+                break;
+
+            case MENewPresentation:
+                hr = OnNewPresentation(pEvent);
+                break;
+            case MESessionTopologySet:
+                hr = MFGetService(m_pSession, MR_POLICY_VOLUME_SERVICE, IID_PPV_ARGS(&m_pMasterVolume));
+                break;
+
+            default:
+                hr = OnSessionEvent(pEvent, meType);
+                break;
+            }
         }
+       
     }
 
     SafeRelease(&pEvent);
@@ -330,7 +351,7 @@ HRESULT CPlayer::OnTopologyStatus(IMFMediaEvent* pEvent)
     HRESULT hr = pEvent->GetUINT32(MF_EVENT_TOPOLOGY_STATUS, &status);
     if (SUCCEEDED(hr) && (status == MF_TOPOSTATUS_READY))
     {
-        m_state = PlayerState::Stopped; //Setting the state 'stopped' because we want to manually play the file
+        m_state = PlayerState::ReadyToStart; //Setting the state 'stopped' because we want to manually play the file
         return hr;
     }
 
@@ -385,7 +406,7 @@ HRESULT CPlayer::CreateSession()
 
     // Start pulling events from the media session
     if(SUCCEEDED(hr)) hr = m_pSession->BeginGetEvent((IMFAsyncCallback*)this, NULL);
-    if(SUCCEEDED(hr)) m_state = PlayerState::Ready;
+    if(SUCCEEDED(hr)) m_state = PlayerState::ReadyToOpen;
    
     return hr;
 }
@@ -463,7 +484,7 @@ HRESULT CPlayer::Play(bool repeat, bool resume)
 {
     m_Repeat = repeat;
   
-    if (m_state != PlayerState::Paused && m_state != PlayerState::Stopped) return MF_E_INVALIDREQUEST;
+    if (m_state != PlayerState::ReadyToStart && m_state != PlayerState::Paused && m_state != PlayerState::Stopped) return MF_E_INVALIDREQUEST;
     
     if (m_pSession == NULL || m_pSource == NULL) return E_UNEXPECTED;
 

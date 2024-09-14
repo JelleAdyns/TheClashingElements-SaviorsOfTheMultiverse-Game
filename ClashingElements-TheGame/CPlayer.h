@@ -24,15 +24,16 @@ public:
     enum class PlayerState
     {
         Closed = 0,     // No session.
-        Ready,          // Session was created, ready to open a file. 
+        ReadyToOpen,    // Session was created, ready to open a file. 
         OpenPending,    // Session is opening a file.
+        ReadyToStart,   // Opened file
         Started,        // Session is playing a file.
         Paused,         // Session is paused.
         Stopped,        // Session is stopped (ready to play). 
         Closing         // Application has closed the session, but is waiting for MESessionClosed.
     };
 
-    static HRESULT CreateInstance(HWND hVideo, HWND hEvent, CPlayer** ppPlayer);
+    static HRESULT CreateInstance(HWND hVideo, CPlayer** ppPlayer);
 
     // IUnknown methods
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
@@ -59,7 +60,7 @@ public:
 protected:
 
     // Constructor is private. Use static CreateInstance method to instantiate.
-    CPlayer(HWND hVideo, HWND hEvent);
+    CPlayer(HWND hVideo);
 
     // Destructor is private. Caller should call Release.
     virtual ~CPlayer();
@@ -86,7 +87,6 @@ protected:
     IMFMediaSource*         m_pSource;
 
     HWND                    m_hwndAudio;        // Audio window.
-    HWND                    m_hwndEvent;        // App window to receive events.
     PlayerState             m_state;            // Current state of the media session.
     HANDLE                  m_hCloseEvent;      // Event to wait on while closing.
 
