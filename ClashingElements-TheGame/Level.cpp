@@ -148,11 +148,6 @@ void Level::Draw() const
 
 void Level::KeyInput(int virtualKeyCode)
 {
-	if (virtualKeyCode == VK_SPACE)
-	{
-		AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Spaceship), true);
-
-	}
 	if (virtualKeyCode == VK_ESCAPE)
 	{
 		m_pPushCommand = std::make_unique<PushScreenCommand>(m_GameReference, GameState::Pause);
@@ -163,6 +158,12 @@ void Level::KeyInput(int virtualKeyCode)
 void Level::OnEnter()
 {
 	
+}
+
+void Level::OnExit()
+{
+	AudioLocator::GetAudioService().StopAllSounds();
+	AudioLocator::GetAudioService().RemoveSound(static_cast<SoundID>(SoundEvent::Spaceship));
 }
 
 void Level::Notify(HUD::Counters counters)
@@ -200,20 +201,22 @@ void Level::SetUpDrawBuffer()
 
 void Level::HitCollectable()
 {
-	OutputDebugString(_T("Collect"));
-
 	m_pVecCollectables.erase(std::remove_if(m_pVecCollectables.begin(), m_pVecCollectables.end(), [&](const std::unique_ptr<Collectable>& collectable)
 			{
 				if (utils::IsOverlapping(m_pPlayer->GetHitBox(), collectable->GetHitBox()))
 				{
-					m_pPickedUp->NotifyObservers(100);
+					m_pPickedUp->NotifyObservers(HUD::Counters::scorePerCollectable);
 					return true;
 				}
 				return false;
 			}),
 		m_pVecCollectables.end());
 
-	if (m_pVecCollectables.empty()) m_StageCompleted = true;
+	if (m_pVecCollectables.empty())
+	{
+		m_StageCompleted = true;
+		AudioLocator::GetAudioService().StopAllSounds();
+	}
 }
 
 void Level::LoadStage()
@@ -223,7 +226,7 @@ void Level::LoadStage()
 	m_Camera.SetLevelBoundaries(m_pAnimBackGround->DestRect());
 	m_pBackGround = std::make_unique < BackGround >( m_VecBackGrounds[m_StageNumber].second.first, m_VecBackGrounds[m_StageNumber].second.second, 0.8f );
 	
-	//AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Spaceship), true);
+	AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Spaceship), true);
 	
 
 	tifstream inputFile{ ENGINE.GetResourcePath() + L"StagePattern.txt" };
@@ -290,7 +293,7 @@ void Level::LoadStage()
 			case _T('.'):
 
 				m_Graph.AddTile(currTileId, center.x, center.y, isIntersection);
-				if(rowString[col] != _T('P')) m_pVecCollectables.push_back(std::make_unique<Collectable>(center));
+				//if(rowString[col] != _T('P')) m_pVecCollectables.push_back(std::make_unique<Collectable>(center));
 				
 				TileID previousColTileId{ m_Graph.GetTileId(Point2Int{ center.x - Tile::Size, center.y }) };
 				if(previousColTileId >= 0) m_Graph.AddEdge(currTileId, previousColTileId);
@@ -308,7 +311,7 @@ void Level::LoadStage()
 			++col;
 		}
 	}
-
+	m_pVecCollectables.push_back(std::make_unique<Collectable>(Point2Int{ 450, 260 }));
 	m_pDrawBuffer.clear();
 	m_pDrawBuffer.reserve(m_pVecCollectables.size() + m_pVecEnemies.size() + 1);
 

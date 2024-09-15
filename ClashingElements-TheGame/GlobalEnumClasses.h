@@ -30,7 +30,8 @@ enum class GameState
 
 enum class SoundEvent : SoundID
 {
-	Spaceship
+	Spaceship,
+	Saw
 };
 
 #endif // !GLOBALENUMCLASSES_H

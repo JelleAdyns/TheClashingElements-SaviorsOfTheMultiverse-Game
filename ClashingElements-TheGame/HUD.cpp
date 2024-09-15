@@ -9,7 +9,7 @@ const int HUD::m_HudHeight{ 40 };
 
 
 HUD::HUD(int windowWidth, int windowHeight, Skin skin) :
-	m_HudArea{ 0, windowHeight - m_HudHeight, windowWidth, m_HudHeight },
+	m_HudArea{ -1, windowHeight - m_HudHeight, windowWidth + 2, m_HudHeight },
 	m_pDied{std::make_unique<Subject<Counters>>()},
 	m_pLivesTexture{std::make_unique<Texture>(L"Lives.png")},
 	m_LivesSrcRect{ 
@@ -37,6 +37,8 @@ HUD::HUD(int windowWidth, int windowHeight, Skin skin) :
 	tstringstream highStream{};
 	highStream << _T("High Score\n") << std::setfill(_T('0')) << std::setw(6) << to_tstring(m_CurrentHighScore);
 	m_HighScore = highStream.str();
+
+	AudioLocator::GetAudioService().AddSound(L"Sounds/saw_sfx1.mp3", static_cast<SoundID>(SoundEvent::Saw));
 }
 
 void HUD::Draw() const
@@ -120,16 +122,34 @@ void HUD::AddObserver(Level* levelObserver)
 
 bool HUD::FinishedCountSeconds()
 {
+
 	static float time{};
+	static bool count{false};
+	static bool ready{false};
 	time += ENGINE.GetDeltaTime();
-	if (time > 0.05f)
+	
+	if (count and time > 0.05f)
 	{
 		--m_SecondsLeft;
 		++m_Counters.nrOfSecondsLeft;
 		AddScore(Counters::scorePerSecond);
 		time -= 0.05f;
+	
+		if (m_SecondsLeft == 0)
+		{
+			count = false;
+			AudioLocator::GetAudioService().StopSound(static_cast<SoundID>(SoundEvent::Saw));
+		}
 	}
-	return m_SecondsLeft == 0;
+	else if (time > 2.f)
+	{
+		count = !count;
+		if (m_SecondsLeft == 0) ready = true;
+		else AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Saw),true);
+		time = 0.f;
+	}
+
+	return ready;
 }
 
 void HUD::Reset()

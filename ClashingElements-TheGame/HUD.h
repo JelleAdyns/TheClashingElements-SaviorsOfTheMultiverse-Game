@@ -62,7 +62,7 @@ private:
 	constexpr static int m_StartLives{ 3};
 	int m_Lives{3};
 
-	constexpr static int m_StartSeconds{ 200 };
+	constexpr static int m_StartSeconds{ 250 };
 	int m_SecondsLeft{ m_StartSeconds};
 
 	Counters m_Counters{};

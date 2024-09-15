@@ -65,3 +65,13 @@ void PauseScreen::KeyInput(int virtualKeyCode)
 		break;
 	}
 }
+
+void PauseScreen::OnEnter()
+{
+	AudioLocator::GetAudioService().PauseAllSounds();
+}
+
+void PauseScreen::OnExit()
+{
+	AudioLocator::GetAudioService().ResumeAllSounds();
+}
