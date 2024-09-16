@@ -6,7 +6,7 @@
 class AnimBackGround final: public AnimatedSprite
 {
 public:
-	explicit AnimBackGround(const std::wstring& filePath);
+	explicit AnimBackGround(const tstring& filePath);
 	~AnimBackGround() = default;
 
 	AnimBackGround(const AnimBackGround& other) = delete;

@@ -5,7 +5,7 @@
 
 namespace highScoreHandling
 {
-	const std::wstring fileName{ _T("HighScores.txt") };
+	const tstring fileName{ _T("HighScores.txt") };
 
 	tostream& operator<<(tostream& out, const PlayerScore& player)
 	{

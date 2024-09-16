@@ -18,7 +18,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     if (SUCCEEDED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)) && SUCCEEDED(MFStartup(MF_VERSION)))
     {
         ENGINE.SetInstance(HINST_THISCOMPONENT);
-        ENGINE.SetResourcePath(L"../../Resources/");
+        ENGINE.SetResourcePath(_T("../../Resources/"));
         result = ENGINE.Run();
         CoUninitialize();
     }

@@ -13,10 +13,10 @@ Player::Player(Skin skin, HUD* hudObserver) :
 	switch (skin)
 	{
 	case Skin::Finn:
-		m_pTexture = std::make_unique<Texture>( L"Finn.png" );
+		m_pTexture = std::make_unique<Texture>( _T("Finn.png") );
 		break;
 	case Skin::Wesley:
-		m_pTexture = std::make_unique<Texture>(L"Wesley.png");
+		m_pTexture = std::make_unique<Texture>(_T("Wesley.png"));
 		break;
 	}
 	AnimatedSprite::SetTexture(m_pTexture.get());

@@ -13,7 +13,7 @@ FallingBoy::FallingBoy(const Point2Int& bottomCenter) :
 
 	if (m_pTexture == nullptr)
 	{
-		m_pTexture = std::make_unique<Texture>(L"FallingBoys.png");
+		m_pTexture = std::make_unique<Texture>(_T("FallingBoys.png"));
 	}
 	AnimatedSprite::SetTexture(m_pTexture.get());
 

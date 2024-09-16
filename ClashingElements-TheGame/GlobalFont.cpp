@@ -6,7 +6,7 @@ namespace globalFont
 
 	void InitFont()
 	{
-		clashingFont = std::make_unique<Font>(L"ClashingFont.ttf", 12, false, false, true);
+		clashingFont = std::make_unique<Font>(_T("ClashingFont.ttf"), 12, false, false, true);
 	}
 	Font& GetFont()
 	{

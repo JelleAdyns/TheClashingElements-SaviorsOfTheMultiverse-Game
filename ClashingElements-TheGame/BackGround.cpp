@@ -2,13 +2,13 @@
 
 
 
-BackGround::BackGround(const std::wstring& filePath, const Point2Int& bottomLeft, float parallax ):
+BackGround::BackGround(const tstring& filePath, const Point2Int& bottomLeft, float parallax ):
 	m_BottemLeft{ bottomLeft },
 	m_ParallaxSpeed{parallax},
 	m_pBackGround{ std::make_unique<Texture>(filePath )}
 {
 }
-BackGround::BackGround(const std::wstring& filePath, float parallax) :
+BackGround::BackGround(const tstring& filePath, float parallax) :
 	BackGround{filePath, Point2Int{}, parallax}
 {
 }

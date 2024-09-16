@@ -15,7 +15,7 @@ Boss::Boss(const Point2Int& bottomCenter, int speed):
 
 	if (m_pTexture == nullptr)
 	{
-		m_pTexture = std::make_unique<Texture>( L"Boss.png" );
+		m_pTexture = std::make_unique<Texture>( _T("Boss.png") );
 	}
 	AnimatedSprite::SetTexture(m_pTexture.get());
 }

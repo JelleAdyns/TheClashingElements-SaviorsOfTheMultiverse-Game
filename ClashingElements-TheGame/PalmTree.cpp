@@ -11,7 +11,7 @@ PalmTree::PalmTree(const Point2Int& bottomCenter):
 
 	if (m_pTexture == nullptr)
 	{
-		m_pTexture = std::make_unique<Texture>(L"PalmTree.png");
+		m_pTexture = std::make_unique<Texture>(_T("PalmTree.png"));
 	}
 	AnimatedSprite::SetTexture(m_pTexture.get());
 }

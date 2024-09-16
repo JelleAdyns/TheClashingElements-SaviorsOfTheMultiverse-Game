@@ -5,7 +5,7 @@
 
 SkinScreen::SkinScreen(Game& game, GameState nextState) :
 	Screen{},
-	m_BackGround{ L"Space.png" },
+	m_BackGround{ _T("Space.png") },
 	m_IndexCurrSkin{ 0 },
 	m_pLoadLevelCommand{std::make_unique<LoadScreenCommand>(game, nextState)}
 {

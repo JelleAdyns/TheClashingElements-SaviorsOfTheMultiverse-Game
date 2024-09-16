@@ -3,7 +3,7 @@
 
 StartScreen::StartScreen(std::unique_ptr<Command>&& startButton, std::unique_ptr<Command>&& highscoreButton) :
 	Screen{ },
-	m_BackGround{ L"Space.png"},
+	m_BackGround{ _T("Space.png")},
 	m_YTranslation{ 0 },
 	m_DistanceBetweenBoys{ ENGINE.GetWindowRect().height / (FallingBoy::m_NrOfBoys / 2 - 1)},
 	m_BackGroundSpeed{ 10 },

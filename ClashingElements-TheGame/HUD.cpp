@@ -11,7 +11,7 @@ const int HUD::m_HudHeight{ 40 };
 HUD::HUD(int windowWidth, int windowHeight, Skin skin) :
 	m_HudArea{ -1, windowHeight - m_HudHeight, windowWidth + 2, m_HudHeight },
 	m_pDied{std::make_unique<Subject<Counters>>()},
-	m_pLivesTexture{std::make_unique<Texture>(L"Lives.png")},
+	m_pLivesTexture{std::make_unique<Texture>(_T("Lives.png"))},
 	m_LivesSrcRect{ 
 		[&]() {
 
@@ -38,7 +38,7 @@ HUD::HUD(int windowWidth, int windowHeight, Skin skin) :
 	highStream << _T("High Score\n") << std::setfill(_T('0')) << std::setw(6) << to_tstring(m_CurrentHighScore);
 	m_HighScore = highStream.str();
 
-	AudioLocator::GetAudioService().AddSound(L"Sounds/saw_sfx1.mp3", static_cast<SoundID>(SoundEvent::Saw));
+	AudioLocator::GetAudioService().AddSound(_T("Sounds/saw_sfx1.mp3"), static_cast<SoundID>(SoundEvent::Saw));
 }
 
 void HUD::Draw() const

@@ -15,7 +15,7 @@ Collectable::Collectable(const Point2Int& BottomCenter, bool randomize):
 	
 	if (m_pTexture == nullptr)
 	{
-		m_pTexture = std::make_unique<Texture>( L"Collectable.png" );
+		m_pTexture = std::make_unique<Texture>( _T("Collectable.png") );
 	}
 	AnimatedSprite::SetTexture(m_pTexture.get());
 	if (randomize) m_CurrentRow = rand() % 3;

@@ -12,7 +12,7 @@ Minion::Minion(const Point2Int& bottomCenter) :
 
 	if (m_pTexture == nullptr)
 	{
-		m_pTexture = std::make_unique<Texture>( L"Minion.png" );
+		m_pTexture = std::make_unique<Texture>( _T("Minion.png") );
 	}
 	AnimatedSprite::SetTexture(m_pTexture.get());
 }

@@ -4,7 +4,7 @@
 
 HighScoreScreen::HighScoreScreen(Game& game):
 	Screen{},
-	m_BackGround{L"Space.png"},
+	m_BackGround{_T("Space.png")},
 	m_pLoadStartScreenCommand{std::make_unique<PopScreenCommand>(game)}
 {
 	highScoreHandling::LoadHighScores(m_VecHighScoreList);

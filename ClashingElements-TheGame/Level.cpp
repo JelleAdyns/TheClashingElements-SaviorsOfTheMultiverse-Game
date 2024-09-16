@@ -15,6 +15,7 @@
 
 
 Level::Level(Game& game, Skin playerSkin) :
+	Screen{},
 	m_VecBackGrounds
 	{
 		{ _T("Mall.png")      , {_T("BGMall.png")    ,Point2Int{0, 300}} },
@@ -36,7 +37,7 @@ Level::Level(Game& game, Skin playerSkin) :
 	m_pPushCommand{nullptr},
 	m_GameReference{game}
 {
-	AudioLocator::GetAudioService().AddSound(L"Sounds/Spaceship.wav", static_cast<SoundID>(SoundEvent::Spaceship));
+	AudioLocator::GetAudioService().AddSound(_T("Sounds/Spaceship.wav"), static_cast<SoundID>(SoundEvent::Spaceship));
 
 	m_Hud.AddObserver(this);
 
@@ -229,7 +230,7 @@ void Level::LoadStage()
 	AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Spaceship), true);
 	
 
-	tifstream inputFile{ ENGINE.GetResourcePath() + L"StagePattern.txt" };
+	tifstream inputFile{ ENGINE.GetResourcePath() + _T("StagePattern.txt") };
 
 	tstring info{};
 

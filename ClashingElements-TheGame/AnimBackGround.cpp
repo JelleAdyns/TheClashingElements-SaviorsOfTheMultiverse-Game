@@ -2,7 +2,7 @@
 
 const int AnimBackGround::m_NrOfCols{ 3 };
 
-AnimBackGround::AnimBackGround(const std::wstring& filePath) :
+AnimBackGround::AnimBackGround(const tstring& filePath) :
 	AnimatedSprite{ Point2Int{},m_NrOfCols, 3, 1.f / 8}
 {
 	m_pTexture = std::make_unique<Texture>(filePath);

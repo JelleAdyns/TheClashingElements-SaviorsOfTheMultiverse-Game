@@ -8,8 +8,8 @@ class AnimBackGround;
 class BackGround
 {
 public:
-	explicit BackGround(const std::wstring& filePath, const Point2Int& bottomLeft, float parallax = 1.f);
-	explicit BackGround(const std::wstring& filePath, float parallax = 1.f);
+	explicit BackGround(const tstring& filePath, const Point2Int& bottomLeft, float parallax = 1.f);
+	explicit BackGround(const tstring& filePath, float parallax = 1.f);
 	~BackGround() = default;
 
 	BackGround(const BackGround& other) = delete;
