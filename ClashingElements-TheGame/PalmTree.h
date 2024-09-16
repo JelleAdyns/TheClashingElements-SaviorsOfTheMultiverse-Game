@@ -6,7 +6,7 @@ class PalmTree final: public AnimatedSprite
 {
 public:
 	explicit PalmTree(const Point2Int& bottomCenter);
-	~PalmTree();
+	virtual ~PalmTree();
 
 	PalmTree(const PalmTree& other) = delete;
 	PalmTree(PalmTree&& other) noexcept = delete;

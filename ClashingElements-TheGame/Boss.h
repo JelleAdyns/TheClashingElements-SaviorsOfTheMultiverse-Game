@@ -7,7 +7,7 @@ class Boss final : public Enemy
 {
 public:
 	explicit Boss(const Point2Int& bottomCenter, int speed);
-	~Boss();
+	virtual ~Boss();
 
 	Boss(const Boss& other) = delete;
 	Boss(Boss&& other) noexcept = delete;

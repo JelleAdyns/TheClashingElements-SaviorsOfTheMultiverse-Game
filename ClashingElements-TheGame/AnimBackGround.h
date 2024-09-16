@@ -7,7 +7,7 @@ class AnimBackGround final: public AnimatedSprite
 {
 public:
 	explicit AnimBackGround(const tstring& filePath);
-	~AnimBackGround() = default;
+	virtual ~AnimBackGround() = default;
 
 	AnimBackGround(const AnimBackGround& other) = delete;
 	AnimBackGround(AnimBackGround&& other) noexcept = delete;

@@ -6,7 +6,7 @@ class Minion final : public Enemy
 {
 public:
 	explicit Minion(const Point2Int& bottomCenter);
-	~Minion();
+	virtual ~Minion();
 
 	Minion(const Minion& other) = delete;
 	Minion(Minion&& other) noexcept = delete;

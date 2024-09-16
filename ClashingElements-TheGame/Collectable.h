@@ -7,7 +7,7 @@ class Collectable final : public AnimatedSprite
 {
 public:
 	explicit Collectable(const Point2Int& BottomCenter, bool randomize = true);
-	~Collectable();
+	virtual ~Collectable() = default;
 
 	Collectable(const Collectable& other) = delete;
 	Collectable(Collectable&& other) noexcept = delete;

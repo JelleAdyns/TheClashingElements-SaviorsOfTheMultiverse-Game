@@ -11,7 +11,7 @@ class HighScoreScreen final : public Screen
 {
 public:
 	explicit HighScoreScreen(Game& game);
-	~HighScoreScreen() = default;
+	virtual ~HighScoreScreen() = default;
 
 	HighScoreScreen(const HighScoreScreen& other) = delete;
 	HighScoreScreen(HighScoreScreen&& other) noexcept = delete;

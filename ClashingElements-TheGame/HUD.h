@@ -9,7 +9,7 @@ class HUD final : public Observer<int>, public Observer<Player*>
 {
 public:
 	 HUD(int windowWidth, int windowHeight, Skin skin);
-	~HUD() = default;
+	virtual ~HUD() = default;
 
 	HUD(const HUD& other) = delete;
 	HUD(HUD&& other) noexcept = delete;

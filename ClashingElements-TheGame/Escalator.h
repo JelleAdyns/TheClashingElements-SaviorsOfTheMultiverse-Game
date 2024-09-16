@@ -9,7 +9,7 @@ class Escalator final : public MobilityItem
 {
 public:
 	explicit Escalator(const Point2Int& startCenter, const Point2Int& endCenter, bool isDownwards);
-	~Escalator() = default;
+	virtual ~Escalator() = default;
 
 	Escalator(const Escalator& other) = delete;
 	Escalator(Escalator&& other) noexcept = delete;

@@ -9,7 +9,7 @@ class WelcomeScreen final : public Screen
 {
 public:
 	explicit WelcomeScreen(Game& game);
-	~WelcomeScreen() = default;
+	virtual ~WelcomeScreen() = default;
 
 	WelcomeScreen(const WelcomeScreen& other) = delete;
 	WelcomeScreen(WelcomeScreen&& other) noexcept = delete;

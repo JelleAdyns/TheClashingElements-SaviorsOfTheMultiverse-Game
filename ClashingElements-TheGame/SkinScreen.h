@@ -16,7 +16,7 @@ class SkinScreen final : public Screen
 {
 public:
 	explicit SkinScreen(Game& game, GameState nextState);
-	~SkinScreen() = default;
+	virtual ~SkinScreen() = default;
 
 	SkinScreen(const SkinScreen& other) = delete;
 	SkinScreen(SkinScreen&& other) noexcept = delete;

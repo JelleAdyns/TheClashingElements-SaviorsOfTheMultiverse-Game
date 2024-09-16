@@ -7,7 +7,7 @@ class Player final: public Character
 {
 public:
 	explicit Player(Skin skin, HUD* hudObserver = nullptr);
-	~Player() = default;
+	virtual ~Player() = default;
 
 	Player(const Player& other) = delete;
 	Player(Player&& other) noexcept = delete;

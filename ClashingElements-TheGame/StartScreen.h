@@ -12,7 +12,7 @@ class StartScreen final: public Screen
 {
 public:
 	explicit StartScreen(std::unique_ptr<Command>&& startButton, std::unique_ptr<Command>&& highscoreButton);
-	~StartScreen() = default;
+	virtual ~StartScreen() = default;
 
 	StartScreen(const StartScreen& other) = delete;
 	StartScreen(StartScreen&& other) noexcept = delete;

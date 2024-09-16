@@ -10,7 +10,7 @@ class GameOverScreen final : public Screen
 {
 public:
 	explicit GameOverScreen(Game& game, HUD::Counters counters);
-	~GameOverScreen() = default;
+	virtual ~GameOverScreen() = default;
 
 	GameOverScreen(const GameOverScreen& other) = delete;
 	GameOverScreen(GameOverScreen&& other) noexcept = delete;

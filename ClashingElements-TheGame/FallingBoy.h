@@ -8,7 +8,7 @@ class FallingBoy final : public AnimatedSprite
 {
 public:
 	explicit FallingBoy(const Point2Int& bottomCenter);
-	~FallingBoy();
+	virtual ~FallingBoy();
 
 	FallingBoy(const FallingBoy& other) = delete;
 	FallingBoy(FallingBoy&& other) noexcept = delete;

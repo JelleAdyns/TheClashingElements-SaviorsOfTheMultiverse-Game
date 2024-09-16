@@ -9,7 +9,7 @@ class PauseScreen final : public Screen
 {
 public:
 	explicit PauseScreen(Game& game);
-	~PauseScreen() = default;
+	virtual ~PauseScreen() = default;
 
 	PauseScreen(const PauseScreen& other) = delete;
 	PauseScreen(PauseScreen&& other) noexcept = delete;

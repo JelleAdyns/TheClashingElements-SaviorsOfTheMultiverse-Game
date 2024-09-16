@@ -9,7 +9,7 @@ class MobilityItem
 {
 public:
 	explicit MobilityItem() = default;
-	~MobilityItem() = default;
+	virtual ~MobilityItem() = default;
 
 	MobilityItem(const MobilityItem& other) = delete;
 	MobilityItem(MobilityItem&& other) noexcept = delete;

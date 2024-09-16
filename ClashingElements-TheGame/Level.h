@@ -23,7 +23,7 @@ class Level final : public Screen, public Observer<HUD::Counters>
 {
 public:
 	explicit Level(Game& game, Skin playerSkin);
-	~Level() = default;
+	virtual ~Level() = default;
 
 	Level(const Level& other) = delete;
 	Level(Level&& other) noexcept = delete;
