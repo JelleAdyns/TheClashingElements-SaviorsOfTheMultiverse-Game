@@ -19,6 +19,7 @@ namespace highScoreHandling
 	bool NameIsInList(const tstring& name);
 	PlayerScore GetFirstScore();
 	void RemoveHighScore(const tstring& name);
+	void DrawScoreLine(const Point2Int& pos, int width, const PlayerScore& playerScore, int rank);
 }
 
 #endif // !HIGHSCOREHANDLING_H

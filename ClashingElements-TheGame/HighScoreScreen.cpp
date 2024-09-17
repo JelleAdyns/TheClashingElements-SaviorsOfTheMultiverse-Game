@@ -18,7 +18,8 @@ void HighScoreScreen::Draw() const
 	auto& font = globalFont::GetFont();
 	
 	constexpr static int maxScores{ 10 };
-	const int posHeightSteps{ wndwRect.height / (maxScores + 1)};
+	constexpr static int border{ 6 };
+	const int posHeightSteps{ (wndwRect.height - border * 2) / (maxScores + 2) };
 
 	font.SetTextFormat(10, false, false);
 	font.SetHorizontalAllignment(Font::HorAllignment::Center);
@@ -26,21 +27,16 @@ void HighScoreScreen::Draw() const
 
 	ENGINE.SetColor(RGB(255, 255, 255));
 
-	ENGINE.DrawString(_T("HIGHSCORES"), globalFont::GetFont(), 0, wndwRect.height - posHeightSteps, wndwRect.width);
+	ENGINE.DrawString(_T("HIGHSCORES"), globalFont::GetFont(), 0, wndwRect.height - posHeightSteps - border, wndwRect.width);
 
 	for (int i = 0; i < (m_VecHighScoreList.size() < maxScores ? m_VecHighScoreList.size() : maxScores); i++)
 	{
-		tstringstream highScoreText{};
-
-		highScoreText << m_VecHighScoreList.at(i).name << _T('\t') 
-			<< std::setfill(_T('0')) << std::setw(6) << to_tstring(m_VecHighScoreList.at(i).score);
-		
 		if (i == 0) ENGINE.SetColor(RGB(255, 255, 0));
 		else ENGINE.SetColor(RGB(255, 255, 255));
 
-		ENGINE.DrawString(highScoreText.str(), globalFont::GetFont(), 0, wndwRect.height - posHeightSteps * (i + 2), wndwRect.width);
-
+		highScoreHandling::DrawScoreLine(Point2Int{ 0, wndwRect.height - posHeightSteps * (i + 2) - border }, wndwRect.width, m_VecHighScoreList.at(i), (i + 1));
 	}
+	ENGINE.DrawString(_T("PRESS DELETE"), globalFont::GetFont(), 0, border, wndwRect.width);
 }
 
 void HighScoreScreen::Tick()

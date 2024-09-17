@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <filesystem>
 #include "Engine.h"
+#include "GlobalFont.h"
 
 namespace highScoreHandling
 {
@@ -96,5 +97,38 @@ namespace highScoreHandling
 		{
 			std::copy(highScores.cbegin(), highScores.cend(), std::ostream_iterator<PlayerScore, tchar>(outputFile, _T("\n")));
 		}
+	}
+	void DrawScoreLine(const Point2Int& pos, int width, const PlayerScore& playerScore, int rank)
+	{
+		tstring rankName{ to_tstring(rank) };
+
+		const auto& addTH = [&]() {rankName += _T("TH"); };
+
+		switch (rank % 10)
+		{
+		case 1:
+			if (rank == 11) addTH();
+			else rankName += _T("ST");
+			break;
+		case 2:
+			if (rank == 12) addTH();
+			else rankName += _T("ND");
+			break;
+		case 3:
+			if (rank == 13) addTH();
+			else rankName += _T("RD");
+			break;
+		default:
+			addTH();
+			break;
+		}
+
+
+		tstringstream highScoreText{};
+
+		highScoreText << std::setfill(_T(' ')) << std::setw(4) << rankName << std::setw(4) << playerScore.name << std::setw(2) << _T(' ')
+			<< std::setfill(_T('0')) << std::setw(6) << to_tstring(playerScore.score);
+
+		ENGINE.DrawString(highScoreText.str(), globalFont::GetFont(), pos, width);
 	}
 }
