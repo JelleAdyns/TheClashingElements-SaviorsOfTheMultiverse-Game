@@ -16,7 +16,6 @@ public:
 
 	//virtual void Draw() const override;
 	//virtual void Update(float elapsedSec) override;
-	static int m_DefaultSpeed;
 };
 
 

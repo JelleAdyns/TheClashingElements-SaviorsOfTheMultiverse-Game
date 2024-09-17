@@ -21,9 +21,10 @@ public:
 
 	void Play();
 	void TakeDamage();
-	static int m_DefaultSpeed;
+	static int GetDefaultSpeed() { return m_DefaultSpeed; }
 private:
 
+	static int m_DefaultSpeed;
 	enum class PlayerState
 	{
 		ChoosingSkin,

@@ -281,7 +281,7 @@ void Level::LoadStage()
 
 			case _T('B'):
 
-				if (rowString[col] != _T('P')) m_pVecEnemies.push_back(std::make_unique<Boss>( center, Player::m_DefaultSpeed ));
+				if (rowString[col] != _T('P')) m_pVecEnemies.push_back(std::make_unique<Boss>( center, Player::GetDefaultSpeed() ));
 
 			case _T('M'):
 
