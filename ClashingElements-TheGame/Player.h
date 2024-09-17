@@ -30,11 +30,11 @@ private:
 		Playing
 	};
 	PlayerState m_State;
-	std::unique_ptr<Texture> m_pTexture;
 
-	void UpdateInvincibility();
 
 	std::unique_ptr<Subject<Player*>> m_pTookDamage;
+	void UpdateInvincibility();
+
 	bool m_IsInvincible{ false };
 	bool m_NeedsToDraw{ true };
 	float m_MaxInvincibleTime{ 3.f };

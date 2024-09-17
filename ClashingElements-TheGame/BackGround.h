@@ -24,7 +24,7 @@ public:
 	
 private:
 
-	const std::unique_ptr<Texture> m_pBackGround;
+	const Texture& m_rBackGround;
 	const float m_ParallaxSpeed;
 
 	const Point2Int m_BottemLeft;

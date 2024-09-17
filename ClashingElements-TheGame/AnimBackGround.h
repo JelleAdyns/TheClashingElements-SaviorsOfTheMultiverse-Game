@@ -15,7 +15,6 @@ public:
 	AnimBackGround& operator=(AnimBackGround&& other) noexcept = delete;
 private:
 	const static int m_NrOfCols;
-	std::unique_ptr<Texture> m_pTexture;
 };
 
 

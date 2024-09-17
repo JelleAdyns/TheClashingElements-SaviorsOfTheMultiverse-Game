@@ -8,7 +8,7 @@ class FallingBoy final : public AnimatedSprite
 {
 public:
 	explicit FallingBoy(const Point2Int& bottomCenter);
-	virtual ~FallingBoy();
+	virtual ~FallingBoy() = default;
 
 	FallingBoy(const FallingBoy& other) = delete;
 	FallingBoy(FallingBoy&& other) noexcept = delete;
@@ -22,9 +22,6 @@ public:
 
 	const static int m_NrOfBoys;
 private:
-
-	static std::unique_ptr<Texture> m_pTexture;
-	static int m_InstanceCounter;
 	const static int m_FallingSpeed;
 
 	std::vector<Vector2f> m_VecPositions;

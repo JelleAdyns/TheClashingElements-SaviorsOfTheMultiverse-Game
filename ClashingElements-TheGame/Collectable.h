@@ -20,9 +20,6 @@ public:
 	CircleInt GetHitBox() const;
 
 private:
-	static std::unique_ptr<Texture> m_pTexture;
-	static int m_InstanceCounter;
-	const static int m_Value;
 
 	CircleInt m_HitBox;
 

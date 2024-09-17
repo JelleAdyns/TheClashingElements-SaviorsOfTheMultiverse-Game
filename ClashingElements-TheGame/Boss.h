@@ -7,7 +7,7 @@ class Boss final : public Enemy
 {
 public:
 	explicit Boss(const Point2Int& bottomCenter, int speed);
-	virtual ~Boss();
+	virtual ~Boss() = default;
 
 	Boss(const Boss& other) = delete;
 	Boss(Boss&& other) noexcept = delete;
@@ -16,10 +16,6 @@ public:
 
 	//virtual void Draw() const override;
 	//virtual void Update(float elapsedSec) override;
-
-private:
-	static std::unique_ptr<Texture> m_pTexture;
-	static int m_InstanceCounter;
 	static int m_DefaultSpeed;
 };
 

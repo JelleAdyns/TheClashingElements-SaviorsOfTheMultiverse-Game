@@ -11,7 +11,7 @@ const int HUD::m_HudHeight{ 40 };
 HUD::HUD(int windowWidth, int windowHeight, Skin skin) :
 	m_HudArea{ -1, windowHeight - m_HudHeight, windowWidth + 2, m_HudHeight },
 	m_pDied{std::make_unique<Subject<Counters>>()},
-	m_pLivesTexture{std::make_unique<Texture>(_T("Lives.png"))},
+	m_rLivesTexture{ResourceManager::GetInstance().GetTexture( _T("Lives.png"))},
 	m_LivesSrcRect{ 
 		[&]() {
 
@@ -67,7 +67,7 @@ void HUD::Draw() const
 
 	for (int i = 0; i < m_Lives; i++)
 	{
-		ENGINE.DrawTexture(*m_pLivesTexture, RectInt{ 12 + ((8 + 2) * i), wndwRect.height - (m_HudHeight - 6), 8,8}, m_LivesSrcRect);
+		ENGINE.DrawTexture(m_rLivesTexture, RectInt{ 12 + ((8 + 2) * i), wndwRect.height - (m_HudHeight - 6), 8,8}, m_LivesSrcRect);
 	}
 	
 	ENGINE.DrawString((tstringstream{} << std::setfill(_T('0')) << std::setw(4) << m_SecondsLeft).str(), font, wndwRect.width / 2 - width / 2, m_HudArea.bottom + 6, width);

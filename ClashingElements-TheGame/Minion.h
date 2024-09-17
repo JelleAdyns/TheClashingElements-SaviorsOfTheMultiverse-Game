@@ -6,7 +6,7 @@ class Minion final : public Enemy
 {
 public:
 	explicit Minion(const Point2Int& bottomCenter);
-	virtual ~Minion();
+	virtual ~Minion() = default;
 
 	Minion(const Minion& other) = delete;
 	Minion(Minion&& other) noexcept = delete;
@@ -16,8 +16,6 @@ public:
 	//virtual void Draw() const override;
 	//virtual void Update(float elapsedSec) override;
 private:
-	static std::unique_ptr<Texture> m_pTexture;
-	static int m_InstanceCounter;
 	static int m_DefaultSpeed;
 }; 
 

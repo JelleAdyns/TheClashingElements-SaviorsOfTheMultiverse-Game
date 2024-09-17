@@ -6,8 +6,18 @@
 class AnimatedSprite
 {
 public:
-	explicit AnimatedSprite(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime, bool updateRows = true);
-	virtual ~AnimatedSprite();
+
+	struct SpriteInfo
+	{
+		const int nrOfCols{1};
+		const int nrOfFrames{1};
+		const int nrOfRows{nrOfFrames / nrOfCols};
+		const float	frameTime{0.5f};
+	};
+
+
+	explicit AnimatedSprite(const Point2Int& bottomCenter, const tstring& textureFile, const SpriteInfo& spriteInfo, bool updateRows = true);
+	virtual ~AnimatedSprite() = default;
 
 	AnimatedSprite(const AnimatedSprite& other) = delete;
 	AnimatedSprite(AnimatedSprite&& other) noexcept = delete;
@@ -19,25 +29,24 @@ public:
 
 	RectInt DestRect() const;
 	void ResetFrames();
+
 protected:
-	void SetTexture(const Texture* pTexture, const RectInt& textureArea = RectInt{});
+
+	const Texture& GetTexture() const;
 
 	Point2Int m_BottomCenter;
 
 	int	m_CurrentCol;
 	int	m_CurrentRow;
 
-	const int m_NrOfCols;
-	const int m_NrOfFrames;
-	const int m_NrOfRows;
-	const float	m_FrameTime;
+	SpriteInfo m_SpriteInfo;
 
 	float m_PassedTime;
 
 
 private:
 	RectInt SrcRect() const;
-	const Texture* m_pTexture;
+	const Texture& m_rTexture;
 	const bool m_UpdateRows;
 	RectInt m_TextureArea;
 

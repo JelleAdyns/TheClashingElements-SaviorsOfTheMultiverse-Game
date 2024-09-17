@@ -4,22 +4,30 @@
 int	Player::m_DefaultSpeed{ Tile::Size * 4 };
 
 Player::Player(Skin skin, HUD* hudObserver) :
-	Character{ Point2Int{}, 8, 32, 1.f / 15, 1 },
+	Character
+	{ 
+		Point2Int{},						//arg 1
+		[&]() {								//arg 2
+			switch (skin)
+			{
+			case Skin::Finn:
+				return _T("Finn.png");
+				break;
+			case Skin::Wesley:
+				return _T("Wesley.png");
+				break;
+			default:
+				return _T("");
+				break;
+			}
+		}(),
+		SpriteInfo{.nrOfCols{8}, .nrOfFrames{32},.frameTime{1.f/15}},	//arg 3
+		1		//arg 4
+	},
 	m_State{ PlayerState::ChoosingSkin },
-	m_pTexture{ nullptr },
 	m_pTookDamage{std::make_unique<Subject<Player*>>()}
 {
 	Character::SetDefaultSpeed(m_DefaultSpeed);
-	switch (skin)
-	{
-	case Skin::Finn:
-		m_pTexture = std::make_unique<Texture>( _T("Finn.png") );
-		break;
-	case Skin::Wesley:
-		m_pTexture = std::make_unique<Texture>(_T("Wesley.png"));
-		break;
-	}
-	AnimatedSprite::SetTexture(m_pTexture.get());
 
 	if(hudObserver) m_pTookDamage->AddObserver(hudObserver);
 }
@@ -29,12 +37,7 @@ void Player::Update()
 	{
 	case Player::PlayerState::ChoosingSkin:
 
-		m_PassedTime += ENGINE.GetDeltaTime();
-		if (m_PassedTime >= m_FrameTime)
-		{
-			++m_CurrentCol %= m_NrOfCols;
-			m_PassedTime = 0.f;
-		}
+		AnimatedSprite::Update();
 
 		break;
 

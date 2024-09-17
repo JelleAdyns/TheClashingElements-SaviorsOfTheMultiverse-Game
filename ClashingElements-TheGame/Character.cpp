@@ -1,7 +1,7 @@
 #include "Character.h"
 
-Character::Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime, int pixelOffset) :
-	AnimatedSprite{ bottomCenter, nrCols, nrFrames, frameTime, false },
+Character::Character(const Point2Int& bottomCenter, const tstring& textureFile, SpriteInfo spriteInfo, int pixelOffset) :
+	AnimatedSprite{ bottomCenter, textureFile, spriteInfo, false },
 	m_PixelOffset{ pixelOffset },
 
 	m_Dir{ Direction::Down },

@@ -69,7 +69,8 @@ private:
 
 	std::unique_ptr<Subject<Counters>> m_pDied;
 
-	std::unique_ptr<Texture> m_pLivesTexture;
+	const Texture& m_rLivesTexture;
+
 	const RectInt m_LivesSrcRect{};
 };
 

@@ -33,8 +33,6 @@ void Game::Initialize()
 	AudioLocator::RegisterAudioService(std::make_unique<Audio>());
 #endif // _DEBUG
 
-	globalFont::InitFont();
-
 	//highScoreHandling::WriteHighScores(_T("BOB"), 20);
 
 }

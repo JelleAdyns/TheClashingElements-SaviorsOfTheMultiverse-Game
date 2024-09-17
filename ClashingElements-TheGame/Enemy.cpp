@@ -1,8 +1,8 @@
 #include "Enemy.h"
 #include <algorithm>
 
-Enemy::Enemy(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime) :
-	Character{bottomCenter, nrCols,nrFrames,frameTime, 1},
+Enemy::Enemy(const Point2Int& bottomCenter, const tstring& textureFile, SpriteInfo spriteInfo) :
+	Character{bottomCenter, textureFile, spriteInfo, 1},
 	m_SmartnessLevel{50}
 {
 

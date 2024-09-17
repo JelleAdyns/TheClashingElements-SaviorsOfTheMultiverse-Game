@@ -14,7 +14,7 @@ namespace highScoreHandling
 
 	void LoadHighScores(std::vector<PlayerScore>& highscores)
 	{
-		tstring filePath{ ENGINE.GetResourcePath() + fileName };
+		tstring filePath{ ResourceManager::GetInstance().GetDataPath() + fileName};
 		if (tifstream inputFile{ filePath, std::ios::in }; inputFile.is_open())
 		{
 			tstring line{};
@@ -48,7 +48,7 @@ namespace highScoreHandling
 				return firstStudent.score > secondStudent.score;
 			});
 
-		tstring filePath{ ENGINE.GetResourcePath() + fileName };
+		tstring filePath{ ResourceManager::GetInstance().GetDataPath() + fileName };
 		if (tofstream outputFile{ filePath, std::ios::out }; outputFile.is_open())
 		{
 			std::copy(highScores.cbegin(), highScores.cend(), std::ostream_iterator<PlayerScore, tchar>(outputFile, _T("\n")));
@@ -65,7 +65,7 @@ namespace highScoreHandling
 
 	PlayerScore GetFirstScore()
 	{
-		tstring filePath{ ENGINE.GetResourcePath() + fileName };
+		tstring filePath{ ResourceManager::GetInstance().GetDataPath() + fileName };
 		if (tifstream inputFile{ filePath, std::ios::in }; inputFile.is_open())
 		{
 			tstring firstLine{};
@@ -91,7 +91,7 @@ namespace highScoreHandling
 			std::remove_if(highScores.begin(), highScores.end(), [&](const PlayerScore& playerScore) { return name == playerScore.name; }),
 			highScores.end());
 
-		tstring filePath{ ENGINE.GetResourcePath() + fileName };
+		tstring filePath{ ResourceManager::GetInstance().GetDataPath() + fileName };
 		if (tofstream outputFile{ filePath, std::ios::out }; outputFile.is_open())
 		{
 			std::copy(highScores.cbegin(), highScores.cend(), std::ostream_iterator<PlayerScore, tchar>(outputFile, _T("\n")));

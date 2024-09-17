@@ -5,7 +5,7 @@
 BackGround::BackGround(const tstring& filePath, const Point2Int& bottomLeft, float parallax ):
 	m_BottemLeft{ bottomLeft },
 	m_ParallaxSpeed{parallax},
-	m_pBackGround{ std::make_unique<Texture>(filePath )}
+	m_rBackGround{ ResourceManager::GetInstance().GetTexture(filePath) }
 {
 }
 BackGround::BackGround(const tstring& filePath, float parallax) :
@@ -15,7 +15,7 @@ BackGround::BackGround(const tstring& filePath, float parallax) :
 
 void BackGround::Draw() const
 {
-	ENGINE.DrawTexture(*m_pBackGround, DestRect());
+	ENGINE.DrawTexture(m_rBackGround, DestRect());
 }
 float BackGround::GetParallaxSpeed() const
 {
@@ -24,5 +24,5 @@ float BackGround::GetParallaxSpeed() const
 
 RectInt BackGround::DestRect() const
 {
-	return RectInt{ m_BottemLeft.x , m_BottemLeft.y, int(m_pBackGround->GetWidth()), int(m_pBackGround->GetHeight()) };
+	return RectInt{ m_BottemLeft.x , m_BottemLeft.y, int(m_rBackGround.GetWidth()), int(m_rBackGround.GetHeight()) };
 }

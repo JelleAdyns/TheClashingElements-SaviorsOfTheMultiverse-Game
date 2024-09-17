@@ -230,7 +230,7 @@ void Level::LoadStage()
 	AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Spaceship), true);
 	
 
-	tifstream inputFile{ ENGINE.GetResourcePath() + _T("StagePattern.txt") };
+	tifstream inputFile{ ResourceManager::GetInstance().GetDataPath() + _T("StagePattern.txt") };
 
 	tstring info{};
 
@@ -294,7 +294,7 @@ void Level::LoadStage()
 			case _T('.'):
 
 				m_Graph.AddTile(currTileId, center.x, center.y, isIntersection);
-				//if(rowString[col] != _T('P')) m_pVecCollectables.push_back(std::make_unique<Collectable>(center));
+				if(rowString[col] != _T('P')) m_pVecCollectables.push_back(std::make_unique<Collectable>(center));
 				
 				TileID previousColTileId{ m_Graph.GetTileId(Point2Int{ center.x - Tile::Size, center.y }) };
 				if(previousColTileId >= 0) m_Graph.AddEdge(currTileId, previousColTileId);
@@ -312,7 +312,6 @@ void Level::LoadStage()
 			++col;
 		}
 	}
-	m_pVecCollectables.push_back(std::make_unique<Collectable>(Point2Int{ 450, 260 }));
 	m_pDrawBuffer.clear();
 	m_pDrawBuffer.reserve(m_pVecCollectables.size() + m_pVecEnemies.size() + 1);
 

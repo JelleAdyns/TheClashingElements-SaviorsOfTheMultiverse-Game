@@ -5,7 +5,6 @@
 
 namespace globalFont
 {
-	void InitFont();
 	Font& GetFont();
 }
 

@@ -1,55 +1,41 @@
 #include "AnimatedSprite.h"
 
-AnimatedSprite::AnimatedSprite(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime, bool updateRows):
+AnimatedSprite::AnimatedSprite(const Point2Int& bottomCenter, const tstring& textureFile, const SpriteInfo& spriteInfo, bool updateRows):
 	m_BottomCenter{bottomCenter},
 
 	m_CurrentCol{0},
 	m_CurrentRow{0},
 	
-	m_NrOfCols{nrCols},
-	m_NrOfFrames{nrFrames},
-	m_NrOfRows{nrFrames/nrCols},
-	m_FrameTime{frameTime},
+	m_SpriteInfo{ spriteInfo },
 	
 	m_PassedTime{0.f},
 
-	m_pTexture{nullptr},
+	m_rTexture{ResourceManager::GetInstance().GetTexture(textureFile)},
 	m_UpdateRows{updateRows}
 {
-
-}
-
-AnimatedSprite::~AnimatedSprite()
-{
-	m_pTexture = nullptr;
+	m_TextureArea.left = 0;
+	m_TextureArea.bottom = 0;
+	m_TextureArea.width = static_cast<int>(m_rTexture.GetWidth());
+	m_TextureArea.height = static_cast<int>(m_rTexture.GetHeight());
 }
 
 void AnimatedSprite::Draw() const
 {
-	ENGINE.DrawTexture(*m_pTexture, DestRect(), SrcRect());
+	ENGINE.DrawTexture(m_rTexture, DestRect(), SrcRect());
 }
 
 void AnimatedSprite::Update()
 {
 	m_PassedTime += ENGINE.GetDeltaTime();
-	if (m_PassedTime >= m_FrameTime)
+	if (m_PassedTime >= m_SpriteInfo.frameTime)
 	{
 		if (m_UpdateRows)
 		{
-			if (m_CurrentCol == m_NrOfCols - 1) ++m_CurrentRow %= m_NrOfRows;
+			if (m_CurrentCol == m_SpriteInfo.nrOfCols - 1) ++m_CurrentRow %= m_SpriteInfo.nrOfRows;
 		}
-		++m_CurrentCol %= m_NrOfCols;
-		m_PassedTime -= m_FrameTime;
+		++m_CurrentCol %= m_SpriteInfo.nrOfCols;
+		m_PassedTime -= m_SpriteInfo.frameTime;
 	}
-}
-
-void AnimatedSprite::SetTexture(const Texture* texturePtr, const RectInt& textureArea)
-{
-	m_pTexture = texturePtr;
-	if (textureArea.width == 0 && textureArea.height == 0)
-		m_TextureArea = RectInt{ 0,0, static_cast<int>(m_pTexture->GetWidth()), static_cast<int>(m_pTexture->GetHeight()) };
-	else m_TextureArea = textureArea;
-
 }
 
 RectInt AnimatedSprite::DestRect() const
@@ -63,11 +49,16 @@ void AnimatedSprite::ResetFrames()
 	m_PassedTime = 0.f;
 }
 
+const Texture& AnimatedSprite::GetTexture() const
+{
+	return m_rTexture;
+}
+
 RectInt AnimatedSprite::SrcRect() const
 {
 	RectInt srcRect{};
-	srcRect.width = m_TextureArea.width / m_NrOfCols;
-	srcRect.height = m_TextureArea.height / m_NrOfRows;
+	srcRect.width = m_TextureArea.width / m_SpriteInfo.nrOfCols;
+	srcRect.height = m_TextureArea.height / m_SpriteInfo.nrOfRows;
 	srcRect.left = m_TextureArea.left + srcRect.width * m_CurrentCol;
 	srcRect.bottom = m_TextureArea.bottom + srcRect.height * m_CurrentRow;
 	return srcRect;

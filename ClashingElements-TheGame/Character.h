@@ -7,7 +7,7 @@
 class Character : public AnimatedSprite
 {
 public:
-	explicit Character(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime, int pixelOffset = 0);
+	explicit Character(const Point2Int& bottomCenter, const tstring& textureFile, SpriteInfo spriteInfo, int pixelOffset = 0);
 	virtual ~Character() = default;
 
 	Character(const Character& other) = delete;

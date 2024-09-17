@@ -8,7 +8,7 @@
 class Enemy : public Character
 {
 public:
-	explicit Enemy(const Point2Int& bottomCenter, int nrCols, int nrFrames, float frameTime );
+	explicit Enemy(const Point2Int& bottomCenter, const tstring& textureFile, SpriteInfo spriteInfo);
 	virtual ~Enemy() = default;
 
 	Enemy(const Enemy& other) = delete;
@@ -22,15 +22,15 @@ public:
 
 	void SetTarget(const Point2Int& playerTarget);
 protected:
-	uint8_t m_SmartnessLevel;
-	const uint8_t m_MaxSmartnessLevel{100};
+	uint8_t m_SmartnessLevel{};
+	const uint8_t m_MaxSmartnessLevel{ 100 };
 
 
 private:
 
-	std::vector<std::tuple<Direction, int, Point2Int>> m_DirMap;
-	std::vector<Point2Int> m_Path;
-	Point2Int m_LastKnownPlayerPos;
+	std::vector<std::tuple<Direction, int, Point2Int>> m_DirMap{};
+	std::vector<Point2Int> m_Path{};
+	Point2Int m_LastKnownPlayerPos{};
 
 	void FillDirectionMap(const PathGraph& graph);
 	void CalculatePathsInAllDirections(const PathGraph& graph);

@@ -185,7 +185,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Minion.cpp" />
-    <ClCompile Include="PalmTree.cpp" />
     <ClCompile Include="PathGraph.cpp" />
     <ClCompile Include="PauseScreen.cpp" />
     <ClCompile Include="Player.cpp" />
