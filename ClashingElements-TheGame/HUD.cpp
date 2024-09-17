@@ -125,7 +125,8 @@ bool HUD::FinishedCountSeconds()
 
 	static float time{};
 	static bool count{false};
-	static bool ready{false};
+	bool ready{false};
+
 	time += ENGINE.GetDeltaTime();
 	
 	if (count and time > 0.05f)
@@ -144,7 +145,11 @@ bool HUD::FinishedCountSeconds()
 	else if (time > 2.f)
 	{
 		count = !count;
-		if (m_SecondsLeft == 0) ready = true;
+		if (m_SecondsLeft == 0)
+		{
+			count = false;
+			ready = true;
+		}
 		else AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Saw),true);
 		time = 0.f;
 	}

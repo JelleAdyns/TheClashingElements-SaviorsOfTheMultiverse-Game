@@ -8,7 +8,7 @@ class Level;
 class HUD final : public Observer<int>, public Observer<Player*>
 {
 public:
-	 HUD(int windowWidth, int windowHeight, Skin skin);
+	HUD(int windowWidth, int windowHeight, Skin skin);
 	virtual ~HUD() = default;
 
 	HUD(const HUD& other) = delete;
@@ -38,7 +38,7 @@ public:
 		int nrOfLivesLost{};
 		int totalScore{};
 
-		constexpr static int scorePerCollectable = 10;
+		constexpr static int scorePerCollectable = 50;
 		constexpr static int scorePerSecond = 100;
 		constexpr static int scorePerEnemyKilled = 200;
 		constexpr static int scorePerLifeLost = -100;
@@ -59,8 +59,8 @@ private:
 	int m_CurrentScore{0};
 	int m_CurrentHighScore{0};
 
-	constexpr static int m_StartLives{ 3};
-	int m_Lives{3};
+	constexpr static int m_StartLives{ 3 };
+	int m_Lives{m_StartLives};
 
 	constexpr static int m_StartSeconds{ 250 };
 	int m_SecondsLeft{ m_StartSeconds};
