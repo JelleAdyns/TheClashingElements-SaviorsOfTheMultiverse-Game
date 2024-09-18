@@ -219,8 +219,9 @@ void Level::LoadStage()
 {
 	m_Graph = std::move(PathGraph{});
 	m_pAnimBackGround = std::make_unique<AnimBackGround>(m_VecBackGrounds[m_StageNumber].first);
-	m_Camera.SetLevelBoundaries(m_pAnimBackGround->DestRect());
 	m_pBackGround = std::make_unique < BackGround >( m_VecBackGrounds[m_StageNumber].second.first, m_VecBackGrounds[m_StageNumber].second.second, 0.8f );
+	m_pPlayer->ResetFrames();
+	m_Camera.SetLevelBoundaries(m_pAnimBackGround->DestRect());
 	
 	AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Spaceship), true);
 	
@@ -272,7 +273,7 @@ void Level::LoadStage()
 				break;
 			case _T('P'):
 
-				m_pPlayer->SetPos(center);
+				m_pPlayer->Respawn(center);
 
 			case _T('B'):
 

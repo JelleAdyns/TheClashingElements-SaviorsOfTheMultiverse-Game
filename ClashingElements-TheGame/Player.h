@@ -21,6 +21,7 @@ public:
 
 	void Play();
 	void TakeDamage();
+	void Respawn(const Point2Int& pos);
 	static int GetDefaultSpeed() { return m_DefaultSpeed; }
 private:
 

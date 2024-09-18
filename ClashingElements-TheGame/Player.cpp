@@ -132,6 +132,13 @@ void Player::TakeDamage()
 	}
 }
 
+void Player::Respawn(const Point2Int& pos)
+{
+	ResetFrames();
+	m_CurrentRow = 0;
+	SetPos(pos);
+}
+
 void Player::UpdateInvincibility()
 {
 	auto dt = ENGINE.GetDeltaTime();
