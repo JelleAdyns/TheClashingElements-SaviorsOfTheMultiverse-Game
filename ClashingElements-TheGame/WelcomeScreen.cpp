@@ -1,5 +1,5 @@
 #include "WelcomeScreen.h"
-#include "GlobalFont.h"
+#include "GameFont.h"
 
 WelcomeScreen::WelcomeScreen(Game& game):
 	Screen{},
@@ -20,7 +20,7 @@ void WelcomeScreen::Draw() const
 	ENGINE.SetColor(RGB(0, 0, 0), 0.5f);
 	ENGINE.FillRectangle(destRect);
 
-	auto& font = globalFont::GetFont();
+	auto& font = gameFont::GetFont();
 	font.SetTextFormat(7, true, false);
 	font.SetHorizontalAllignment(Font::HorAllignment::Center);
 	font.SetVerticalAllignment(Font::VertAllignment::Center);

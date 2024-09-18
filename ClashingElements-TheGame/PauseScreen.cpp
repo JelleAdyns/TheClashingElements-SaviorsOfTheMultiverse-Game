@@ -1,5 +1,5 @@
 #include "PauseScreen.h"
-#include "GlobalFont.h"
+#include "GameFont.h"
 
 PauseScreen::PauseScreen(Game& game) :
 	Screen{},
@@ -21,7 +21,7 @@ void PauseScreen::Draw() const
 	ENGINE.SetColor(RGB(0, 0, 0), 0.5f);
 	ENGINE.FillRectangle(destRect);
 
-	auto& font = globalFont::GetFont();
+	auto& font = gameFont::GetFont();
 	font.SetTextFormat(9, true, false);
 	
 	const RectInt textDestRect{ destRect.left + textMargin, destRect.bottom + textMargin, destRect.width - textMargin * 2, destRect.height - textMargin * 2 };

@@ -21,7 +21,7 @@ void Button::Draw() const
 	ENGINE.SetColor(m_TextColor);
 	ENGINE.DrawString(
 		m_Text,
-		globalFont::GetFont(), 
+		gameFont::GetFont(), 
 		Point2Int{m_Center.x - m_Border.width / 2 , m_Center.y - m_Border.height / 2}, 
 		m_Border.width
 	);

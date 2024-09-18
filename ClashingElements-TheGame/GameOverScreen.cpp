@@ -1,5 +1,5 @@
 #include "GameOverScreen.h"
-#include "GlobalFont.h"
+#include "GameFont.h"
 
 GameOverScreen::GameOverScreen(Game& game) :
 	Screen{}
@@ -26,16 +26,12 @@ GameOverScreen::GameOverScreen(Game& game) :
 		button->SetColor(color);
 		button->SetWidth(width);
 		button->SetHeight(height);
-}
+	}
 }
 
 void GameOverScreen::Draw() const
 {
 	const auto& wndwRect = ENGINE.GetWindowRect();
-	static constexpr int margin = 20;
-	static constexpr int textMargin = 5;
-	static const int height = wndwRect.height - 100;
-	static const RectInt destRect{ margin, (wndwRect.height - height) / 2, wndwRect.width - margin * 2, height };
 
 	ENGINE.SetColor(RGB(0, 0, 0), 0.3f);
 	ENGINE.FillRectangle(wndwRect);
@@ -44,7 +40,7 @@ void GameOverScreen::Draw() const
 	ENGINE.SetColor(RGB(0, 0, 0));
 	ENGINE.DrawRectangle(m_DestRect);
 
-	auto& font = globalFont::GetFont();
+	auto& font = gameFont::GetFont();
 	font.SetTextFormat(9, true, false);
 	font.SetHorizontalAllignment(Font::HorAllignment::Center);
 	font.SetVerticalAllignment(Font::VertAllignment::Top);
@@ -96,17 +92,17 @@ void GameOverScreen::Draw() const
 	}
 	else
 	{
-	font.SetTextFormat(7, true, false);
-	font.SetHorizontalAllignment(Font::HorAllignment::Center);
-	font.SetVerticalAllignment(Font::VertAllignment::Center);
+		font.SetTextFormat(7, true, false);
+		font.SetHorizontalAllignment(Font::HorAllignment::Center);
+		font.SetVerticalAllignment(Font::VertAllignment::Center);
 		ENGINE.SetColor(RGB(255, 255, 255));
-	ENGINE.DrawString(
-		_T("Press SPACE to continue."),
-		font,
+		ENGINE.DrawString(
+			_T("Press SPACE to continue."),
+			font,
 			m_DestRect.left + m_TextMargin,
 			m_DestRect.bottom + m_TextMargin,
 			m_DestRect.width - m_TextMargin * 2);
-}
+	}
 }
 
 void GameOverScreen::Tick()
@@ -149,17 +145,17 @@ void GameOverScreen::KeyInput(int virtualKeyCode)
 	}
 	else
 	{
-	switch (virtualKeyCode)
-	{
-	case VK_SPACE:
-		if (m_TextIndex < static_cast<int>(m_VecScoreDisplays.size()) - 1) 
+		switch (virtualKeyCode)
+		{
+		case VK_SPACE:
+			if (m_TextIndex < static_cast<int>(m_VecScoreDisplays.size()) - 1)
 			{
-			m_TextIndex = static_cast<int>(m_VecScoreDisplays.size()) - 1;
+				m_TextIndex = static_cast<int>(m_VecScoreDisplays.size()) - 1;
 				m_ReadyToContinue = true;
 			};
-		break;
+			break;
+		}
 	}
-}
 }
 
 void GameOverScreen::OnEnter()

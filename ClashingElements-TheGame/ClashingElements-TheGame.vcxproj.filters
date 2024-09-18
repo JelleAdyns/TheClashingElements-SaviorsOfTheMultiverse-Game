@@ -114,7 +114,7 @@
     <ClCompile Include="Level.cpp">
       <Filter>Game Files\Sub Classes\Screens</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalFont.cpp">
+    <ClCompile Include="GameFont.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
     <ClCompile Include="HighScoreHandling.cpp">
@@ -203,7 +203,7 @@
     <ClInclude Include="Player.h">
       <Filter>Game Files\Sub Classes\Sprites\Characters</Filter>
     </ClInclude>
-    <ClInclude Include="GlobalFont.h">
+    <ClInclude Include="GameFont.h">
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="Character.h">

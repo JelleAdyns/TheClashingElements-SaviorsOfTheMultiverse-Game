@@ -1,5 +1,5 @@
 #include "HUD.h"
-#include "GlobalFont.h"
+#include "GameFont.h"
 #include "Collectable.h"
 #include "HighScoreHandling.h"
 #include "Level.h"
@@ -49,7 +49,7 @@ void HUD::Draw() const
 	ENGINE.SetColor(RGB(0,0,0));
 	ENGINE.FillRectangle(m_HudArea);
 
-	auto& font = globalFont::GetFont();
+	auto& font = gameFont::GetFont();
 	font.SetTextFormat(8, false, false);
 	font.SetHorizontalAllignment(Font::HorAllignment::Center);
 	font.SetVerticalAllignment(Font::VertAllignment::Top);

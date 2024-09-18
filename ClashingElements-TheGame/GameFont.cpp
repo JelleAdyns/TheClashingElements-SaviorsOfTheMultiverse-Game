@@ -1,6 +1,6 @@
-#include "GlobalFont.h"
+#include "GameFont.h"
 
-namespace globalFont
+namespace gameFont
 {
 	Font& GetFont()
 	{

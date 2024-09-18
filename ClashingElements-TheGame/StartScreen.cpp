@@ -33,7 +33,7 @@ void StartScreen::Draw() const
 
 	m_FallingBoys.Draw();
 
-	auto& font = globalFont::GetFont();
+	auto& font = gameFont::GetFont();
 
 	font.SetTextFormat(8, false, false);
 	font.SetHorizontalAllignment(Font::HorAllignment::Center);

@@ -1,5 +1,5 @@
 #include "HighScoreScreen.h"
-#include "GlobalFont.h"
+#include "GameFont.h"
 
 
 HighScoreScreen::HighScoreScreen(Game& game):
@@ -15,8 +15,8 @@ void HighScoreScreen::Draw() const
 
 	const auto& wndwRect = ENGINE.GetWindowRect();
 	highScoreHandling::DrawScoreList(10, RectInt{ 0, 10, wndwRect.width, wndwRect.height - 10 }, highScoreHandling::GetFirstScore(false).name);
-	
-	constexpr static int maxScores{ 10 };
+
+	auto& font = gameFont::GetFont();
 	constexpr static int border{ 6 };
 
 	ENGINE.DrawString(_T("PRESS DELETE"), font, 0, border, wndwRect.width);

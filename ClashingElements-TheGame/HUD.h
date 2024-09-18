@@ -61,10 +61,10 @@ private:
 	int m_CurrentScore{0};
 	int m_CurrentHighScore{0};
 
-	constexpr static int m_StartLives{ 3 };
+	constexpr static int m_StartLives{ 0 };
 	int m_Lives{m_StartLives};
 
-	constexpr static int m_StartSeconds{ 250 };
+	constexpr static int m_StartSeconds{ 25 };
 	int m_SecondsLeft{ m_StartSeconds};
 
 

@@ -289,7 +289,7 @@ void Level::LoadStage()
 			case _T('.'):
 
 				m_Graph.AddTile(currTileId, center.x, center.y, isIntersection);
-				if(rowString[col] != _T('P')) m_pVecCollectables.push_back(std::make_unique<Collectable>(center));
+				//if(rowString[col] != _T('P')) m_pVecCollectables.push_back(std::make_unique<Collectable>(center));
 				
 				TileID previousColTileId{ m_Graph.GetTileId(Point2Int{ center.x - Tile::Size, center.y }) };
 				if(previousColTileId >= 0) m_Graph.AddEdge(currTileId, previousColTileId);
@@ -307,6 +307,7 @@ void Level::LoadStage()
 			++col;
 		}
 	}
+	m_pVecCollectables.push_back(std::make_unique<Collectable>(Point2Int{452, 226}));
 	m_pDrawBuffer.clear();
 	m_pDrawBuffer.reserve(m_pVecCollectables.size() + m_pVecEnemies.size() + 1);
 

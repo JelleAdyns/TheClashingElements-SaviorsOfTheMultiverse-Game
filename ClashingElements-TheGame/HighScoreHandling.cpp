@@ -120,13 +120,13 @@ namespace highScoreHandling
 		highScoreText << std::setfill(_T(' ')) << std::setw(4) << rankName << std::setw(maxCharacters + 1) << playerScore.name << std::setw(2) << _T(' ')
 			<< std::setfill(_T('0')) << std::setw(6) << to_tstring(playerScore.score);
 
-		ENGINE.DrawString(highScoreText.str(), globalFont::GetFont(), destRect);
+		ENGINE.DrawString(highScoreText.str(), gameFont::GetFont(), destRect);
 	}
 
 	void DrawScoreList(int maxScores, const RectInt& destRect, const tstring& nameToHighlight, bool drawTitle)
 	{
 		//const auto& wndwRect = ENGINE.GetWindowRect();
-		auto& font = globalFont::GetFont();
+		auto& font = gameFont::GetFont();
 
 		constexpr static int border{ 6 };
 		const int posHeightSteps{ (destRect.height - border * 2) / (maxScores + (drawTitle ? 1 : 0)) };

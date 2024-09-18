@@ -1,6 +1,6 @@
 #pragma once
 #include <functional>
-#include "GlobalFont.h"
+#include "GameFont.h"
 #include "GlobalEnumClasses.h"
 #include "Engine.h"
 #include "Commands.h"
@@ -8,7 +8,7 @@
 class Button
 {
 public:
-	//explicit Button(const std::string& text, const Point2Int& center/*,const GameState& nextGameState*/,  bool isSelected = false);
+	
 	explicit Button(const tstring& text, const Point2Int& center, std::unique_ptr<Command>&& toExecute, bool isSelected = false);
 	~Button() = default;
 
