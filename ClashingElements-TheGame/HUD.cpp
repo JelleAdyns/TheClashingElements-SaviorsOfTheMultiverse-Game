@@ -6,6 +6,7 @@
 #include <sstream>
 
 const int HUD::m_HudHeight{ 40 };
+HUD::Counters HUD::m_Counters{ };
 
 
 HUD::HUD(int windowWidth, int windowHeight, Skin skin) :
@@ -28,6 +29,8 @@ HUD::HUD(int windowWidth, int windowHeight, Skin skin) :
 		}()
 	}
 {
+	ResetCounters();
+
 	tstringstream yourStream{};
 	yourStream << _T("Your Score\n") << std::setfill(_T('0')) << std::setw(6) << _T('0');
 	m_YourScore = yourStream.str();
@@ -38,7 +41,7 @@ HUD::HUD(int windowWidth, int windowHeight, Skin skin) :
 	highStream << _T("High Score\n") << std::setfill(_T('0')) << std::setw(6) << to_tstring(m_CurrentHighScore);
 	m_HighScore = highStream.str();
 
-	AudioLocator::GetAudioService().AddSound(_T("Sounds/saw_sfx1.mp3"), static_cast<SoundID>(SoundEvent::Saw));
+	AudioLocator::GetAudioService().AddSound(_T("Sounds/Pickup.wav"), static_cast<SoundID>(SoundEvent::Saw));
 }
 
 void HUD::Draw() const
@@ -163,9 +166,14 @@ void HUD::Reset()
 	m_SecondsLeft = m_StartSeconds;
 }
 
-HUD::Counters HUD::GetCounters() const
+HUD::Counters HUD::GetCounters()
 {
 	return m_Counters;
+}
+
+void HUD::ResetCounters()
+{
+	m_Counters = Counters{};
 }
 
 void HUD::AddScore(int points)

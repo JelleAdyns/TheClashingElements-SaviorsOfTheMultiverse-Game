@@ -22,15 +22,13 @@ public:
 	virtual void Tick() override;
 	virtual void KeyInput(int virtualKey) override;
 
-	virtual void OnEnter() override {};
+	virtual void OnEnter() override;
 	virtual void OnExit() override{};
 	virtual void OnSuspend() override{};
 	virtual void OnResume() override{};
 
 private:
 	BackGround m_BackGround;
-
-	std::vector<highScoreHandling::PlayerScore> m_VecHighScoreList;
 	std::unique_ptr<Command> m_pLoadStartScreenCommand;
 };
 

@@ -3,11 +3,11 @@
 #include "Button.h"
 
 
-SkinScreen::SkinScreen(Game& game, GameState nextState) :
+SkinScreen::SkinScreen(Game& game) :
 	Screen{},
 	m_BackGround{ _T("Space.png") },
 	m_IndexCurrSkin{ 0 },
-	m_pLoadLevelCommand{std::make_unique<LoadScreenCommand>(game, nextState)}
+	m_pLoadLevelCommand{std::make_unique<LoadScreenCommand>(game, GameState::Playing)}
 {
 	m_pVecSkins.emplace(Skin::Finn, std::make_unique<Player>(Skin::Finn) );
 	m_pVecSkins.emplace(Skin::Wesley, std::make_unique<Player>(Skin::Wesley));

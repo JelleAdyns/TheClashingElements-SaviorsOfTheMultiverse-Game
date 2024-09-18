@@ -176,11 +176,6 @@ void Level::OnSubjectDestroy()
 {
 }
 
-HUD::Counters Level::GetCounters() const
-{
-	return m_Hud.GetCounters();
-}
-
 void Level::SetUpDrawBuffer()
 {
 	m_pDrawBuffer.clear();

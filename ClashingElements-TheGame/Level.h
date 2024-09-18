@@ -42,8 +42,6 @@ public:
 	virtual void Notify(HUD::Counters counters) override;
 	virtual void OnSubjectDestroy() override;
 
-	HUD::Counters GetCounters() const;
-
 private:
 	const std::vector<std::pair<tstring, std::pair<tstring, Point2Int>>> m_VecBackGrounds;
 	const std::vector<tstring> m_VecMusic;

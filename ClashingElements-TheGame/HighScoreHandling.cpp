@@ -2,22 +2,29 @@
 #include <algorithm>
 #include <filesystem>
 #include "Engine.h"
-#include "GlobalFont.h"
+#include "GameFont.h"
 
 namespace highScoreHandling
 {
 	const tstring fileName{ _T("HighScores.txt") };
+	std::vector<PlayerScore> lastLoadedScores{};
 
 	tostream& operator<<(tostream& out, const PlayerScore& player)
 	{
 		return out << player.name << ',' << player.score;
 	}
 
-	void LoadHighScores(std::vector<PlayerScore>& highscores)
+	const std::vector<PlayerScore>& GetHighScores()
+	{
+		return lastLoadedScores;
+	}
+
+	void LoadHighScores()
 	{
 		tstring filePath{ ResourceManager::GetInstance().GetDataPath() + fileName};
 		if (tifstream inputFile{ filePath, std::ios::in }; inputFile.is_open())
 		{
+			lastLoadedScores.clear();
 			tstring line{};
 			tregex reg{ _T("^(\\D{3}),(\\d+)$") };
 			while (std::getline(inputFile, line))
@@ -25,26 +32,23 @@ namespace highScoreHandling
 				tsmatch matches{};
 				if (std::regex_search(line.cbegin(), line.cend(), matches, reg))
 				{
-					highscores.push_back(PlayerScore{ matches.str(1), std::stoi(matches.str(2)) });
+					lastLoadedScores.push_back(PlayerScore{ matches.str(1), std::stoi(matches.str(2)) });
 				}
-#ifdef _DEBUG
 				else OutputDebugString((_T("Invalid line: ") + line + _T('\n')).c_str());
 
-#endif // _DEBUG
 			}
 		}
 		else MessageBox(ENGINE.GetWindow(), (_T("File not found: ") + filePath).c_str(), _T("File not found."), MB_ICONINFORMATION);
 	}
 
-	void WriteHighScores(const tstring& initials, int score)
+	void WriteHighScores(const tstring& initials, int score, bool loadScores)
 	{
-		assert((initials.size() <= 3) && "The initials string was longer than 3 characters while trying to write to highscores.");
+		assert((initials.size() <= maxCharacters) && "The initials string was longer than 3 characters while trying to write to highscores.");
 
-		std::vector<PlayerScore> highScores{};
-		LoadHighScores(highScores);
-		highScores.push_back(PlayerScore{ initials, score });
+		if(loadScores) LoadHighScores();
+		lastLoadedScores.push_back(PlayerScore{ initials, score });
 
-		std::sort(highScores.begin(), highScores.end(), [](const PlayerScore& firstStudent, const PlayerScore& secondStudent)
+		std::stable_sort(lastLoadedScores.begin(), lastLoadedScores.end(), [](const PlayerScore& firstStudent, const PlayerScore& secondStudent)
 			{
 				return firstStudent.score > secondStudent.score;
 			});
@@ -52,53 +56,40 @@ namespace highScoreHandling
 		tstring filePath{ ResourceManager::GetInstance().GetDataPath() + fileName };
 		if (tofstream outputFile{ filePath, std::ios::out }; outputFile.is_open())
 		{
-			std::copy(highScores.cbegin(), highScores.cend(), std::ostream_iterator<PlayerScore, tchar>(outputFile, _T("\n")));
+			std::copy(lastLoadedScores.cbegin(), lastLoadedScores.cend(), std::ostream_iterator<PlayerScore, tchar>(outputFile, _T("\n")));
 		}
 	}
 
-	bool NameIsInList(const tstring& name)
+	bool NameIsInList(const tstring& name, bool loadScores)
 	{
-		std::vector<PlayerScore> highScores{};
-		LoadHighScores(highScores);
+		if(loadScores) LoadHighScores();
 
-		return std::any_of(highScores.cbegin(), highScores.cend(), [&](const PlayerScore& playerScore) { return name == playerScore.name; });
+		return std::any_of(lastLoadedScores.cbegin(), lastLoadedScores.cend(), [&](const PlayerScore& playerScore) { return name == playerScore.name; });
 	}
 
-	PlayerScore GetFirstScore()
+	PlayerScore GetFirstScore(bool loadScores)
 	{
-		tstring filePath{ ResourceManager::GetInstance().GetDataPath() + fileName };
-		if (tifstream inputFile{ filePath, std::ios::in }; inputFile.is_open())
-		{
-			tstring firstLine{};
-			std::getline(inputFile, firstLine);
-			tregex reg{ _T("^(\\D{3}),(\\d+)$") };
+		if (loadScores) LoadHighScores();
 
-			tsmatch matches{};
-			if (std::regex_search(firstLine.cbegin(), firstLine.cend(), matches, reg))
-			{
-				return PlayerScore{ matches.str(1), std::stoi(matches.str(2)) };
-			}
-		}
-		else MessageBox(ENGINE.GetWindow(), (_T("File not found: ") + filePath).c_str(), _T("File not found."), MB_ICONINFORMATION);
-		return PlayerScore{};
+		assert(lastLoadedScores.size() > 0);
+		return lastLoadedScores.at(0);
 	}
 
-	void RemoveHighScore(const tstring& name)
+	void RemoveHighScores(const tstring& name, bool loadScores)
 	{
-		std::vector<PlayerScore> highScores{};
-		LoadHighScores(highScores);
+		if(loadScores) LoadHighScores();
 
-		highScores.erase(
-			std::remove_if(highScores.begin(), highScores.end(), [&](const PlayerScore& playerScore) { return name == playerScore.name; }),
-			highScores.end());
+		lastLoadedScores.erase(
+			std::remove_if(lastLoadedScores.begin(), lastLoadedScores.end(), [&](const PlayerScore& playerScore) { return name == playerScore.name; }),
+			lastLoadedScores.end());
 
 		tstring filePath{ ResourceManager::GetInstance().GetDataPath() + fileName };
 		if (tofstream outputFile{ filePath, std::ios::out }; outputFile.is_open())
 		{
-			std::copy(highScores.cbegin(), highScores.cend(), std::ostream_iterator<PlayerScore, tchar>(outputFile, _T("\n")));
+			std::copy(lastLoadedScores.cbegin(), lastLoadedScores.cend(), std::ostream_iterator<PlayerScore, tchar>(outputFile, _T("\n")));
 		}
 	}
-	void DrawScoreLine(const Point2Int& pos, int width, const PlayerScore& playerScore, int rank)
+	void DrawScoreLine(const RectInt& destRect, const PlayerScore& playerScore, int rank)
 	{
 		tstring rankName{ to_tstring(rank) };
 
@@ -126,9 +117,35 @@ namespace highScoreHandling
 
 		tstringstream highScoreText{};
 
-		highScoreText << std::setfill(_T(' ')) << std::setw(4) << rankName << std::setw(4) << playerScore.name << std::setw(2) << _T(' ')
+		highScoreText << std::setfill(_T(' ')) << std::setw(4) << rankName << std::setw(maxCharacters + 1) << playerScore.name << std::setw(2) << _T(' ')
 			<< std::setfill(_T('0')) << std::setw(6) << to_tstring(playerScore.score);
 
-		ENGINE.DrawString(highScoreText.str(), globalFont::GetFont(), pos, width);
+		ENGINE.DrawString(highScoreText.str(), globalFont::GetFont(), destRect);
+	}
+
+	void DrawScoreList(int maxScores, const RectInt& destRect, const tstring& nameToHighlight, bool drawTitle)
+	{
+		//const auto& wndwRect = ENGINE.GetWindowRect();
+		auto& font = globalFont::GetFont();
+
+		constexpr static int border{ 6 };
+		const int posHeightSteps{ (destRect.height - border * 2) / (maxScores + (drawTitle ? 1 : 0)) };
+
+		font.SetTextFormat(10, false, false);
+		font.SetHorizontalAllignment(Font::HorAllignment::Center);
+		font.SetVerticalAllignment(Font::VertAllignment::Center);
+
+		ENGINE.SetColor(RGB(255, 255, 255));
+
+		const int top{ destRect.bottom + destRect.height };
+		ENGINE.DrawString(_T("HIGHSCORES"), font, 0, top - border - posHeightSteps , destRect.width, posHeightSteps);
+
+		for (int i = 0; i < (lastLoadedScores.size() < maxScores ? lastLoadedScores.size() : maxScores); i++)
+		{
+			if (lastLoadedScores.at(i).name == nameToHighlight) ENGINE.SetColor(RGB(255, 255, 0));
+			else ENGINE.SetColor(RGB(255, 255, 255));
+
+			DrawScoreLine(RectInt{ 0, top - posHeightSteps * (i + 2) - border , destRect.width, posHeightSteps}, lastLoadedScores.at(i), (i + 1));
+		}
 	}
 }

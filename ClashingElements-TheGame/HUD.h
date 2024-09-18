@@ -44,8 +44,10 @@ public:
 		constexpr static int scorePerLifeLost = -100;
 	};
 
-	Counters GetCounters() const;
+	static Counters GetCounters();
+	static void ResetCounters();
 private:
+	static Counters m_Counters;
 
 	void AddScore(int points);
 
@@ -65,7 +67,6 @@ private:
 	constexpr static int m_StartSeconds{ 250 };
 	int m_SecondsLeft{ m_StartSeconds};
 
-	Counters m_Counters{};
 
 	std::unique_ptr<Subject<Counters>> m_pDied;
 

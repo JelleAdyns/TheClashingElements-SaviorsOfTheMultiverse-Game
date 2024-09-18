@@ -6,6 +6,7 @@
 #include "WelcomeScreen.h"
 #include "PauseScreen.h"
 #include "GameOverScreen.h"
+#include "ResultsScreen.h"
 #include "Level.h"
 
 Game::Game()
@@ -33,7 +34,7 @@ void Game::Initialize()
 	AudioLocator::RegisterAudioService(std::make_unique<Audio>());
 #endif // _DEBUG
 
-	//highScoreHandling::WriteHighScores(_T("BOB"), 20);
+	highScoreHandling::RemoveHighScores(highScoreHandling::placeholderName);
 
 }
 void Game::Draw() const
@@ -151,8 +152,6 @@ void Game::LoadScreen()
 {
 	Skin skinForLevel{};
 	if (m_GameState == GameState::Playing) skinForLevel = static_cast<SkinScreen*>(m_pScreenStack.back().second.get())->GetPlayer();
-	HUD::Counters countersForGameOver{};
-	if (m_GameState == GameState::GameOver) countersForGameOver= static_cast<Level*>(m_pScreenStack.back().second.get())->GetCounters();
 
 	for (int i{ static_cast<int>(m_pScreenStack.size() - 1) }; i >= 0; --i)
 	{
@@ -179,7 +178,7 @@ void Game::LoadScreen()
 
 	case GameState::SelectingSkin:
 
-		m_pScreenStack.emplace_back(m_GameState, std::make_unique<SkinScreen>(*this, GameState::Playing));
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<SkinScreen>(*this));
 
 		break;
 
@@ -200,7 +199,13 @@ void Game::LoadScreen()
 		break;
 	case GameState::GameOver:
 
-		m_pScreenStack.emplace_back(m_GameState, std::make_unique<GameOverScreen>(*this, countersForGameOver));
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<GameOverScreen>(*this));
+
+		break;
+
+	case GameState::Results:
+
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<ResultsScreen>(*this));
 
 		break;
 	}
@@ -231,7 +236,7 @@ void Game::PushScreen()
 
 	case GameState::SelectingSkin:
 
-		m_pScreenStack.emplace_back(m_GameState, std::make_unique<SkinScreen>(*this, GameState::Playing));
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<SkinScreen>(*this));
 
 		break;
 
@@ -252,7 +257,12 @@ void Game::PushScreen()
 		break;
 	case GameState::GameOver:
 
-		m_pScreenStack.emplace_back(m_GameState, std::make_unique<GameOverScreen>(*this, static_cast<Level*>(m_pScreenStack.back().second.get())->GetCounters()));
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<GameOverScreen>(*this));
+
+		break;
+	case GameState::Results:
+
+		m_pScreenStack.emplace_back(m_GameState, std::make_unique<ResultsScreen>(*this));
 
 		break;
 	}

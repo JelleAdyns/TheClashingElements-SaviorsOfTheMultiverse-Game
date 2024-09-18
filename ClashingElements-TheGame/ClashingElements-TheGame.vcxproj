@@ -188,6 +188,7 @@
     <ClCompile Include="PathGraph.cpp" />
     <ClCompile Include="PauseScreen.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ResultsScreen.cpp" />
     <ClCompile Include="SkinScreen.cpp" />
     <ClCompile Include="StartScreen.cpp" />
     <ClCompile Include="Structs.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="PauseScreen.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResultsScreen.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SkinScreen.h" />
     <ClInclude Include="StartScreen.h" />

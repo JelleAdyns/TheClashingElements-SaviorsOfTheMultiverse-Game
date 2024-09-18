@@ -15,7 +15,7 @@ class Button;
 class SkinScreen final : public Screen
 {
 public:
-	explicit SkinScreen(Game& game, GameState nextState);
+	explicit SkinScreen(Game& game);
 	virtual ~SkinScreen() = default;
 
 	SkinScreen(const SkinScreen& other) = delete;

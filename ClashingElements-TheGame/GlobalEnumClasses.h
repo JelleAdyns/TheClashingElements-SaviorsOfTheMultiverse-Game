@@ -25,7 +25,8 @@ enum class GameState
 	Playing,
 	Welcome,
 	Pause,
-	GameOver
+	GameOver,
+	Results
 };
 
 enum class SoundEvent : SoundID
