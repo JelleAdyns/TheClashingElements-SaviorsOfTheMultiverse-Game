@@ -238,3 +238,9 @@ std::vector<TileID> PathGraph::CalculatShortestPath(TileID startId, TileID endId
 	return std::vector<TileID>{};
 }
 
+void PathGraph::Reset()
+{
+	m_AdjacencyList.clear();
+	m_VecTiles.clear();
+}
+

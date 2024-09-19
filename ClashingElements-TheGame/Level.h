@@ -74,8 +74,9 @@ private:
 
 	Game& m_GameReference;
 
-	void HitCollectable();
+	void StartStage();
 	void LoadStage();
+	void HitCollectable();
 	void Reset();
 	void SetUpDrawBuffer();
 

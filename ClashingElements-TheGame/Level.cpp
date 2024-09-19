@@ -19,7 +19,7 @@ Level::Level(Game& game, Skin playerSkin) :
 	m_VecBackGrounds
 	{
 		{ _T("Mall.png")      , {_T("BGMall.png")    ,Point2Int{0, 300}} },
-		{ _T("GloirbnPit.png"), {_T("GloirbnPit.png"),Point2Int{0, 300}} }
+		{ _T("GloirbnPit.png"), {_T("GloirbnPit.png"),Point2Int{0, 0}} }
     },
 
 	m_VecMusic
@@ -46,7 +46,7 @@ Level::Level(Game& game, Skin playerSkin) :
 
 	m_pPlayer = std::make_unique<Player>(playerSkin, &m_Hud);
 	m_pPlayer->Play();
-	LoadStage();
+	StartStage();
 
 	m_Camera.Update(m_pPlayer->DestRect());
 
@@ -100,11 +100,8 @@ void Level::Tick()
 	{
 		if (m_Hud.FinishedCountSeconds())
 		{
-			Reset();
-			m_Hud.Reset();
-
 			++m_StageNumber %= m_MaxStages;
-			LoadStage();
+			StartStage();
 		}
 	}
 
@@ -215,17 +212,28 @@ void Level::HitCollectable()
 	}
 }
 
-void Level::LoadStage()
+void Level::StartStage()
 {
-	m_Graph = std::move(PathGraph{});
-	m_pAnimBackGround = std::make_unique<AnimBackGround>(m_VecBackGrounds[m_StageNumber].first);
-	m_pBackGround = std::make_unique < BackGround >( m_VecBackGrounds[m_StageNumber].second.first, m_VecBackGrounds[m_StageNumber].second.second, 0.8f );
-	m_pPlayer->ResetFrames();
+	Reset();
+
+	const auto& [stageArtFile, backgroundPosPair] = m_VecBackGrounds.at(m_StageNumber);
+	const auto& [backgroundFile, pos] = backgroundPosPair;
+
+	m_pAnimBackGround = std::make_unique<AnimBackGround>(stageArtFile);
+	m_pBackGround = std::make_unique < BackGround >( backgroundFile, pos, 0.8f );
+
 	m_Camera.SetLevelBoundaries(m_pAnimBackGround->DestRect());
 	
-	AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Spaceship), true);
-	
+	LoadStage();
 
+	m_pDrawBuffer.reserve(m_pVecCollectables.size() + m_pVecEnemies.size() + 1);
+
+	AudioLocator::GetAudioService().PlaySoundClip(static_cast<SoundID>(SoundEvent::Spaceship), true);
+}
+
+void Level::LoadStage()
+{
+	
 	tifstream inputFile{ ResourceManager::GetInstance().GetDataPath() + _T("StagePattern.txt") };
 
 	tstring info{};
@@ -309,10 +317,7 @@ void Level::LoadStage()
 		}
 	}
 	//m_pVecCollectables.push_back(std::make_unique<Collectable>(Point2Int{452, 226}));
-	m_pDrawBuffer.clear();
-	m_pDrawBuffer.reserve(m_pVecCollectables.size() + m_pVecEnemies.size() + 1);
-
-	m_StageCompleted = false;
+	
 }
 
 
@@ -320,4 +325,8 @@ void Level::Reset()
 {
 	m_pVecSprites.clear();
 	m_pVecEnemies.clear();
+	m_Graph.Reset();
+	m_Hud.Reset();
+	m_pDrawBuffer.clear();
+	m_StageCompleted = false;
 }

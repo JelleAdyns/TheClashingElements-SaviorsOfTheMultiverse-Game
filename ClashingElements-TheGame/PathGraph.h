@@ -16,7 +16,7 @@ public:
 	PathGraph(const PathGraph& other) = delete;
 	PathGraph(PathGraph&& other) noexcept = delete;
 	PathGraph& operator=(const PathGraph& other) = delete;
-	PathGraph& operator=(PathGraph&& other) noexcept = default;
+	PathGraph& operator=(PathGraph&& other) noexcept = delete;
 
 	//DEBUG DRAW
 	void Draw() const;
@@ -39,6 +39,7 @@ public:
 	//https://www.youtube.com/watch?v=mZfyt03LDH4&t=1094s
 	std::vector<TileID> CalculatShortestPath(TileID startId, TileID endId) const;
 
+	void Reset();
 private:
 
 	std::vector<std::vector<TileID>> m_AdjacencyList;
