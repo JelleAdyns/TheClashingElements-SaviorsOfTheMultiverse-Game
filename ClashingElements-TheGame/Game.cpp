@@ -9,14 +9,6 @@
 #include "ResultsScreen.h"
 #include "Level.h"
 
-Game::Game()
-{
-	
-}
-Game::~Game()
-{
-
-}
 void Game::Initialize()
 {
 	BaseGame::Initialize();
@@ -34,8 +26,12 @@ void Game::Initialize()
 	AudioLocator::RegisterAudioService(std::make_unique<Audio>());
 #endif // _DEBUG
 
-	highScoreHandling::RemoveHighScores(highScoreHandling::placeholderName);
+	
 
+}
+void Game::Destroy()
+{
+	highScoreHandling::RemoveHighScores(highScoreHandling::placeholderName);
 }
 void Game::Draw() const
 {

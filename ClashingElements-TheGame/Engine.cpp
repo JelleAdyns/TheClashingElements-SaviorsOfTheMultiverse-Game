@@ -32,10 +32,10 @@ Engine::Engine() :
 
 Engine::~Engine()
 {
+    delete m_pGame;
     SafeRelease(&m_pDFactory);
     SafeRelease(&m_pDRenderTarget);
     SafeRelease(&m_pDColorBrush);
-    delete m_pGame;
 
 }
 
@@ -254,6 +254,8 @@ int Engine::Run()
         }
     }
     
+    m_pGame->Destroy();
+
     return (int)msg.wParam;
 }
 void Engine::DrawBorders(int rtWidth, int rtHeight) const
