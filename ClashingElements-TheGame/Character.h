@@ -24,6 +24,8 @@ public:
 	CircleInt GetHitBox() const;
 	bool IsMoving() const;
 
+	static void SetSpeedMultiplier(float multiplier);
+	static float GetSpeedMultiplier();
 
 protected:
 	Direction m_Dir;
@@ -39,6 +41,9 @@ private:
 	float m_ActualPosX;
 	float m_ActualPosY;
 	int m_DefaultSpeed;
+
+	static float m_SpeedMultiplier;
+
 	CircleInt m_HitBox;
 };
 

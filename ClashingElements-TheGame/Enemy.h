@@ -4,11 +4,12 @@
 #include "Character.h"
 #include "GlobalEnumClasses.h"
 #include "PathGraph.h"
+#include <deque>
 
 class Enemy : public Character
 {
 public:
-	explicit Enemy(const Point2Int& bottomCenter, const tstring& textureFile, SpriteInfo spriteInfo);
+	explicit Enemy(const Point2Int& bottomCenter, const tstring& textureFile, SpriteInfo spriteInfo, uint8_t startSmartness);
 	virtual ~Enemy() = default;
 
 	Enemy(const Enemy& other) = delete;
@@ -22,19 +23,32 @@ public:
 
 	void SetTarget(const Point2Int& playerTarget);
 protected:
+	const uint8_t m_StartSmartnessLevel;
 	uint8_t m_SmartnessLevel{};
-	const uint8_t m_MaxSmartnessLevel{ 100 };
+	static constexpr uint8_t m_MaxSmartnessLevel{ 100 };
 
 
 private:
 
-	std::vector<std::tuple<Direction, int, Point2Int>> m_DirMap{};
+	static constexpr float m_VisionGainPercentage{ 0.7f };
+
+	struct DirInfo
+	{
+		Direction dir;
+		int nrOfTiles;
+		Point2Int nextTargetPos;
+	};
+
+	std::deque<DirInfo> m_DirMap{};
 	std::vector<Point2Int> m_Path{};
 	Point2Int m_LastKnownPlayerPos{};
+
+	const int m_VisionRadius{ Tile::Size * 6 };
 
 	void FillDirectionMap(const PathGraph& graph);
 	void CalculatePathsInAllDirections(const PathGraph& graph);
 	void SortDirectionMap();
+	void ChoosePath();
 };
 
 

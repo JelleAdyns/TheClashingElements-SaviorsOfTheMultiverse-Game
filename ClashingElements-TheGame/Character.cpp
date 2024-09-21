@@ -1,5 +1,7 @@
 #include "Character.h"
 
+float Character::m_SpeedMultiplier{ 0.f };
+
 Character::Character(const Point2Int& bottomCenter, const tstring& textureFile, SpriteInfo spriteInfo, int pixelOffset) :
 	AnimatedSprite{ bottomCenter, textureFile, spriteInfo, false },
 	m_PixelOffset{ pixelOffset },
@@ -33,13 +35,14 @@ void Character::Draw() const
 
 void Character::Update()
 {
-	
+	float speed{ m_DefaultSpeed + m_DefaultSpeed * m_SpeedMultiplier };
+
 	if (m_TargetLocation.x != m_BottomCenter.x && m_IsMoving)
 	{
 		bool decreasing{ m_TargetLocation.x < m_BottomCenter.x };
 
-		if (decreasing) m_Velocity.x = float(-m_DefaultSpeed);
-		else m_Velocity.x = float(m_DefaultSpeed);
+		if (decreasing) m_Velocity.x = -speed;
+		else m_Velocity.x = speed;
 
 		UpdatePos(m_Velocity);
 
@@ -55,8 +58,8 @@ void Character::Update()
 	{
 		bool decreasing{ m_TargetLocation.y < m_BottomCenter.y };
 
-		if (decreasing) m_Velocity.y = float(-m_DefaultSpeed);
-		else m_Velocity.y = float(m_DefaultSpeed);
+		if (decreasing) m_Velocity.y = -speed;
+		else m_Velocity.y = speed;
 
 		UpdatePos(m_Velocity);
 
@@ -104,4 +107,14 @@ CircleInt Character::GetHitBox()const
 bool Character::IsMoving() const
 {
 	return m_IsMoving;
+}
+
+void Character::SetSpeedMultiplier(float multiplier)
+{
+	m_SpeedMultiplier = multiplier;
+}
+
+float Character::GetSpeedMultiplier()
+{
+	return m_SpeedMultiplier;
 }

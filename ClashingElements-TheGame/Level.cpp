@@ -101,6 +101,11 @@ void Level::Tick()
 		if (m_Hud.FinishedCountSeconds())
 		{
 			++m_StageNumber %= m_MaxStages;
+
+			float currentMultiplier = Character::GetSpeedMultiplier();
+			if(currentMultiplier == 0.f) Character::SetSpeedMultiplier(0.4f);
+			else Character::SetSpeedMultiplier(currentMultiplier * 1.2f);
+			
 			StartStage();
 		}
 	}
@@ -151,6 +156,12 @@ void Level::KeyInput(int virtualKeyCode)
 		m_pPushCommand = std::make_unique<PushScreenCommand>(m_GameReference, GameState::Pause);
 
 	}
+#ifdef _DEBUG
+	if (virtualKeyCode == 'R')
+	{
+		m_Hud.Reset();
+	}
+#endif // _DEBUG
 }
 
 void Level::OnEnter()

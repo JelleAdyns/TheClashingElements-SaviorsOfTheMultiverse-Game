@@ -6,7 +6,7 @@ GameOverScreen::GameOverScreen(Game& game) :
 {
 
 	m_pVecButtons.push_back(std::make_unique<Button>(
-		_T("ENTER SCORE"),
+		_T("SAVE SCORE"),
 		Point2Int{ENGINE.GetWindowRect().width / 2,m_DestRect.bottom + m_TextMargin*2 + 20},
 		std::make_unique<LoadScreenCommand>(game, GameState::Results),
 		true ));
@@ -79,12 +79,13 @@ void GameOverScreen::Draw() const
 			lineHeight);
 	}
 
+	font.SetHorizontalAllignment(Font::HorAllignment::Center);
+	font.SetVerticalAllignment(Font::VertAllignment::Center);
 
 	if(m_ReadyToContinue)
 	{
 		font.SetTextFormat(9, true, false);
-		font.SetHorizontalAllignment(Font::HorAllignment::Center);
-		font.SetVerticalAllignment(Font::VertAllignment::Center);
+		
 		for (const auto& button : m_pVecButtons)
 		{
 			button->Draw();
@@ -93,8 +94,7 @@ void GameOverScreen::Draw() const
 	else
 	{
 		font.SetTextFormat(7, true, false);
-		font.SetHorizontalAllignment(Font::HorAllignment::Center);
-		font.SetVerticalAllignment(Font::VertAllignment::Center);
+
 		ENGINE.SetColor(RGB(255, 255, 255));
 		ENGINE.DrawString(
 			_T("Press SPACE to continue."),

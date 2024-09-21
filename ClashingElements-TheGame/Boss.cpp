@@ -1,7 +1,7 @@
 #include "Boss.h"
 
 Boss::Boss(const Point2Int& bottomCenter, int speed):
-	Enemy{ bottomCenter,_T("Boss.png"), SpriteInfo{.nrOfCols{ 8 }, .nrOfFrames{32}, .frameTime{ 1.f / 15}} }
+	Enemy{ bottomCenter,_T("Boss.png"), SpriteInfo{.nrOfCols{ 8 }, .nrOfFrames{32}, .frameTime{ 1.f / 15}}, 60}
 {
 
 	Character::SetDefaultSpeed(speed);
