@@ -37,7 +37,7 @@ void PauseScreen::Draw() const
 	font.SetHorizontalAllignment(Font::HorAllignment::Left);
 	font.SetVerticalAllignment(Font::VertAllignment::Center);
 
-	ENGINE.DrawString(_T("Walking:\tARROWS\nShooting:SPACE"), font, textDestRect);
+	ENGINE.DrawString(_T("Walking:\tARROWS"), font, textDestRect);
 
 
 	font.SetTextFormat(7, true, false);

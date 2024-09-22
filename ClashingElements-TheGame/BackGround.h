@@ -5,7 +5,7 @@
 #include "Engine.h"
 
 class AnimBackGround;
-class BackGround
+class BackGround final
 {
 public:
 	explicit BackGround(const tstring& filePath, const Point2Int& bottomLeft, float parallax = 1.f);

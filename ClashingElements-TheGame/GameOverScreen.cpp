@@ -60,7 +60,7 @@ void GameOverScreen::Draw() const
 	font.SetVerticalAllignment(Font::VertAllignment::Center);
 	ENGINE.SetColor(RGB(255, 255, 240));
 
-	const RectInt resultsDestRect{ m_DestRect.left + m_TextMargin, m_DestRect.bottom + 40, m_DestRect.width - m_TextMargin * 2, m_DestRect.height - 60 };
+	const RectInt resultsDestRect{ m_DestRect.left + m_TextMargin, m_DestRect.bottom + 60, m_DestRect.width - m_TextMargin * 2, m_DestRect.height - 80 };
 	int lineHeight{ resultsDestRect.height / static_cast<int>(m_VecScoreDisplays.size()) };
 
 	for (int i = 0; i <= m_TextIndex; i++)
@@ -77,6 +77,17 @@ void GameOverScreen::Draw() const
 			resultsDestRect.bottom + resultsDestRect.height - lineHeight* (i+1),
 			resultsDestRect.width,
 			lineHeight);
+	}
+
+	if(m_ReadyToContinue)
+	{
+		ENGINE.SetColor(RGB(255, 255, 255));
+		ENGINE.DrawString(
+			(tstringstream{} << std::setfill(_T('0')) << std::setw(2) << to_tstring(m_SecondsToTitleScreen)).str(),
+			font,
+			m_DestRect.left,
+			m_DestRect.bottom + m_TextMargin * 2 + 32,
+			m_DestRect.width);
 	}
 
 	font.SetHorizontalAllignment(Font::HorAllignment::Center);
@@ -107,18 +118,33 @@ void GameOverScreen::Draw() const
 
 void GameOverScreen::Tick()
 {
-	if (m_TextIndex < static_cast<int>(m_VecScoreDisplays.size()) - 1)
+	static float time{};
+	static constexpr float maxTime{ 1.f };
+	time += ENGINE.GetDeltaTime();
+
+	if (not m_ReadyToContinue)
 	{
-		static float time{};
-		static constexpr float maxTime{ 1.f };
-		time += ENGINE.GetDeltaTime();
 		if (time >= maxTime)
 		{
 			++m_TextIndex;
 			time = 0.f;
+
+			if(m_TextIndex == static_cast<int>(m_VecScoreDisplays.size()) - 1)
+				m_ReadyToContinue = true;
 		}
 	}
-	else m_ReadyToContinue = true;
+	else
+	{
+		if (time >= maxTime)
+		{
+			--m_SecondsToTitleScreen;
+
+			if (m_SecondsToTitleScreen == 0)
+				m_pVecButtons.back()->ExecuteCommand();
+
+			time = 0.f;
+		}
+	}
 	
 }
 
@@ -173,9 +199,9 @@ void GameOverScreen::OnEnter()
 	textStream = tstringstream{} << std::setfill(_T('0')) << std::setw(3) << counters.nrOfSecondsLeft << _T("\tSeconds Left:  ") << std::setw(6) << partialScore;
 	m_VecScoreDisplays.push_back(textStream.str());
 	
-	partialScore = counters.nrOfEnemiesKilled * HUD::Counters::scorePerEnemyKilled;
-	textStream = tstringstream{} << std::setfill(_T('0')) << std::setw(3) << counters.nrOfEnemiesKilled << _T("\tEnemies Killed:") << std::setw(6) << partialScore;
-	m_VecScoreDisplays.push_back(textStream.str());
+	//partialScore = counters.nrOfEnemiesKilled * HUD::Counters::scorePerEnemyKilled;
+	//textStream = tstringstream{} << std::setfill(_T('0')) << std::setw(3) << counters.nrOfEnemiesKilled << _T("\tEnemies Killed:") << std::setw(6) << partialScore;
+	//m_VecScoreDisplays.push_back(textStream.str());
 	
 	partialScore = counters.nrOfLivesLost * HUD::Counters::scorePerLifeLost;
 	textStream = tstringstream{} << std::setfill(_T('0')) << std::setw(3) << counters.nrOfLivesLost << _T("\tLives Lost:    ") << std::setw(6) << partialScore;

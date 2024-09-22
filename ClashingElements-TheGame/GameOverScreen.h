@@ -36,6 +36,7 @@ private:
 	std::vector<std::unique_ptr<Button>> m_pVecButtons;
 	std::vector<tstring> m_VecScoreDisplays{};
 
+	int m_SecondsToTitleScreen{ 30 };
 	int m_TextIndex{-1};
 	bool m_ReadyToContinue{false};
 };

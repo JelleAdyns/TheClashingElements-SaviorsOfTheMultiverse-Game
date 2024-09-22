@@ -3,7 +3,7 @@
 
 #include "Engine.h"
 
-class Camera
+class Camera final
 {
 public:
 	explicit Camera(int width, int height);

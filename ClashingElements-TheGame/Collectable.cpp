@@ -24,6 +24,7 @@ void Collectable::Update()
 {
 	AnimatedSprite::Update();
 	m_Time += ENGINE.GetDeltaTime();
+	if (m_Time > 10.f) m_Time -= 10.f;
 }
 
 CircleInt Collectable::GetHitBox() const

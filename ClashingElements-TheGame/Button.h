@@ -5,7 +5,7 @@
 #include "Engine.h"
 #include "Commands.h"
 
-class Button
+class Button final
 {
 public:
 	

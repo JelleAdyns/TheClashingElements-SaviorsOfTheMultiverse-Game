@@ -7,7 +7,7 @@
 #include "Tile.h"
 #include "GlobalEnumClasses.h"
 
-class PathGraph
+class PathGraph final
 {
 public:
 	explicit PathGraph() = default;
