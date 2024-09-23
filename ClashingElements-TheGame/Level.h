@@ -33,6 +33,7 @@ public:
 	virtual void Tick() override;
 	virtual void Draw() const override;
 	virtual void KeyInput(int virtualKeyCode) override;
+	virtual void HandleControllerInput() override;
 
 	virtual void OnEnter() override;
 	virtual void OnExit() override;
@@ -43,6 +44,8 @@ public:
 	virtual void OnSubjectDestroy() override;
 
 private:
+
+
 	const std::vector<std::pair<tstring, std::pair<tstring, Point2Int>>> m_VecBackGrounds;
 	const std::vector<tstring> m_VecMusic;
 

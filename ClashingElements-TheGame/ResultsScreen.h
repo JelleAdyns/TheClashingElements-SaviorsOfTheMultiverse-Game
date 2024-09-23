@@ -20,13 +20,17 @@ public:
 	virtual void Draw() const override;
 	virtual void Tick() override;
 	virtual void KeyInput(int virtualKeyCode) override;
+	virtual void HandleControllerInput() override;
 
 	virtual void OnEnter() override;
 	virtual void OnExit() override {};
 	virtual void OnSuspend() override {};
 	virtual void OnResume() override {};
 private:
+
+
 	void CycleName(int virtualKeyCode);
+	void CycleNameController();
 	tstring GetInitials() const;
 
 	std::unique_ptr<LoadScreenCommand> m_pLoadScreen;
@@ -37,8 +41,11 @@ private:
 	tchar m_CurrentCharacter{ _T('.') };
 
 	bool m_NameEntered{false};
-
+	int m_NrOfEnters{};
 	BackGround m_BackGround;
+
+	KeybindString m_CycleText{ _T("Cycle: ARROWS \n Confirm: ENTER") ,_T("Cycle: DPAD\n Confirm: A ") };
+	KeybindString m_ContinueText{ _T("Title screen: SPACE"),_T("Title screen: A") };
 };
 
 #endif // !RESULTSSCREEN_H

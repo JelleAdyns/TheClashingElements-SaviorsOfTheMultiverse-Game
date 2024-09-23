@@ -19,6 +19,7 @@ public:
 	virtual void Draw() const override;
 	virtual void Tick() override;
 	virtual void KeyInput(int virtualKeyCode) override;
+	virtual void HandleControllerInput() override;
 
 	virtual void OnEnter() override;
 	virtual void OnExit() override;
@@ -26,7 +27,11 @@ public:
 	virtual void OnResume() override {};
 private:
 
-	std::unique_ptr<PopScreenCommand> m_pPopScreen;
+	std::unique_ptr<Command> m_pPopScreen;
+	std::unique_ptr<Command> m_pLoadTitleScreen;
+
+	KeybindString m_ControlsText{ _T("Walking:\tARROWS\nTitle screen:\tBACKSPACE"),_T("Walking:\tDPAD\nTitle screen:\tY") };
+	KeybindString m_ContinueText{ _T("Press ESC to continue."), _T("Press START to continue.") };
 };
 
 #endif // !PAUSESCREEN_H

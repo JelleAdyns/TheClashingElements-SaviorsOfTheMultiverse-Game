@@ -53,13 +53,20 @@ void Player::Update()
 void Player::Draw() const
 {
 	if(m_NeedsToDraw) Character::Draw();
+
+#ifdef _DEBUG
+	ENGINE.SetColor(RGB(255, 0, 255));
+	ENGINE.DrawVector(m_BottomCenter, m_Velocity, 10);
+#endif // __DEBUG
+
 }
 
 void Player::Move(const PathGraph& graph)
 {
 	if (m_State == PlayerState::Playing)
 	{
-		if (ENGINE.IsKeyPressed(VK_LEFT) && !ENGINE.IsKeyPressed(VK_RIGHT))
+		if ((ENGINE.IsKeyPressed(VK_LEFT) and not ENGINE.IsKeyPressed(VK_RIGHT)) or
+			(ENGINE.ButtonPressed(Controller::Button::DpadLeft, 0) and not ENGINE.ButtonPressed(Controller::Button::DpadRight, 0)))
 		{
 			Point2Int newTarget{};
 			if (graph.HasNeighbourInDirection(Direction::Left, m_BottomCenter, newTarget))
@@ -73,7 +80,8 @@ void Player::Move(const PathGraph& graph)
 				}
 			}
 		}
-		if (ENGINE.IsKeyPressed(VK_RIGHT) && !ENGINE.IsKeyPressed(VK_LEFT))
+		if ((ENGINE.IsKeyPressed(VK_RIGHT) and not ENGINE.IsKeyPressed(VK_LEFT)) or
+			(ENGINE.ButtonPressed(Controller::Button::DpadRight, 0) and not ENGINE.ButtonPressed(Controller::Button::DpadLeft, 0)))
 		{
 			Point2Int newTarget{};
 			if (graph.HasNeighbourInDirection(Direction::Right, m_BottomCenter, newTarget))
@@ -87,7 +95,8 @@ void Player::Move(const PathGraph& graph)
 				}
 			}
 		}
-		if (ENGINE.IsKeyPressed(VK_DOWN) && !ENGINE.IsKeyPressed(VK_UP))
+		if ((ENGINE.IsKeyPressed(VK_DOWN) and not ENGINE.IsKeyPressed(VK_UP)) or
+			(ENGINE.ButtonPressed(Controller::Button::DpadDown, 0) and not ENGINE.ButtonPressed(Controller::Button::DpadUp, 0)))
 		{
 			Point2Int newTarget{};
 			if (graph.HasNeighbourInDirection(Direction::Down, m_BottomCenter, newTarget))
@@ -101,7 +110,8 @@ void Player::Move(const PathGraph& graph)
 				}
 			}
 		}
-		if (ENGINE.IsKeyPressed(VK_UP) && !ENGINE.IsKeyPressed(VK_DOWN))
+		if ((ENGINE.IsKeyPressed(VK_UP) and not ENGINE.IsKeyPressed(VK_DOWN)) or
+			(ENGINE.ButtonPressed(Controller::Button::DpadUp, 0) and not ENGINE.ButtonPressed(Controller::Button::DpadDown, 0)))
 		{
 			Point2Int newTarget{};
 			if (graph.HasNeighbourInDirection(Direction::Up, m_BottomCenter, newTarget))

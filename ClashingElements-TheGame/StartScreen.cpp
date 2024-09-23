@@ -51,6 +51,7 @@ void StartScreen::Tick()
 	if (m_YTranslation >= ENGINE.GetWindowRect().height) m_YTranslation = 0;
 
 	m_FallingBoys.UpdatePos();
+
 }
 void StartScreen::KeyInput(int virtualKeyCode)
 {
@@ -70,4 +71,28 @@ void StartScreen::KeyInput(int virtualKeyCode)
 		m_pVecButtons[m_SelectedButtonIndex]->ExecuteCommand();
 		break;
 	}
+}
+
+void StartScreen::HandleControllerInput()
+{
+
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::DpadUp, 0))
+	{
+		m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();
+		++m_SelectedButtonIndex %= m_pVecButtons.size();
+		m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();	
+	}
+
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::DpadDown, 0))
+	{
+		m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();
+		--m_SelectedButtonIndex %= m_pVecButtons.size();
+		m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();
+	}
+
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::A, 0))
+	{
+		m_pVecButtons[m_SelectedButtonIndex]->ExecuteCommand();
+	}
+
 }

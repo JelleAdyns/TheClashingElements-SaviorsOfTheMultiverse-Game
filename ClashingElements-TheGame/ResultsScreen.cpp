@@ -33,8 +33,8 @@ void ResultsScreen::Draw() const
 	font.SetHorizontalAllignment(Font::HorAllignment::Center);
 	font.SetVerticalAllignment(Font::VertAllignment::Bottom);
 	
-	if(m_NameEntered) ENGINE.DrawString(_T("Title screen: SPACE"), font, 0, font.GetFontSize(), wndwRect.width);
-	else ENGINE.DrawString(_T("Cycle: ARROWS \nConfirm: ENTER"), font, 0, nameScoreBottom - font.GetFontSize()*3, wndwRect.width/2);
+	if(m_NameEntered) ENGINE.DrawString(m_ContinueText.GetActiveString(), font, 0, font.GetFontSize(), wndwRect.width);
+	else ENGINE.DrawString(m_CycleText.GetActiveString(), font, 0, nameScoreBottom - font.GetFontSize() * 3, wndwRect.width / 2);
 }
 
 void ResultsScreen::Tick()
@@ -59,6 +59,21 @@ void ResultsScreen::KeyInput(int virtualKeyCode)
 	}
 }
 
+void ResultsScreen::HandleControllerInput()
+{
+	if (not m_NameEntered)
+	{
+		CycleNameController();
+	}
+	else
+	{
+		if (ENGINE.ButtonDownThisFrame(Controller::Button::A, 0))
+		{
+			m_pLoadScreen->Execute();
+		}
+	}
+}
+
 void ResultsScreen::OnEnter()
 {
 	highScoreHandling::WriteHighScores(highScoreHandling::placeholderName, HUD::GetCounters().totalScore);
@@ -67,9 +82,10 @@ void ResultsScreen::OnEnter()
 	m_Score = (tstringstream{} <<_T("SCORE\n") << std::setfill(_T('0')) << std::setw(6) << HUD::GetCounters().totalScore).str();
 }
 
+
 void ResultsScreen::CycleName(int virtualKeyCode)
 {
-	static int nrOfEnters{};
+
 
 	switch (virtualKeyCode)
 	{
@@ -89,11 +105,10 @@ void ResultsScreen::CycleName(int virtualKeyCode)
 		break;
 	case VK_RETURN:
 	{
-		
-		++nrOfEnters;
+		++m_NrOfEnters;
 		m_Name += m_CurrentCharacter;
 		m_CurrentCharacter = _T('.');
-		if (nrOfEnters == highScoreHandling::maxCharacters)
+		if (m_NrOfEnters == highScoreHandling::maxCharacters)
 		{
 			m_NameEntered = true;
 			highScoreHandling::RemoveHighScores(highScoreHandling::placeholderName, false);
@@ -103,14 +118,55 @@ void ResultsScreen::CycleName(int virtualKeyCode)
 	break;
 	case VK_BACK:
 	{
-		if (nrOfEnters > 0)
+		if (m_NrOfEnters > 0 and not m_NameEntered)
 		{
-			--nrOfEnters;
+			--m_NrOfEnters;
 			m_Name.erase(m_Name.size() - 1);
 			m_CurrentCharacter = _T('.');
 		}
 	}
 	break;
+	}
+
+}
+
+void ResultsScreen::CycleNameController()
+{
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::DpadUp, 0))
+	{
+		if (m_CurrentCharacter == _T('.')) m_CurrentCharacter = _T('A');
+		else if (m_CurrentCharacter == _T('Z')) m_CurrentCharacter = _T('.');
+		else ++m_CurrentCharacter;
+	}
+
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::DpadDown, 0))
+	{
+		if (m_CurrentCharacter == _T('.')) m_CurrentCharacter = _T('Z');
+		else if (m_CurrentCharacter == _T('A')) m_CurrentCharacter = _T('.');
+		else --m_CurrentCharacter;
+	}
+
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::A, 0))
+	{
+		++m_NrOfEnters;
+		m_Name += m_CurrentCharacter;
+		m_CurrentCharacter = _T('.');
+		if (m_NrOfEnters == highScoreHandling::maxCharacters)
+		{
+			m_NameEntered = true;
+			highScoreHandling::RemoveHighScores(highScoreHandling::placeholderName, false);
+			highScoreHandling::WriteHighScores(GetInitials(), HUD::GetCounters().totalScore, false);
+		}
+	}
+
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::B, 0))
+	{
+		if (m_NrOfEnters > 0 and not m_NameEntered)
+		{
+			--m_NrOfEnters;
+			m_Name.erase(m_Name.size() - 1);
+			m_CurrentCharacter = _T('.');
+		}
 	}
 }
 

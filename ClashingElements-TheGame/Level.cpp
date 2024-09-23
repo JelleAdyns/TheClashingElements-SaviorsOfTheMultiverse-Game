@@ -37,7 +37,7 @@ Level::Level(Game& game, Skin playerSkin) :
 	m_pPushCommand{nullptr},
 	m_GameReference{game}
 {
-	AudioLocator::GetAudioService().AddSound(_T("Sounds/Spaceship.wav"), static_cast<SoundID>(SoundEvent::Spaceship));
+	AudioLocator::GetAudioService().AddSound(_T("Sounds/Spaceship.mp3"), static_cast<SoundID>(SoundEvent::Spaceship));
 
 	m_Hud.AddObserver(this);
 
@@ -110,7 +110,6 @@ void Level::Tick()
 		}
 	}
 
-
 	if (m_pPushCommand)
 	{
 		m_pPushCommand->Execute();
@@ -164,6 +163,14 @@ void Level::KeyInput(int virtualKeyCode)
 #endif // _DEBUG
 }
 
+void Level::HandleControllerInput()
+{
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::Start, 0))
+	{
+		m_pPushCommand = std::make_unique<PushScreenCommand>(m_GameReference, GameState::Pause);
+	}
+}
+
 void Level::OnEnter()
 {
 	
@@ -183,6 +190,7 @@ void Level::Notify(HUD::Counters counters)
 void Level::OnSubjectDestroy()
 {
 }
+
 
 void Level::SetUpDrawBuffer()
 {

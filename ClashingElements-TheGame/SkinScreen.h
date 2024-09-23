@@ -26,6 +26,7 @@ public:
 	virtual void Draw() const override;
 	virtual void Tick() override;
 	virtual void KeyInput(int virtualKeyCode) override;
+	virtual void HandleControllerInput() override;
 
 	virtual void OnEnter() override {};
 	virtual void OnExit() override{};
@@ -36,10 +37,12 @@ public:
 
 private:
 
+
 	BackGround m_BackGround;
 
 	std::map<Skin, std::unique_ptr<Player>> m_pVecSkins;
 	std::unique_ptr<Command> m_pLoadLevelCommand;
+	std::unique_ptr<Command> m_pPopCommand;
 	
 	int m_IndexCurrSkin;
 	

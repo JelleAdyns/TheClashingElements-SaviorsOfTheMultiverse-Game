@@ -30,9 +30,17 @@ void HighScoreScreen::KeyInput(int virtualKey)
 {
 	switch (virtualKey)
 	{
-	case VK_SPACE:
+	case VK_ESCAPE:
 		m_pLoadStartScreenCommand->Execute();
 		break;
+	}
+}
+
+void HighScoreScreen::HandleControllerInput()
+{
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::B, 0))
+	{
+		m_pLoadStartScreenCommand->Execute();
 	}
 }
 

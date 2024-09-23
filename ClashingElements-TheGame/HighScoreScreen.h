@@ -21,6 +21,7 @@ public:
 	virtual void Draw() const override;
 	virtual void Tick() override;
 	virtual void KeyInput(int virtualKey) override;
+	virtual void HandleControllerInput() override;
 
 	virtual void OnEnter() override;
 	virtual void OnExit() override{};
@@ -28,6 +29,8 @@ public:
 	virtual void OnResume() override{};
 
 private:
+
+
 	BackGround m_BackGround;
 	std::unique_ptr<Command> m_pLoadStartScreenCommand;
 };

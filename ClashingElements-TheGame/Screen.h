@@ -19,11 +19,23 @@ public:
 	virtual void Draw() const = 0;
 	virtual void Tick() = 0;
 	virtual void KeyInput(int virtualKeyCode) = 0;
+	virtual void HandleControllerInput() = 0;
 
 	virtual void OnEnter() = 0;
 	virtual void OnExit() = 0;
 	virtual void OnSuspend() = 0;
 	virtual void OnResume() = 0;
+
+	struct KeybindString
+	{
+		const tstring keyboard{};
+		const tstring controller{};
+
+		const tstring& GetActiveString() const
+		{
+			return ENGINE.IsKeyBoardActive() ? keyboard : controller;
+		}
+	};
 };
 
 #endif // !SCREEN_H

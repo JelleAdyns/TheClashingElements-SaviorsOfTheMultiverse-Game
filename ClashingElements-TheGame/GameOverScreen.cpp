@@ -108,7 +108,7 @@ void GameOverScreen::Draw() const
 
 		ENGINE.SetColor(RGB(255, 255, 255));
 		ENGINE.DrawString(
-			_T("Press SPACE to continue."),
+			m_ContinueText.GetActiveString(),
 			font,
 			m_DestRect.left + m_TextMargin,
 			m_DestRect.bottom + m_TextMargin,
@@ -180,6 +180,40 @@ void GameOverScreen::KeyInput(int virtualKeyCode)
 				m_ReadyToContinue = true;
 			};
 			break;
+		}
+	}
+}
+
+void GameOverScreen::HandleControllerInput()
+{
+	if (m_ReadyToContinue)
+	{
+		if (ENGINE.ButtonDownThisFrame(Controller::Button::DpadUp, 0))
+		{
+			m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();
+			++m_SelectedButtonIndex %= m_pVecButtons.size();
+			m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();
+		}
+		if (ENGINE.ButtonDownThisFrame(Controller::Button::DpadDown, 0))
+		{
+			m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();
+			--m_SelectedButtonIndex %= m_pVecButtons.size();
+			m_pVecButtons[m_SelectedButtonIndex]->ToggleSelection();
+		}
+		if (ENGINE.ButtonDownThisFrame(Controller::Button::A, 0))
+		{
+			m_pVecButtons[m_SelectedButtonIndex]->ExecuteCommand();
+		}
+	}
+	else
+	{
+		if (ENGINE.ButtonDownThisFrame(Controller::Button::A, 0))
+		{
+			if (m_TextIndex < static_cast<int>(m_VecScoreDisplays.size()) - 1)
+			{
+				m_TextIndex = static_cast<int>(m_VecScoreDisplays.size()) - 1;
+				m_ReadyToContinue = true;
+			};
 		}
 	}
 }

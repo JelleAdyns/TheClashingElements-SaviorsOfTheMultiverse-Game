@@ -29,7 +29,9 @@ void WelcomeScreen::Draw() const
 	ENGINE.DrawRectangle(destRect);
 	ENGINE.SetColor(RGB(255, 255, 255));
 	ENGINE.DrawString(
-		_T("Glarfius has taken over!\n\nTry to collect as many items as you can while avoiding Glarfius and his Gloobtroopers.\n\nPress ESC while playing to view the controls.\n\nPress SPACE to start.\n\nGood luck!"),
+		_T("Glarfius has taken over!\n\nTry to collect as many items as you can while avoiding Glarfius and his Gloobtroopers.\n\n") + 
+		m_ButtonsText.GetActiveString() + 
+		_T("Good luck!"),
 		font,
 		destRect.left + textMargin,
 		destRect.bottom + textMargin,
@@ -48,5 +50,13 @@ void WelcomeScreen::KeyInput(int virtualKeyCode)
 	case VK_SPACE:
 		m_pPopScreen->Execute();
 		break;
+	}
+}
+
+void WelcomeScreen::HandleControllerInput()
+{
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::A, 0))
+	{
+		m_pPopScreen->Execute();
 	}
 }

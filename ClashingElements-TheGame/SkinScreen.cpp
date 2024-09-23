@@ -7,7 +7,8 @@ SkinScreen::SkinScreen(Game& game) :
 	Screen{},
 	m_BackGround{ _T("Space.png") },
 	m_IndexCurrSkin{ 0 },
-	m_pLoadLevelCommand{std::make_unique<LoadScreenCommand>(game, GameState::Playing)}
+	m_pLoadLevelCommand{std::make_unique<LoadScreenCommand>(game, GameState::Playing)},
+	m_pPopCommand{std::make_unique<PopScreenCommand>(game)}
 {
 	m_pVecSkins.emplace(Skin::Finn, std::make_unique<Player>(Skin::Finn) );
 	m_pVecSkins.emplace(Skin::Wesley, std::make_unique<Player>(Skin::Wesley));
@@ -63,11 +64,45 @@ void SkinScreen::KeyInput(int virtualKeyCode)
 		break;
 	case VK_SPACE:
 		m_pLoadLevelCommand->Execute();
+		break;
+	case VK_ESCAPE:
+		m_pPopCommand->Execute();
+		break;
 	}
 }
+
+void SkinScreen::HandleControllerInput()
+{
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::DpadLeft, 0))
+	{
+		m_pVecSkins[static_cast<Skin>(m_IndexCurrSkin)]->ResetFrames();
+		--m_IndexCurrSkin %= m_pVecSkins.size();
+		m_SelectionRect.left = m_pVecSkins[static_cast<Skin>(m_IndexCurrSkin)]->GetHitBox().center.x - m_SelectionRect.width / 2;
+	}
+
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::DpadRight, 0))
+	{
+		m_pVecSkins[static_cast<Skin>(m_IndexCurrSkin)]->ResetFrames();
+		++m_IndexCurrSkin %= m_pVecSkins.size();
+		m_SelectionRect.left = m_pVecSkins[static_cast<Skin>(m_IndexCurrSkin)]->GetHitBox().center.x - m_SelectionRect.width / 2;
+	}
+
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::A, 0))
+	{
+		m_pLoadLevelCommand->Execute();
+	}
+	if (ENGINE.ButtonDownThisFrame(Controller::Button::B, 0))
+	{
+		m_pPopCommand->Execute();
+	}
+
+}
+
 Skin SkinScreen::GetPlayer() const
 {
 	return static_cast<Skin>(m_IndexCurrSkin);
 }
+
+
 
 

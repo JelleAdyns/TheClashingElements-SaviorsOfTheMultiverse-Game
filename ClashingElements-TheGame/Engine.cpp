@@ -138,13 +138,21 @@ LRESULT Engine::HandleMessages(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                 }
                 
                 m_pGame->KeyUp(static_cast<int>(wParam));
+
+                m_IsKeyboardActive = true;
             }
             result = 0;
             wasHandled = true;
             break;
             case WM_KEYDOWN:
             {
+                if ((lParam & (1 << 30)) == 0)
+                {
+                    m_pGame->KeyDownThisFrame(static_cast<int>(wParam));
+                }
                 m_pGame->KeyDown(static_cast<int>(wParam));
+
+                m_IsKeyboardActive = true;
             }
             result = 0;
             wasHandled = true;
@@ -244,6 +252,18 @@ int Engine::Run()
             ENGINE.SetDeltaTime(elapsedSec);
 
             m_T1 = t2;
+
+            if(ENGINE.IsAnyButtonPressed()) m_IsKeyboardActive = false;
+
+            for (auto& controller : m_pVecControllers)
+            {
+                controller->ProcessControllerInput();
+            }
+
+            if(not m_IsKeyboardActive)
+            {
+                m_pGame->HandleControllerInput();
+            }
 
             m_pGame->Tick();
             Paint();
@@ -417,35 +437,36 @@ void Engine::DrawLine(const Point2Int& firstPoint, int secondX, int secondY, flo
     DrawLine(firstPoint.x, firstPoint.y, secondX, secondY, lineThickness);
 }
 
-void Engine::DrawVector(const Point2Int& origin, const Vector2f& vector, float lineThickness) const
+void Engine::DrawVector(const Point2Int& origin, const Vector2f& vector, int headLineLength, float lineThickness) const
 {
-    DrawVector(origin.x, origin.y, vector.x, vector.y, lineThickness);
+    DrawVector(origin.x, origin.y, vector.x, vector.y, headLineLength, lineThickness);
 }
-void Engine::DrawVector(const Point2Int& origin, float vectorX, float vectorY, float lineThickness) const
+void Engine::DrawVector(const Point2Int& origin, float vectorX, float vectorY, int headLineLength, float lineThickness) const
 {
-    DrawVector(origin.x, origin.y, vectorX, vectorY, lineThickness);
+    DrawVector(origin.x, origin.y, vectorX, vectorY, headLineLength, lineThickness);
 }
-void Engine::DrawVector(int originX, int originY, const Vector2f& vector, float lineThickness) const
+void Engine::DrawVector(int originX, int originY, const Vector2f& vector, int headLineLength, float lineThickness) const
 {
-    DrawVector(originX, originY, vector.x, vector.y, lineThickness);
+    DrawVector(originX, originY, vector.x, vector.y, headLineLength, lineThickness);
 }
-void Engine::DrawVector(int originX, int originY, float vectorX, float vectorY, float lineThickness) const
+void Engine::DrawVector(int originX, int originY, float vectorX, float vectorY, int headLineLength, float lineThickness) const
 {
+    assert((headLineLength > 0));
+
     SetTransform();
 
     const int endX = originX + static_cast<int>(vectorX);
     const int endY = originY + static_cast<int>(vectorY);
 
-    const int arrowLineLength{ 30 };
     const float desiredHeadAngle = float(M_PI / 12.f);
     const float mirroredVectorAngle = atan2f(vectorY, vectorX) + float(M_PI) ;
 
-    const Point2Int arrowP2{ static_cast<int>(endX + cosf(mirroredVectorAngle - desiredHeadAngle) * arrowLineLength),
-                            static_cast<int>(endY + sinf(mirroredVectorAngle - desiredHeadAngle) * arrowLineLength) };
+    const Point2Int arrowP2{ static_cast<int>(endX + cosf(mirroredVectorAngle - desiredHeadAngle) * headLineLength),
+                            static_cast<int>(endY + sinf(mirroredVectorAngle - desiredHeadAngle) * headLineLength) };
 
     
-    const Point2Int arrowP3{ static_cast<int>(endX + cosf(mirroredVectorAngle + desiredHeadAngle) * arrowLineLength),
-                            static_cast<int>(endY + sinf(mirroredVectorAngle + desiredHeadAngle) * arrowLineLength) };
+    const Point2Int arrowP3{ static_cast<int>(endX + cosf(mirroredVectorAngle + desiredHeadAngle) * headLineLength),
+                            static_cast<int>(endY + sinf(mirroredVectorAngle + desiredHeadAngle) * headLineLength) };
 
     DrawLine(originX, originY, endX, endY, lineThickness);
     DrawLine(endX, endY, arrowP2.x, arrowP2.y, lineThickness);
@@ -545,11 +566,11 @@ void Engine::DrawString(const tstring& textToDisplay, const Font& font, int left
 {
     DrawString(textToDisplay, font, RectInt{ left, bottom, width, height }, showRect);
 }
-void Engine::DrawString(const tstring& textToDisplay, const Font& font, Point2Int leftBottom, int width, int height, bool showRect)const
+void Engine::DrawString(const tstring& textToDisplay, const Font& font, const Point2Int& leftBottom, int width, int height, bool showRect)const
 {
     DrawString(textToDisplay, font, RectInt{ leftBottom.x, leftBottom.y, width, height }, showRect);
 }
-void Engine::DrawString(const tstring& textToDisplay, const Font& font, RectInt destRect, bool showRect)const
+void Engine::DrawString(const tstring& textToDisplay, const Font& font, const RectInt& destRect, bool showRect)const
 {
     SetTransform();
     D2D1_RECT_F rect = D2D1::RectF(
@@ -577,7 +598,7 @@ void Engine::DrawString(const tstring& textToDisplay, const Font& font, int left
 {
     DrawString(textToDisplay, font, Point2Int{ left, bottom }, width, showRect);
 }
-void Engine::DrawString(const tstring& textToDisplay, const Font& font, Point2Int leftBottom, int width, bool showRect)const
+void Engine::DrawString(const tstring& textToDisplay, const Font& font, const Point2Int& leftBottom, int width, bool showRect)const
 {
     SetTransform();
     D2D1_RECT_F rect = D2D1::RectF(
@@ -806,11 +827,11 @@ void Engine::DrawString(const tstring& textToDisplay, const Font& font, int left
 {
     DrawString(textToDisplay, font, RectInt{ left, top, width, height }, showRect);
 }
-void Engine::DrawString(const tstring& textToDisplay, const Font& font, Point2Int leftTop, int width, int height, bool showRect)const
+void Engine::DrawString(const tstring& textToDisplay, const Font& font, const Point2Int& leftTop, int width, int height, bool showRect)const
 {
     DrawString(textToDisplay, font, RectInt{ leftTop.x, leftTop.y, width, height }, showRect);
 }
-void Engine::DrawString(const tstring& textToDisplay, const Font& font, RectInt destRect, bool showRect)const
+void Engine::DrawString(const tstring& textToDisplay, const Font& font, const RectInt& destRect, bool showRect)const
 {
     SetTransform();
     D2D1_RECT_F rect = D2D1::RectF(
@@ -826,7 +847,7 @@ void Engine::DrawString(const tstring& textToDisplay, const Font& font, RectInt 
 
     m_pDRenderTarget->DrawText(
         textToDisplay.c_str(),
-        (UINT32) textToDisplay.length(),
+        (UINT32)textToDisplay.length(),
         font.GetFormat(),
         rect,
         m_pDColorBrush,
@@ -840,7 +861,7 @@ void Engine::DrawString(const tstring& textToDisplay, const Font& font, int left
     DrawString(textToDisplay, font, Point2Int{ left,top }, width, showRect);
 }
 //Takes the size of the font as Height of the destination rectangle in order to have a logical position
-void Engine::DrawString(const tstring& textToDisplay, const Font& font, Point2Int leftTop, int width, bool showRect)const
+void Engine::DrawString(const tstring& textToDisplay, const Font& font, const Point2Int& leftTop, int width, bool showRect)const
 {
     SetTransform();
     D2D1_RECT_F rect = D2D1::RectF(
@@ -1181,6 +1202,51 @@ void Engine::Scale(float scale, const Point2Int& PointToScaleFrom)
     Scale(scale, scale, PointToScaleFrom.x, PointToScaleFrom.y);
 }
 
+void Engine::AddController()
+{
+    if (m_pVecControllers.size() < 4)
+    {
+        m_pVecControllers.emplace_back(std::make_unique<Controller>(static_cast<uint8_t>(m_pVecControllers.size())));
+    }
+#ifdef _DEBUG
+    else OutputDebugString(_T( "Max amount of controllers already reached.\n"));
+#endif // _DEBUG
+}
+
+void Engine::PopController()
+{
+    if (not m_pVecControllers.empty()) m_pVecControllers.pop_back();
+}
+
+void Engine::PopAllControllers()
+{
+    m_pVecControllers.clear();
+}
+
+bool Engine::IsAnyButtonPressed() const
+{
+    for (const auto& pController : m_pVecControllers)
+    {
+        if(pController->IsAnyButtonPressed()) return true;
+    }
+    return false;
+}
+
+bool Engine::ButtonDownThisFrame(Controller::Button button, uint8_t controllerIndex) const
+{
+    return m_pVecControllers.at(controllerIndex)->IsDownThisFrame(button);
+}
+
+bool Engine::ButtonUpThisFrame(Controller::Button button, uint8_t controllerIndex) const
+{
+    return m_pVecControllers.at(controllerIndex)->IsUpThisFrame(button);
+}
+
+bool Engine::ButtonPressed(Controller::Button button, uint8_t controllerIndex) const
+{
+    return m_pVecControllers.at(controllerIndex)->IsPressed(button);
+}
+
 void Engine::SetColor(COLORREF newColor, float opacity)
 {
     //if (m_pDColorBrush) SafeRelease(&m_pDColorBrush);
@@ -1242,6 +1308,10 @@ float Engine::GetDeltaTime() const
 float Engine::GetTotalTime() const
 {
     return m_TotalTime;
+}
+bool Engine::IsKeyBoardActive() const
+{
+    return m_IsKeyboardActive;
 }
 ID2D1HwndRenderTarget* Engine::getRenderTarget() const
 {

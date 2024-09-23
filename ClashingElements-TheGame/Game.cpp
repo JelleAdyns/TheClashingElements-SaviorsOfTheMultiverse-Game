@@ -26,7 +26,7 @@ void Game::Initialize()
 	AudioLocator::RegisterAudioService(std::make_unique<Audio>());
 #endif // _DEBUG
 
-	
+	ENGINE.AddController();
 
 }
 void Game::Destroy()
@@ -83,6 +83,19 @@ void Game::KeyDown(int virtualKeycode)
 	//
 	// Click here for more information: https://learn.microsoft.com/en-us/windows/win32/learnwin32/keyboard-input
 
+}
+void Game::KeyDownThisFrame(int virtualKeycode)
+{
+	// Numbers and letters from '0' to '9' and 'A' to 'Z' are represented by their ASCII values
+	// For example: if(virtualKeycode == 'B')
+	// BE CAREFULL! Don't use lower caps, because those have different ASCII values
+	//
+	// Other keys are checked with their virtual Keycode defines
+	// For example: if(virtualKeycode == VK_MENU)
+	// VK_MENU represents the 'Alt' key
+	//
+	// Click here for more information: https://learn.microsoft.com/en-us/windows/win32/learnwin32/keyboard-input
+
 	m_pScreenStack.back().second->KeyInput(virtualKeycode);
 	switch (m_GameState)
 	{
@@ -111,6 +124,10 @@ void Game::KeyUp(int virtualKeycode)
 	//
 	// Click here for more information: https://learn.microsoft.com/en-us/windows/win32/learnwin32/keyboard-input
 
+}
+void Game::HandleControllerInput()
+{
+	m_pScreenStack.back().second->HandleControllerInput();
 }
 void Game::MouseDown(bool isLeft, int x, int y)
 {
@@ -160,7 +177,7 @@ void Game::LoadScreen()
 	case GameState::Start:
 
 		m_pScreenStack.emplace_back(m_GameState, std::make_unique<StartScreen>(
-			std::make_unique<LoadScreenCommand>(*this, GameState::SelectingSkin),
+			std::make_unique<PushScreenCommand>(*this, GameState::SelectingSkin),
 			std::make_unique<PushScreenCommand>(*this, GameState::ShowingHighScores)
 		));
 
@@ -218,7 +235,7 @@ void Game::PushScreen()
 	case GameState::Start:
 
 		m_pScreenStack.emplace_back(m_GameState, std::make_unique<StartScreen>(
-			std::make_unique<LoadScreenCommand>(*this, GameState::SelectingSkin),
+			std::make_unique<PushScreenCommand>(*this, GameState::SelectingSkin),
 			std::make_unique<PushScreenCommand>(*this, GameState::ShowingHighScores)
 		));
 

@@ -19,6 +19,7 @@ public:
 	virtual void Draw() const override;
 	virtual void Tick() override;
 	virtual void KeyInput(int virtualKeyCode) override;
+	virtual void HandleControllerInput() override;
 
 	virtual void OnEnter() override {};
 	virtual void OnExit() override {};
@@ -27,6 +28,9 @@ public:
 private:
 
 	std::unique_ptr<PopScreenCommand> m_pPopScreen;
+
+	KeybindString m_ButtonsText{ _T("Press ESC while playing to view the controls.\n\nPress SPACE to start.\n\n"), 
+								_T("Press START while playing to view the controls.\n\nPress A to start.\n\n") };
 };
 
 #endif // !WELCOMESCREEN_H

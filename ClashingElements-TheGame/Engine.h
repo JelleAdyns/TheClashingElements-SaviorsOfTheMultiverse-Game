@@ -7,6 +7,7 @@
 #include "CPlayer.h"
 #include "Audio.h"
 #include "framework.h"
+#include "Controller.h"
 #include <vector>
 #include <chrono>
 #include <map>
@@ -39,10 +40,10 @@ public:
     void DrawLine           (const Point2Int& firstPoint, int secondX, int secondY, float lineThickness = 1.f) const;
     void DrawLine           (int firstX, int firstY, int secondX, int secondY, float lineThickness = 1.f) const;
 
-    void DrawVector         (const Point2Int& origin, const Vector2f& vector, float lineThickness = 1.f) const;
-    void DrawVector         (const Point2Int& origin, float vectorX, float vectorY, float lineThickness = 1.f) const;
-    void DrawVector         (int originX, int originY, const Vector2f& vector, float lineThickness = 1.f) const;
-    void DrawVector         (int originX, int originY, float vectorX, float vectorY, float lineThickness = 1.f) const;
+    void DrawVector         (const Point2Int& origin, const Vector2f& vector, int headLineLength = 30.f, float lineThickness = 1.f) const;
+    void DrawVector         (const Point2Int& origin, float vectorX, float vectorY, int headLineLength = 30.f, float lineThickness = 1.f) const;
+    void DrawVector         (int originX, int originY, const Vector2f& vector, int headLineLength = 30.f, float lineThickness = 1.f) const;
+    void DrawVector         (int originX, int originY, float vectorX, float vectorY, int headLineLength = 30.f, float lineThickness = 1.f) const;
 
 #ifdef MATHEMATICAL_COORDINATESYSTEM
     void DrawRectangle      (int left, int bottom, int width, int height, float lineThickness = 1.f)const;
@@ -54,13 +55,13 @@ public:
     void DrawRoundedRect    (const RectInt& rect, float radiusX, float radiusY, float lineThickness = 1.f)const;
 
     void DrawString         (const tstring& textToDisplay, const Font& font, int left, int bottom, int width, int height, bool showRect = false)const;
-    void DrawString         (const tstring& textToDisplay, const Font& font, Point2Int leftBottom, int width, int height, bool showRect = false)const;
-    void DrawString         (const tstring& textToDisplay, const Font& font, RectInt destRect, bool showRect = false)const;
+    void DrawString         (const tstring& textToDisplay, const Font& font, const Point2Int& leftBottom, int width, int height, bool showRect = false)const;
+    void DrawString         (const tstring& textToDisplay, const Font& font, const RectInt& destRect, bool showRect = false)const;
 
     //Takes the size of the font as Height of the destination rectangle in order to have a logical position
     void DrawString         (const tstring& textToDisplay, const Font& font, int left, int bottom, int width, bool showRect = false)const;
     //Takes the size of the font as Height of the destination rectangle in order to have a logical position
-    void DrawString         (const tstring& textToDisplay, const Font& font, Point2Int leftBottom, int width, bool showRect = false)const;
+    void DrawString         (const tstring& textToDisplay, const Font& font, const Point2Int& leftBottom, int width, bool showRect = false)const;
 
     void DrawTexture        (const Texture& texture, int destLeft, int destBottom, const RectInt& srcRect = {}, float opacity = 1.f)const;
     void DrawTexture        (const Texture& texture, const Point2Int& destLeftBottom = {}, const RectInt& srcRect = {}, float opacity = 1.f)const;
@@ -83,13 +84,13 @@ public:
     void DrawRoundedRect    (const RectInt& rect, float radiusX, float radiusY, float lineThickness = 1.f)const;
 
     void DrawString         (const tstring& textToDisplay, const Font& font, int left, int top, int width, int height, bool showRect = false)const;
-    void DrawString         (const tstring& textToDisplay, const Font& font, Point2Int leftTop, int width, int height, bool showRect = false)const;
-    void DrawString         (const tstring& textToDisplay, const Font& font, RectInt destRect, bool showRect = false)const;
+    void DrawString         (const tstring& textToDisplay, const Font& font, const Point2Int& leftTop, int width, int height, bool showRect = false)const;
+    void DrawString         (const tstring& textToDisplay, const Font& font, const RectInt& destRect, bool showRect = false)const;
 
     //Takes the size of the font as Height of the destination rectangle in order to have a logical position
     void DrawString         (const tstring& textToDisplay, const Font& font, int left, int top, int width, bool showRect = false)const;
     //Takes the size of the font as Height of the destination rectangle in order to have a logical position
-    void DrawString         (const tstring& textToDisplay, const Font& font, Point2Int leftTop, int width, bool showRect = false)const;
+    void DrawString         (const tstring& textToDisplay, const Font& font, const Point2Int& leftTop, int width, bool showRect = false)const;
 
     void DrawTexture        (const Texture& texture, int destLeft, int destTop, const RectInt& srcRect = {}, float opacity = 1.f)const;
     void DrawTexture        (const Texture& texture, const Point2Int& destLeftTop = {}, const RectInt& srcRect = {}, float opacity = 1.f)const;
@@ -117,6 +118,18 @@ public:
     //Use CAPITAL letters or the virtual keycodes
     bool IsKeyPressed(int virtualKeycode) const;
 
+    // Controller stuff
+
+    void AddController();
+    void PopController();
+    void PopAllControllers();
+    bool IsAnyButtonPressed() const;
+    bool ButtonDownThisFrame(Controller::Button button, uint8_t controllerIndex) const;
+    bool ButtonUpThisFrame(Controller::Button button, uint8_t controllerIndex) const;
+    bool ButtonPressed(Controller::Button button, uint8_t controllerIndex)  const;
+
+    // Transform stuff
+
     void PushTransform();
     void PopTransform();
     void Translate(int xTranslation, int yTranslation);
@@ -128,6 +141,9 @@ public:
     void Scale(float xScale, float yScale, const Point2Int& PointToScaleFrom);
     void Scale(float scale, const Point2Int& PointToScaleFrom);
 
+    
+    // Setters
+
     void SetColor(COLORREF newColor, float opacity = 1.F);
     void SetBackGroundColor(COLORREF newColor);
     void SetInstance(HINSTANCE hInst);
@@ -136,12 +152,15 @@ public:
     void SetWindowScale(float scale);
     void SetFrameRate(int FPS);
 
+    // Getters
+
     RectInt GetWindowRect() const;
     float GetWindowScale() const;
     HWND GetWindow() const;
     HINSTANCE GetHInstance() const;
     float GetDeltaTime() const;
     float GetTotalTime() const;
+    bool IsKeyBoardActive() const;
 
     ID2D1HwndRenderTarget* getRenderTarget() const;
 
@@ -208,7 +227,10 @@ private:
     bool                            m_IsFullscreen{};
     bool                            m_KeyIsDown{};
     bool                            m_WindowIsActive{true};
+    bool                            m_IsKeyboardActive{};
     
+    std::vector<std::unique_ptr<Controller>> m_pVecControllers{};
+
     std::chrono::high_resolution_clock::time_point m_T1;
    
 };

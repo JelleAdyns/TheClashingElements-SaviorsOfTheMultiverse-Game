@@ -35,4 +35,13 @@ enum class SoundEvent : SoundID
 	Saw
 };
 
+enum class KeyState
+{
+	DownThisFrame,
+	UpThisFrame,
+	Pressed,
+	NotPressed
+
+};
+
 #endif // !GLOBALENUMCLASSES_H

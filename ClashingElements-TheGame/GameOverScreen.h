@@ -21,24 +21,29 @@ public:
 	virtual void Draw() const override;
 	virtual void Tick() override;
 	virtual void KeyInput(int virtualKeyCode) override;
+	virtual void HandleControllerInput() override;
 
 	virtual void OnEnter() override;
 	virtual void OnExit() override {};
 	virtual void OnSuspend() override {};
 	virtual void OnResume() override {};
 private:
+
+
 	static constexpr int m_Margin = 20;
 	static constexpr int m_TextMargin = 5;
 	const int m_AreaHeight = ENGINE.GetWindowRect().height - 100;
 	const RectInt m_DestRect{ m_Margin, (ENGINE.GetWindowRect().height - m_AreaHeight) / 2, ENGINE.GetWindowRect().width - m_Margin * 2, m_AreaHeight };
 	
-	int m_SelectedButtonIndex;
-	std::vector<std::unique_ptr<Button>> m_pVecButtons;
+	int m_SelectedButtonIndex{};
+	std::vector<std::unique_ptr<Button>> m_pVecButtons{};
 	std::vector<tstring> m_VecScoreDisplays{};
 
 	int m_SecondsToTitleScreen{ 30 };
 	int m_TextIndex{-1};
 	bool m_ReadyToContinue{false};
+
+	KeybindString m_ContinueText{ _T("Press SPACE to continue."), _T("Press A to continue.") };
 };
 
 #endif // !GAMEOVERSCREEN_H
