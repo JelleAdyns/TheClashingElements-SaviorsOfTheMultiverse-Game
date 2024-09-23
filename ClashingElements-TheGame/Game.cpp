@@ -29,7 +29,7 @@ void Game::Initialize()
 	ENGINE.AddController();
 
 }
-void Game::Destroy()
+void Game::Cleanup()
 {
 	highScoreHandling::RemoveHighScores(highScoreHandling::placeholderName);
 }

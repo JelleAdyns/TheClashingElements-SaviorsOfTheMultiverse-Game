@@ -274,7 +274,7 @@ int Engine::Run()
         }
     }
     
-    m_pGame->Destroy();
+    m_pGame->Cleanup();
 
     return (int)msg.wParam;
 }

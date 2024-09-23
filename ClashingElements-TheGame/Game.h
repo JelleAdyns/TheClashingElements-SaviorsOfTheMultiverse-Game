@@ -18,7 +18,7 @@ public:
     Game& operator=(Game&& other) noexcept = delete;
 
     virtual void Initialize() override;
-    virtual void Destroy() override;
+    virtual void Cleanup() override;
 
     virtual void Draw() const override;
     virtual void Tick() override;

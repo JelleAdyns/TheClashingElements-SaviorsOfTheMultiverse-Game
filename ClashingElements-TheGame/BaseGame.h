@@ -13,7 +13,7 @@ public:
     BaseGame& operator=(BaseGame&& other) noexcept = delete;
 
     virtual void Initialize();
-    virtual void Destroy();
+    virtual void Cleanup();
 
     virtual void Draw() const {}
 	virtual void Tick() {}

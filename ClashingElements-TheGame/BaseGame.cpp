@@ -10,6 +10,6 @@ void BaseGame::Initialize()
     ENGINE.SetFrameRate(60);
 }
 
-void BaseGame::Destroy()
+void BaseGame::Cleanup()
 {
 }
