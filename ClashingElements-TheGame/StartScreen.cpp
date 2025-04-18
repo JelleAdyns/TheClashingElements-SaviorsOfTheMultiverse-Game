@@ -44,6 +44,22 @@ void StartScreen::Draw() const
 		button->Draw();
 	}
 
+	font.SetTextFormat(14, false, false);
+	font.SetHorizontalAllignment(Font::HorAllignment::Center);
+	font.SetVerticalAllignment(Font::VertAllignment::Center);
+
+	int border = 60;
+	ENGINE.SetColor(RGB(255, 255, 0));
+	ENGINE.DrawString(_T("The Clashing Elements\n\nThe Game"), font, border, ENGINE.GetWindowRect().height / 2, ENGINE.GetWindowRect().width - 2 * border, ENGINE.GetWindowRect().height/2);
+
+
+	font.SetTextFormat(6, false, false);
+	font.SetHorizontalAllignment(Font::HorAllignment::Left);
+	font.SetVerticalAllignment(Font::VertAllignment::Center);
+
+	ENGINE.SetColor(RGB(255, 255, 255));
+	ENGINE.DrawString(_T("DEMO VERSION"), font, 2, 2, ENGINE.GetWindowRect().width);
+
 }
 void StartScreen::Tick()
 {

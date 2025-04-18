@@ -7,7 +7,7 @@ const int FallingBoy::m_NrOfBoys{ 10 };
 FallingBoy::FallingBoy(const Point2Int& bottomCenter) :
 	AnimatedSprite{ Point2Int{},_T("FallingBoys.png"), SpriteInfo{.nrOfCols{ 3 }, .nrOfFrames{ 30 }, .frameTime{ 1.f / 8}}, false }
 {
-	int distanceFromBorder{ 50 };
+	int distanceFromBorder{ 40 };
 	const auto& window = ENGINE.GetWindowRect();
 	for (int i = 0; i < m_SpriteInfo.nrOfRows/2; i++)
 	{

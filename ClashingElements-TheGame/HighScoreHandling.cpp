@@ -48,9 +48,9 @@ namespace highScoreHandling
 		if(loadScores) LoadHighScores();
 		lastLoadedScores.push_back(PlayerScore{ initials, score });
 
-		std::stable_sort(lastLoadedScores.begin(), lastLoadedScores.end(), [](const PlayerScore& firstStudent, const PlayerScore& secondStudent)
+		std::stable_sort(lastLoadedScores.begin(), lastLoadedScores.end(), [](const PlayerScore& firstPlayer, const PlayerScore& secondPlayer)
 			{
-				return firstStudent.score > secondStudent.score;
+				return firstPlayer.score > secondPlayer.score;
 			});
 
 		tstring filePath{ ResourceManager::GetInstance().GetDataPath() + fileName };
@@ -123,7 +123,8 @@ namespace highScoreHandling
 		ENGINE.DrawString(highScoreText.str(), gameFont::GetFont(), destRect);
 	}
 
-	void DrawScoreList(int maxScores, const RectInt& destRect, const tstring& nameToHighlight, bool drawTitle)
+	//void DrawScoreList(int maxScores, const RectInt& destRect, const tstring& nameToHighlight, bool drawTitle)
+	void DrawScoreList(int maxScores, const RectInt& destRect, int rankToHighlight, bool drawTitle)
 	{
 		//const auto& wndwRect = ENGINE.GetWindowRect();
 		auto& font = gameFont::GetFont();
@@ -142,10 +143,17 @@ namespace highScoreHandling
 
 		for (int i = 0; i < (lastLoadedScores.size() < maxScores ? lastLoadedScores.size() : maxScores); i++)
 		{
-			if (lastLoadedScores.at(i).name == nameToHighlight) ENGINE.SetColor(RGB(255, 255, 0));
+			if (i + 1 == rankToHighlight) ENGINE.SetColor(RGB(255, 255, 0));
 			else ENGINE.SetColor(RGB(255, 255, 255));
 
 			DrawScoreLine(RectInt{ 0, top - posHeightSteps * (i + 2) - border , destRect.width, posHeightSteps}, lastLoadedScores.at(i), (i + 1));
 		}
+	}
+	int GetRankWithPlaceholder(bool loadScores)
+	{
+		if (loadScores) LoadHighScores();
+		
+		auto pos = std::find_if(lastLoadedScores.cbegin(), lastLoadedScores.cend(), [](const PlayerScore& player) {return player.name == placeholderName; });
+		return pos != lastLoadedScores.cend() ? static_cast<int>(std::distance(lastLoadedScores.cbegin(), pos)) + 1 : 0;
 	}
 }

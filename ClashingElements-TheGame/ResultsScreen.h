@@ -42,6 +42,7 @@ private:
 
 	bool m_NameEntered{false};
 	int m_NrOfEnters{};
+	int m_RankedPosition{0};
 	BackGround m_BackGround;
 
 	KeybindString m_CycleText{ _T("Cycle: ARROWS \n Confirm: ENTER") ,_T("Cycle: DPAD\n Confirm: A ") };

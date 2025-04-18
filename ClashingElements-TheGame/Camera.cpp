@@ -32,7 +32,7 @@ void Camera::Transform(float parallax) const
 void Camera::Update(const RectInt& target)
 {
 	m_CurrCamBottomLeft.x = target.left + target.width / 2 - m_Width / 2;
-	m_CurrCamBottomLeft.y = target.bottom + target.height / 2 - m_Height / 2;
+	m_CurrCamBottomLeft.y = target.bottom/* + target.height / 2*/ - m_Height / 2;
 	Clamp(m_CurrCamBottomLeft);
 }
 

@@ -18,7 +18,7 @@ Level::Level(Game& game, Skin playerSkin) :
 	Screen{},
 	m_VecBackGrounds
 	{
-		{ _T("Mall.png")      , {_T("BGMall.png")    ,Point2Int{0, 300}} },
+		{ _T("MallBG.png")      , {_T("Space.png")    ,Point2Int{0, 0}} },
 		{ _T("GloirbnPit.png"), {_T("GloirbnPit.png"),Point2Int{0, 0}} }
     },
 
@@ -28,7 +28,7 @@ Level::Level(Game& game, Skin playerSkin) :
 		_T("Sounds/Spaceship.wav")
 	},
 
-	m_MaxStages{ 2 },
+	m_MaxStages{ 1 },
 	m_StageNumber{ 0 },
 	m_LoopNumber{ 0 },
 	m_StageCompleted{false},
@@ -103,7 +103,7 @@ void Level::Tick()
 			++m_StageNumber %= m_MaxStages;
 
 			float currentMultiplier = Character::GetSpeedMultiplier();
-			if(currentMultiplier == 0.f) Character::SetSpeedMultiplier(0.4f);
+			if(currentMultiplier == 0.f) Character::SetSpeedMultiplier(1.4f);
 			else Character::SetSpeedMultiplier(currentMultiplier * 1.2f);
 			
 			StartStage();
@@ -121,10 +121,10 @@ void Level::Tick()
 void Level::Draw() const
 {
 	
-	ENGINE.PushTransform();
-	m_Camera.Transform(m_pBackGround->GetParallaxSpeed());
 	m_pBackGround->Draw();
-	ENGINE.PopTransform();
+	//ENGINE.PushTransform();
+	//m_Camera.Transform(m_pBackGround->GetParallaxSpeed());
+	//ENGINE.PopTransform();
 
 	
 	ENGINE.PushTransform();
@@ -180,6 +180,7 @@ void Level::OnExit()
 {
 	AudioLocator::GetAudioService().StopAllSounds();
 	AudioLocator::GetAudioService().RemoveSound(static_cast<SoundID>(SoundEvent::Spaceship));
+	Character::SetSpeedMultiplier(1);
 }
 
 void Level::Notify(HUD::Counters counters)
@@ -239,7 +240,7 @@ void Level::StartStage()
 	const auto& [backgroundFile, pos] = backgroundPosPair;
 
 	m_pAnimBackGround = std::make_unique<AnimBackGround>(stageArtFile);
-	m_pBackGround = std::make_unique < BackGround >( backgroundFile, pos, 0.8f );
+	m_pBackGround = std::make_unique < BackGround >( backgroundFile, pos, 0.f );
 
 	m_Camera.SetLevelBoundaries(m_pAnimBackGround->DestRect());
 	
@@ -295,9 +296,9 @@ void Level::LoadStage()
 
 			switch (rowString[col])
 			{
-			case _T('T'):
-				m_pVecSprites.push_back(std::make_unique<PalmTree>( center ));
-				break;
+			//case _T('T'):
+			//	m_pVecSprites.push_back(std::make_unique<PalmTree>( center ));
+			//	break;
 			case _T('P'):
 
 				m_pPlayer->Respawn(center);

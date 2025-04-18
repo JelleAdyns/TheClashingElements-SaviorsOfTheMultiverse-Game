@@ -27,14 +27,15 @@ void ResultsScreen::Draw() const
 	ENGINE.DrawString(m_Name + (m_NameEntered ? _T(' ') : m_CurrentCharacter), font, RectInt{ 0,nameScoreBottom, wndwRect.width / 2, 80 });
 	ENGINE.DrawString(m_Score, font, RectInt{ wndwRect.width / 2,nameScoreBottom, wndwRect.width/2, 80 });
 
-	highScoreHandling::DrawScoreList(5, RectInt{ 0, 20, wndwRect.width, wndwRect.height / 2 }, m_NameEntered ? GetInitials() : highScoreHandling::placeholderName);
-
 	font.SetTextFormat(6, false, false);
 	font.SetHorizontalAllignment(Font::HorAllignment::Center);
 	font.SetVerticalAllignment(Font::VertAllignment::Bottom);
 	
+	ENGINE.SetColor(RGB(255, 255, 0));
 	if(m_NameEntered) ENGINE.DrawString(m_ContinueText.GetActiveString(), font, 0, font.GetFontSize(), wndwRect.width);
 	else ENGINE.DrawString(m_CycleText.GetActiveString(), font, 0, nameScoreBottom - font.GetFontSize() * 3, wndwRect.width / 2);
+
+	highScoreHandling::DrawScoreList(5, RectInt{ 0, 20, wndwRect.width, wndwRect.height / 2 }, m_RankedPosition);
 }
 
 void ResultsScreen::Tick()
@@ -77,7 +78,7 @@ void ResultsScreen::HandleControllerInput()
 void ResultsScreen::OnEnter()
 {
 	highScoreHandling::WriteHighScores(highScoreHandling::placeholderName, HUD::GetCounters().totalScore);
-
+	m_RankedPosition = highScoreHandling::GetRankWithPlaceholder(false);
 	m_Name = _T("NAME\n");
 	m_Score = (tstringstream{} <<_T("SCORE\n") << std::setfill(_T('0')) << std::setw(6) << HUD::GetCounters().totalScore).str();
 }

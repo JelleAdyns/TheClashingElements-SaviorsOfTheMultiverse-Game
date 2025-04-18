@@ -1,6 +1,6 @@
 #include "Character.h"
 
-float Character::m_SpeedMultiplier{ 0.f };
+float Character::m_SpeedMultiplier{ 1.f };
 
 Character::Character(const Point2Int& bottomCenter, const tstring& textureFile, SpriteInfo spriteInfo, int pixelOffset) :
 	AnimatedSprite{ bottomCenter, textureFile, spriteInfo, false },
@@ -35,7 +35,7 @@ void Character::Draw() const
 
 void Character::Update()
 {
-	float speed{ m_DefaultSpeed + m_DefaultSpeed * m_SpeedMultiplier };
+	float speed{ m_DefaultSpeed * m_SpeedMultiplier };
 
 	if (m_TargetLocation.x != m_BottomCenter.x && m_IsMoving)
 	{

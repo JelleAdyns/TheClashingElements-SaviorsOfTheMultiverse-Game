@@ -14,12 +14,12 @@ void HighScoreScreen::Draw() const
 
 
 	const auto& wndwRect = ENGINE.GetWindowRect();
-	highScoreHandling::DrawScoreList(10, RectInt{ 0, 10, wndwRect.width, wndwRect.height - 10 }, highScoreHandling::GetFirstScore(false).name);
+	highScoreHandling::DrawScoreList(10, RectInt{ 0, 10, wndwRect.width, wndwRect.height - 10 }, 1);
 
-	auto& font = gameFont::GetFont();
-	constexpr static int border{ 6 };
-
-	ENGINE.DrawString(_T("PRESS DELETE"), font, 0, border, wndwRect.width);
+	//auto& font = gameFont::GetFont();
+	//constexpr static int border{ 6 };
+	//
+	//ENGINE.DrawString(_T("PRESS DELETE"), font, 0, border, wndwRect.width);
 }
 
 void HighScoreScreen::Tick()

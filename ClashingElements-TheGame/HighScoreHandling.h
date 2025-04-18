@@ -24,7 +24,8 @@ namespace highScoreHandling
 	PlayerScore GetFirstScore(bool loadScores = true);
 	void RemoveHighScores(const tstring& name, bool loadScores = true);
 	void DrawScoreLine(const RectInt& destRect, const PlayerScore& playerScore, int rank);
-	void DrawScoreList(int maxScores, const RectInt& destRect, const tstring& nameToHighlight, bool drawTitle = true);
+	void DrawScoreList(int maxScores, const RectInt& destRect, int rankToHighlight, bool drawTitle = true);
+	int GetRankWithPlaceholder(bool loadScores = true);
 }
 
 #endif // !HIGHSCOREHANDLING_H
